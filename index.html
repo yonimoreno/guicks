@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guicks — Quick Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --glass: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.12);
+      --text: #f0f0f5;
+      --text-dim: rgba(240,240,245,0.5);
+      --dock-bg: rgba(255,255,255,0.08);
+      --accent: #4f8ef7;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Animated background ── */
+    .bg-wrap {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 20% 20%, #1a1040 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 80%, #0d2a50 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 50% 50%, #0f1a35 0%, transparent 70%),
+                  #07070d;
+    }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: float 14s ease-in-out infinite;
+    }
+    .orb1 { width: 420px; height: 420px; background: #2a1a6e; top: -80px; left: -80px; animation-delay: 0s; }
+    .orb2 { width: 320px; height: 320px; background: #0e3d6e; bottom: -60px; right: -60px; animation-delay: -5s; }
+    .orb3 { width: 250px; height: 250px; background: #1a3a6e; top: 40%; left: 55%; animation-delay: -9s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.97); }
+    }
+
+    /* ── Layout ── */
+    .shell {
+      position: relative; z-index: 1;
+      width: 100%; height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── Status bar ── */
+    .statusbar {
+      width: 100%; max-width: 600px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 28px 0;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .statusbar .time { font-size: 16px; font-weight: 700; }
+    .statusbar .icons { display: flex; gap: 6px; align-items: center; }
+    .statusbar .icons svg { width: 16px; height: 16px; fill: var(--text); opacity: 0.9; }
+
+    /* ── Header ── */
+    .header {
+      margin-top: 10px;
+      text-align: center;
+      animation: fadeDown 0.7s ease both;
+    }
+    .header .logo {
+      font-size: 32px; font-weight: 800;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.55));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header .tagline {
+      font-size: 11px; font-weight: 400;
+      color: var(--text-dim);
+      margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── App grid ── */
+    .grid-wrap {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 36px 28px 10px;
+      overflow-y: auto;
+      width: 100%; max-width: 600px;
+    }
+
+    .section-label { display: none; }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px 20px;
+      width: 100%;
+    }
+
+    /* ── App icon ── */
+    .app {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; cursor: pointer;
+      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .app:nth-child(1) { animation-delay: 0.05s; }
+    .app:nth-child(2) { animation-delay: 0.10s; }
+    .app:nth-child(3) { animation-delay: 0.15s; }
+    .app:nth-child(4) { animation-delay: 0.20s; }
+    .app:nth-child(5) { animation-delay: 0.25s; }
+    .app:nth-child(6) { animation-delay: 0.30s; }
+    .app:nth-child(7) { animation-delay: 0.35s; }
+    .app:nth-child(8) { animation-delay: 0.40s; }
+    .app:nth-child(9) { animation-delay: 0.45s; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.6); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Safety: any app not covered by nth-child still shows */
+    .app { opacity: 1; }
+
+    .icon {
+      width: 68px; height: 68px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.18);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .icon::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(255,255,255,0.18);
+      pointer-events: none;
+    }
+
+    .icon svg { width: 34px; height: 34px; }
+
+    .app:active .icon,
+    .app.pressed .icon {
+      transform: scale(0.88);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .app:hover:not(:active) .icon {
+      transform: scale(1.07);
+      box-shadow: 0 10px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .app-name {
+      font-size: 10.5px; font-weight: 500;
+      color: var(--text);
+      text-align: center;
+      line-height: 1.3;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    /* Icon color themes */
+    .icon-qr      { background: linear-gradient(145deg, #3a1fa8, #6c3fe0); }
+    .icon-currency { background: linear-gradient(145deg, #0d4a2e, #1a7a4a); }
+    .icon-soon    { background: linear-gradient(145deg, #1a1a2e, #2a2a3e); opacity: 0.5; }
+
+    /* Coming soon badge */
+    .coming-soon .icon::before {
+      content: 'SOON';
+      position: absolute; top: 6px; right: 6px;
+      font-size: 7px; font-weight: 700; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.1);
+      padding: 1px 4px; border-radius: 4px;
+    }
+
+
+
+    /* ── Tooltip on click ── */
+    .toast {
+      position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%) translateY(10px);
+      background: rgba(30,30,40,0.92);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; font-size: 13px; font-weight: 500;
+      padding: 10px 20px; border-radius: 20px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+      z-index: 100;
+    }
+    .toast.show {
+      opacity: 1; transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Home indicator ── */
+    .home-bar {
+      position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%);
+      width: 130px; height: 5px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 360px) {
+      .app-grid { gap: 14px; }
+      .icon { width: 60px; height: 60px; border-radius: 14px; }
+    }
+
+    /* ── Cookie Banner ── */
+    .cookie-banner {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(20, 20, 35, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 200;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .cookie-banner p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+    }
+
+    .cookie-btn {
+      flex-shrink: 0;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .cookie-btn:hover { opacity: 0.85; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Copyright ── */
+    .copyright {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      padding-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    /* scrollbar */
+    .grid-wrap::-webkit-scrollbar { width: 0; }
+  </style>
+</head>
+<body>
+
+<div class="bg-wrap">
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+</div>
+
+<div class="shell">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time" id="clock">9:41</span>
+    <div class="icons">
+      <!-- Signal -->
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity="0.4"/></svg>
+      <!-- Wifi -->
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <!-- Battery -->
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Logo -->
+  <div class="header">
+    <div class="logo">guicks</div>
+    <div class="tagline">Quick tools, zero friction</div>
+  </div>
+
+  <!-- App Grid -->
+  <div class="grid-wrap">
+    <div class="section-label">Tools</div>
+    <div class="app-grid" id="mainGrid">
+
+      <!-- QR Generator -->
+      <div class="app" onclick="openTool('https://qr.guicks.com', 'QR Generator')">
+        <div class="icon icon-qr">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
+            <rect x="5" y="5" width="3" height="3" fill="white"/>
+            <rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
+            <rect x="16" y="5" width="3" height="3" fill="white"/>
+            <rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
+            <rect x="5" y="16" width="3" height="3" fill="white"/>
+            <rect x="14" y="14" width="2" height="2" fill="white"/>
+            <rect x="18" y="14" width="3" height="3" rx="0.5" fill="white"/>
+            <rect x="14" y="18" width="3" height="3" rx="0.5" fill="white"/>
+            <rect x="19" y="19" width="2" height="2" fill="white"/>
+          </svg>
+        </div>
+        <span class="app-name">QR Generator</span>
+      </div>
+
+      <!-- Currency Converter -->
+      <div class="app" onclick="openTool('https://currency.guicks.com', 'Currency Converter')">
+        <div class="icon icon-currency">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
+            <path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-name">Currency</span>
+      </div>
+
+      <!-- Sheep Count -->
+      <div class="app" onclick="openTool('https://sheepcount.rest', 'Sheep Count')">
+        <div class="icon" style="background: linear-gradient(145deg, #1a4a3a, #2d7a5a);">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:44px;height:44px;">
+            <!-- Fence posts -->
+            <rect x="1.5" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
+            <rect x="5.5" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
+            <!-- Fence rails -->
+            <rect x="1.5" y="14" width="5.5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
+            <rect x="1.5" y="17" width="5.5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
+
+            <!-- Sheep body (fluffy, mid-jump, tilted) -->
+            <g transform="translate(12, 8) rotate(-15)">
+              <circle cx="0"  cy="0"   r="3.2" fill="white"/>
+              <circle cx="2.5" cy="1"  r="2.5" fill="white"/>
+              <circle cx="-2.5" cy="1" r="2.5" fill="white"/>
+              <circle cx="1"  cy="-2"  r="2.5" fill="white"/>
+              <circle cx="-1" cy="-2"  r="2.5" fill="white"/>
+              <!-- Face -->
+              <ellipse cx="3.2" cy="2.5" rx="2" ry="1.6" fill="white"/>
+              <!-- Eye -->
+              <circle cx="3.8" cy="2" r="0.5" fill="#2d7a5a"/>
+              <!-- Front legs (tucked mid-jump) -->
+              <line x1="-1" y1="3" x2="-2.5" y2="5.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="1"  y1="3" x2="0"    y2="6"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+              <!-- Back legs (kicked up) -->
+              <line x1="-2" y1="2" x2="-4"   y2="0"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+              <line x1="-1" y1="2.5" x2="-3" y2="1"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+            </g>
+
+            <!-- Right side fence (partially behind sheep) -->
+            <rect x="19" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
+            <rect x="22" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
+            <rect x="19" y="14" width="5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
+            <rect x="19" y="17" width="5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
+
+            <!-- Ground line -->
+            <line x1="1" y1="20.5" x2="23" y2="20.5" stroke="white" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
+          </svg>
+        </div>
+        <span class="app-name">Sheep Count</span>
+      </div>
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="3" fill="rgba(255,255,255,0.4)"/>
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Spin Wheel</span>
+      </div>
+
+      <!-- Coming Soon: Random Number -->
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
+            <circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="15.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="8.5" cy="15.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="15.5" cy="15.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="12" cy="12" r="1.5" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Random №</span>
+      </div>
+
+      <!-- Coming Soon: Calculator -->
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="4" y="3" width="16" height="18" rx="2" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
+            <rect x="7" y="6" width="10" height="4" rx="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="8" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="12" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="16" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="8" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="12" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
+            <circle cx="16" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Calculator</span>
+      </div>
+
+      <!-- Coming Soon: Measure Converter -->
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 7v2M12 5v4M16 7v2" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Converter</span>
+      </div>
+
+      <!-- Coming Soon: Stock Market -->
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <polyline points="3,17 7,11 11,14 15,7 21,10" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Stocks</span>
+      </div>
+
+      <!-- Coming Soon: Translate -->
+      <div class="app coming-soon" onclick="showToast('Coming soon!')">
+        <div class="icon icon-soon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 8l2 2-2 2M19 8l-2 2 2 2" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 19c1.5-2 4-2 5.5 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="app-name" style="color:rgba(255,255,255,0.4)">Translate</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="copyright">© Copyright 2026 Yoni Moreno</div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<div class="home-bar"></div>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2, '0');
+    const m = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // Toast
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // Navigate to tool
+  function openTool(url, name) {
+    // Add a press effect then navigate
+    window.location.href = url;
+  }
+
+  // Tap press effect (mobile feel)
+  document.querySelectorAll('.app').forEach(app => {
+    app.addEventListener('pointerdown', () => app.classList.add('pressed'));
+    app.addEventListener('pointerup', () => setTimeout(() => app.classList.remove('pressed'), 150));
+    app.addEventListener('pointerleave', () => app.classList.remove('pressed'));
+  });
+</script>
+<!-- Cookie Banner -->
+<div class="cookie-banner" id="cookieBanner">
+  <p>🍪 This website uses cookies to analyze traffic with Google Analytics. By continuing, you accept our use of cookies.</p>
+  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+</div>
+
+<script>
+  // Hide banner if already accepted
+  if (localStorage.getItem('cookiesAccepted')) {
+    document.getElementById('cookieBanner').style.display = 'none';
+  }
+  function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    const b = document.getElementById('cookieBanner');
+    b.style.opacity = '0';
+    b.style.transform = 'translateY(20px)';
+    b.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    setTimeout(() => b.style.display = 'none', 300);
+  }
+</script>
+
+</body>
+</html>
