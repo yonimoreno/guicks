@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .back-btn{color:#1c1c2e!important}
+html.guicks-light .back-btn svg{stroke:#1c1c2e!important}
+html.guicks-light .tab-bar{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .tab-btn{color:rgba(0,0,0,.45)!important}
+html.guicks-light .tab-btn.active{color:#fff!important}
+html.guicks-light .card{background:#fff!important;border-color:rgba(0,0,0,.07)!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important}
+html.guicks-light .digital-time{color:#0d0d1a!important}
+html.guicks-light .date-str{color:#5a5a78!important}
+html.guicks-light .tz-str{color:#9090b0!important}
+html.guicks-light .world-city-name{color:#0d0d1a!important}
+html.guicks-light .world-city-date{color:#9090b0!important}
+html.guicks-light .world-city-time{color:#0d0d1a!important}
+html.guicks-light .alarm-time-text{color:#0d0d1a!important}
+html.guicks-light .alarm-label-text{color:#9090b0!important}
+html.guicks-light .add-row input,.add-row select{background:#fff!important;border-color:rgba(0,0,0,.12)!important;color:#0d0d1a!important}
+html.guicks-light .add-row input::placeholder{color:rgba(0,0,0,.3)!important}
+html.guicks-light .note-bar{background:rgba(245,166,35,.1)!important;border-color:rgba(245,166,35,.25)!important;color:#c87f00!important}
+html.guicks-light .section-empty{color:#9090b0!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clock — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: #07070d;
+  color: #f0f0f5;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(44,28,110,.45) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 45% at 85% 100%, rgba(28,28,55,.4) 0%, transparent 65%);
+}
+
+.shell {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  max-width: 600px; margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* ── Status bar ── */
+.statusbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 24px 0;
+  font-size: 13px; font-weight: 700; color: #f0f0f5;
+}
+.statusbar .time { font-size: 16px; font-weight: 800; }
+.statusbar .icons { display: flex; gap: 5px; align-items: center; }
+.statusbar .icons svg { width: 16px; height: 16px; fill: #f0f0f5; }
+
+/* ── Top nav ── */
+.topnav { display: flex; align-items: center; padding: 10px 20px 0; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: #a0a0c8; font-size: 15px; font-weight: 700;
+  text-decoration: none; padding: 6px 10px 6px 4px;
+  border-radius: 10px; transition: background .15s;
+}
+.back-btn:hover { background: rgba(255,255,255,.06); }
+.back-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── App header ── */
+.app-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 24px 16px;
+}
+.app-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(145deg, #1c1c2e, #2d2d55);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
+}
+.app-icon svg { width: 26px; height: 26px; }
+.app-header-text h1 { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.app-header-text p { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+/* ── Tabs ── */
+.tab-bar {
+  display: flex; gap: 5px;
+  margin: 0 16px 18px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px; padding: 4px;
+}
+.tab-btn {
+  flex: 1; padding: 9px 6px;
+  border-radius: 10px; border: none;
+  background: none; font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 700;
+  color: rgba(255,255,255,.4); cursor: pointer;
+  transition: all .18s;
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, #2d2d55, #4a1fb8);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(74,31,184,.4);
+}
+
+/* ── Panels ── */
+.panel { display: none; padding: 0 16px; }
+.panel.active { display: block; }
+
+/* ── Analog clock ── */
+.clock-face-wrap { display: flex; justify-content: center; padding: 4px 0 12px; }
+#clockCanvas { display: block; filter: drop-shadow(0 8px 24px rgba(0,0,0,.5)); }
+.digital-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 46px; font-weight: 400;
+  text-align: center; letter-spacing: 2px;
+  color: #f0f0f5; margin-bottom: 4px;
+}
+.date-str { font-size: 14px; font-weight: 600; text-align: center; color: rgba(255,255,255,.5); margin-bottom: 2px; }
+.tz-str { font-size: 11px; text-align: center; color: rgba(255,255,255,.3); }
+
+/* ── Cards ── */
+.card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* World time cards */
+.world-city-name { font-size: 15px; font-weight: 700; color: #f0f0f5; }
+.world-city-date { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 2px; }
+.world-city-time { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 400; color: #f0f0f5; }
+.del-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 16px; opacity: .3; transition: opacity .15s; padding: 0 0 0 10px;
+}
+.del-btn:hover { opacity: .8; }
+
+/* Alarm cards */
+.alarm-time-text { font-family: 'DM Mono', monospace; font-size: 30px; font-weight: 400; color: #f0f0f5; }
+.alarm-label-text { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 3px; }
+.alarm-card.off { opacity: .45; }
+.alarm-right { display: flex; align-items: center; gap: 10px; }
+.toggle {
+  width: 44px; height: 26px;
+  background: rgba(255,255,255,.15);
+  border-radius: 13px; cursor: pointer;
+  position: relative; transition: background .2s; border: none;
+  flex-shrink: 0;
+}
+.toggle.on { background: #34c759; }
+.toggle::after {
+  content: ''; position: absolute;
+  width: 22px; height: 22px;
+  background: #fff; border-radius: 50%;
+  top: 2px; left: 2px;
+  transition: transform .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+.toggle.on::after { transform: translateX(18px); }
+
+/* Add rows */
+.add-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.add-row select,
+.add-row input[type="time"],
+.add-row input[type="text"] {
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.1);
+  color: #f0f0f5;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  padding: 10px 13px;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color .15s;
+}
+.add-row select:focus,
+.add-row input:focus {
+  border-color: rgba(108,63,224,.6);
+  box-shadow: 0 0 0 3px rgba(108,63,224,.15);
+}
+.add-row select { flex: 1; cursor: pointer; }
+.add-row input[type="time"] { width: 120px; }
+.add-row input[type="text"] { flex: 1; min-width: 100px; }
+.add-row input::placeholder { color: rgba(255,255,255,.25); }
+
+.add-btn {
+  background: linear-gradient(135deg, #2d2d55, #4a1fb8);
+  color: #fff; border: none; border-radius: 12px;
+  padding: 10px 18px;
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(74,31,184,.35);
+  transition: transform .15s, box-shadow .15s;
+}
+.add-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(74,31,184,.45); }
+.add-btn:active { transform: translateY(0); }
+
+/* Note / warning */
+.note-bar {
+  background: rgba(245,166,35,.08);
+  border: 1px solid rgba(245,166,35,.2);
+  border-radius: 12px; padding: 10px 14px;
+  font-size: 12px; font-weight: 600;
+  color: #d4900a; line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.section-empty {
+  text-align: center; padding: 32px 16px;
+  font-size: 13px; color: rgba(255,255,255,.3);
+  font-style: italic;
+}
+
+/* ── Alarm ring overlay ── */
+#ring-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, #1c1c2e, #4a1fb8);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: #fff;
+  animation: ringPulse 1.2s ease-in-out infinite alternate;
+}
+#ring-overlay.ringing { display: flex; }
+@keyframes ringPulse {
+  from { background: linear-gradient(135deg, #1c1c2e, #4a1fb8); }
+  to   { background: linear-gradient(135deg, #2d1a5e, #6c3fe0); }
+}
+.ring-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 80px; font-weight: 300; letter-spacing: 4px;
+}
+.ring-label { font-size: 24px; margin-top: 8px; opacity: .8; font-weight: 600; }
+.ring-dismiss {
+  margin-top: 52px;
+  padding: 16px 52px; border-radius: 32px;
+  border: 2px solid rgba(255,255,255,.5);
+  background: none; color: #fff;
+  font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700;
+  cursor: pointer; transition: background .2s;
+}
+.ring-dismiss:hover { background: rgba(255,255,255,.15); }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time" id="sb-time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity=".4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Top nav -->
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+  </div>
+
+  <!-- App header -->
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
+        <path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1>Clock</h1>
+      <p>World time · Alarms</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-clock" onclick="switchTab('clock')">🕐 Clock</button>
+    <button class="tab-btn" id="tab-world" onclick="switchTab('world')">🌍 World</button>
+    <button class="tab-btn" id="tab-alarms" onclick="switchTab('alarms')">⏰ Alarms</button>
+  </div>
+
+  <!-- Clock panel -->
+  <div class="panel active" id="panel-clock">
+    <div class="clock-face-wrap">
+      <canvas id="clockCanvas" width="220" height="220"></canvas>
+    </div>
+    <div class="digital-time" id="digital-time">00:00:00</div>
+    <div class="date-str" id="date-str"></div>
+    <div class="tz-str" id="tz-str"></div>
+  </div>
+
+  <!-- World time panel -->
+  <div class="panel" id="panel-world">
+    <div class="add-row">
+      <select id="city-select"><option value="">— Add a city —</option></select>
+      <button class="add-btn" onclick="addCity()">Add</button>
+    </div>
+    <div id="world-list"></div>
+  </div>
+
+  <!-- Alarms panel -->
+  <div class="panel" id="panel-alarms">
+    <div class="note-bar">⚠️ Alarms ring only while this browser tab is open</div>
+    <div class="add-row">
+      <input type="time" id="alarm-time-input"/>
+      <input type="text" id="alarm-label-input" placeholder="Label (optional)" maxlength="30"/>
+      <button class="add-btn" onclick="addAlarm()">Set</button>
+    </div>
+    <div id="alarm-list"></div>
+  </div>
+</div>
+
+<!-- Alarm ring overlay -->
+<div id="ring-overlay">
+  <div class="ring-time" id="ring-time-text">00:00</div>
+  <div class="ring-label" id="ring-label-text">Alarm</div>
+  <button class="ring-dismiss" onclick="dismissAlarm()">Dismiss</button>
+</div>
+
+<script>
+/* ── Status bar clock ── */
+function tickSB() {
+  const n = new Date();
+  const t = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('sb-time').textContent = t;
+}
+tickSB(); setInterval(tickSB, 10000);
+
+/* ── Tabs ── */
+let currentTab = 'clock';
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'world') renderWorldList();
+  if (tab === 'alarms') renderAlarmList();
+}
+
+/* ── Analog clock face ── */
+function drawClock() {
+  const canvas = document.getElementById('clockCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 220, H = 220, cx = 110, cy = 110, R = 104;
+  const now = new Date();
+  const hrs = now.getHours() % 12, min = now.getMinutes(), sec = now.getSeconds();
+  const isLight = document.documentElement.classList.contains('guicks-light');
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Face
+  ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  ctx.fillStyle = isLight ? '#ffffff' : '#12122a';
+  ctx.fill();
+  ctx.strokeStyle = isLight ? 'rgba(0,0,0,.08)' : 'rgba(255,255,255,.08)';
+  ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Tick marks
+  for (let i = 0; i < 60; i++) {
+    const angle = (i / 60) * 2 * Math.PI - Math.PI / 2;
+    const isMaj = i % 5 === 0;
+    const r1 = R - (isMaj ? 14 : 7), r2 = R - 3;
+    ctx.beginPath();
+    ctx.moveTo(cx + r1 * Math.cos(angle), cy + r1 * Math.sin(angle));
+    ctx.lineTo(cx + r2 * Math.cos(angle), cy + r2 * Math.sin(angle));
+    ctx.strokeStyle = isMaj
+      ? (isLight ? '#0d0d1a' : '#f0f0f5')
+      : (isLight ? 'rgba(0,0,0,.18)' : 'rgba(255,255,255,.18)');
+    ctx.lineWidth = isMaj ? 2 : 1;
+    ctx.stroke();
+  }
+
+  // Hour labels
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = isLight ? '#0d0d1a' : '#f0f0f5';
+  ctx.font = 'bold 12px Outfit, sans-serif';
+  [12, 3, 6, 9].forEach((n, i) => {
+    const a = (i / 4) * 2 * Math.PI - Math.PI / 2;
+    ctx.fillText(n, cx + 72 * Math.cos(a), cy + 72 * Math.sin(a));
+  });
+
+  // Hands
+  const handColor = isLight ? '#0d0d1a' : '#f0f0f5';
+  function drawHand(angle, len, width, color) {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, -len); ctx.lineTo(0, len * 0.18);
+    ctx.strokeStyle = color; ctx.lineWidth = width;
+    ctx.lineCap = 'round'; ctx.stroke(); ctx.restore();
+  }
+  drawHand((hrs + min / 60) / 12 * 2 * Math.PI - Math.PI / 2, 64, 5, handColor);
+  drawHand((min + sec / 60) / 60 * 2 * Math.PI - Math.PI / 2, 84, 3.5, handColor);
+  drawHand(sec / 60 * 2 * Math.PI - Math.PI / 2, 90, 2, '#ff3b30');
+
+  // Centre dot
+  ctx.beginPath(); ctx.arc(cx, cy, 5, 0, 2 * Math.PI);
+  ctx.fillStyle = '#ff3b30'; ctx.fill();
+}
+
+function updateClockPanel() {
+  const now = new Date();
+  document.getElementById('digital-time').textContent =
+    now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('date-str').textContent =
+    now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('tz-str').textContent =
+    Intl.DateTimeFormat().resolvedOptions().timeZone;
+  drawClock();
+}
+
+/* ── World time ── */
+const TZ_LIST = [
+  ['New York','America/New_York'],['Los Angeles','America/Los_Angeles'],
+  ['Chicago','America/Chicago'],['Toronto','America/Toronto'],
+  ['Vancouver','America/Vancouver'],['Mexico City','America/Mexico_City'],
+  ['São Paulo','America/Sao_Paulo'],['Buenos Aires','America/Argentina/Buenos_Aires'],
+  ['London','Europe/London'],['Paris','Europe/Paris'],
+  ['Berlin','Europe/Berlin'],['Madrid','Europe/Madrid'],
+  ['Rome','Europe/Rome'],['Warsaw','Europe/Warsaw'],
+  ['Amsterdam','Europe/Amsterdam'],['Stockholm','Europe/Stockholm'],
+  ['Zurich','Europe/Zurich'],['Athens','Europe/Athens'],
+  ['Dubai','Asia/Dubai'],['Riyadh','Asia/Riyadh'],
+  ['Moscow','Europe/Moscow'],['Istanbul','Europe/Istanbul'],
+  ['Mumbai','Asia/Kolkata'],['Delhi','Asia/Kolkata'],
+  ['Dhaka','Asia/Dhaka'],['Bangkok','Asia/Bangkok'],
+  ['Singapore','Asia/Singapore'],['Hong Kong','Asia/Hong_Kong'],
+  ['Shanghai','Asia/Shanghai'],['Beijing','Asia/Shanghai'],
+  ['Tokyo','Asia/Tokyo'],['Seoul','Asia/Seoul'],
+  ['Sydney','Australia/Sydney'],['Melbourne','Australia/Melbourne'],
+  ['Auckland','Pacific/Auckland'],['Cairo','Africa/Cairo'],
+  ['Nairobi','Africa/Nairobi'],['Lagos','Africa/Lagos'],
+  ['Johannesburg','Africa/Johannesburg'],
+];
+
+// Populate select
+(function() {
+  const sel = document.getElementById('city-select');
+  TZ_LIST.forEach(([city, tz]) => {
+    const opt = document.createElement('option');
+    opt.value = tz; opt.textContent = city;
+    sel.appendChild(opt);
+  });
+})();
+
+const CITIES_KEY = 'guicks_clk_cities_v1';
+let cities = [];
+try { cities = JSON.parse(localStorage.getItem(CITIES_KEY)) || []; } catch(e) {}
+
+function addCity() {
+  const sel = document.getElementById('city-select');
+  const tz = sel.value;
+  if (!tz) { showToast('Pick a city first'); return; }
+  const city = TZ_LIST.find(([c, t]) => t === tz)?.[0] || tz;
+  if (cities.find(c => c.tz === tz)) { showToast('Already added!'); return; }
+  cities.push({ city, tz });
+  localStorage.setItem(CITIES_KEY, JSON.stringify(cities));
+  renderWorldList(); sel.value = '';
+  showToast('✅ ' + city + ' added');
+}
+
+function renderWorldList() {
+  const el = document.getElementById('world-list');
+  if (!cities.length) {
+    el.innerHTML = '<div class="section-empty">No cities yet — add one above</div>';
+    return;
+  }
+  el.innerHTML = cities.map((c, i) => {
+    const t = new Date().toLocaleTimeString([], { timeZone: c.tz, hour: '2-digit', minute: '2-digit' });
+    const d = new Date().toLocaleDateString([], { timeZone: c.tz, weekday: 'short', month: 'short', day: 'numeric' });
+    return `<div class="card">
+      <div>
+        <div class="world-city-name">${c.city}</div>
+        <div class="world-city-date">${d}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="world-city-time">${t}</div>
+        <button class="del-btn" onclick="removeCity(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function removeCity(i) {
+  cities.splice(i, 1);
+  localStorage.setItem(CITIES_KEY, JSON.stringify(cities));
+  renderWorldList();
+}
+
+/* ── Alarms ── */
+const ALARMS_KEY = 'guicks_clk_alarms_v1';
+let alarms = [];
+try { alarms = JSON.parse(localStorage.getItem(ALARMS_KEY)) || []; } catch(e) {}
+
+function addAlarm() {
+  const time = document.getElementById('alarm-time-input').value;
+  if (!time) { showToast('Pick a time first'); return; }
+  const label = document.getElementById('alarm-label-input').value.trim() || 'Alarm';
+  alarms.push({ id: Date.now(), time, label, on: true });
+  localStorage.setItem(ALARMS_KEY, JSON.stringify(alarms));
+  renderAlarmList();
+  document.getElementById('alarm-time-input').value = '';
+  document.getElementById('alarm-label-input').value = '';
+  showToast('⏰ Alarm set for ' + time);
+}
+
+function renderAlarmList() {
+  const el = document.getElementById('alarm-list');
+  if (!alarms.length) {
+    el.innerHTML = '<div class="section-empty">No alarms set yet</div>';
+    return;
+  }
+  el.innerHTML = alarms.map((a, i) => `
+    <div class="card alarm-card${a.on ? '' : ' off'}">
+      <div>
+        <div class="alarm-time-text">${a.time}</div>
+        <div class="alarm-label-text">${a.label}</div>
+      </div>
+      <div class="alarm-right">
+        <button class="toggle${a.on ? ' on' : ''}" onclick="toggleAlarm(${i})"></button>
+        <button class="del-btn" onclick="deleteAlarm(${i})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleAlarm(i) {
+  alarms[i].on = !alarms[i].on;
+  localStorage.setItem(ALARMS_KEY, JSON.stringify(alarms));
+  renderAlarmList();
+}
+
+function deleteAlarm(i) {
+  alarms.splice(i, 1);
+  localStorage.setItem(ALARMS_KEY, JSON.stringify(alarms));
+  renderAlarmList();
+}
+
+/* ── Alarm ringing ── */
+let _ringInterval = null;
+let _audioCtx = null;
+
+function checkAlarms() {
+  if (!alarms.length) return;
+  const now = new Date();
+  if (now.getSeconds() !== 0) return; // check only on exact minute
+  const cur = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  alarms.forEach(a => {
+    if (a.on && a.time === cur && !a._ringing) {
+      a._ringing = true;
+      ringAlarm(a);
+      setTimeout(() => { a._ringing = false; }, 61000);
+    }
+  });
+}
+
+function ringAlarm(alarm) {
+  document.getElementById('ring-time-text').textContent = alarm.time;
+  document.getElementById('ring-label-text').textContent = alarm.label;
+  document.getElementById('ring-overlay').classList.add('ringing');
+  // Web Audio API beep
+  try {
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function beep() {
+      const osc = _audioCtx.createOscillator();
+      const gain = _audioCtx.createGain();
+      osc.connect(gain); gain.connect(_audioCtx.destination);
+      osc.type = 'sine'; osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.4, _audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, _audioCtx.currentTime + 0.6);
+      osc.start(); osc.stop(_audioCtx.currentTime + 0.6);
+    }
+    beep();
+    _ringInterval = setInterval(beep, 1300);
+  } catch(e) {}
+}
+
+function dismissAlarm() {
+  document.getElementById('ring-overlay').classList.remove('ringing');
+  if (_ringInterval) { clearInterval(_ringInterval); _ringInterval = null; }
+  if (_audioCtx) { try { _audioCtx.close(); } catch(e) {} _audioCtx = null; }
+}
+
+/* ── Toast ── */
+let _toastTimer;
+function showToast(msg) {
+  let t = document.getElementById('__toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = '__toast';
+    t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(28,28,40,.93);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:13px;font-weight:500;padding:10px 20px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;white-space:nowrap;z-index:9000;font-family:Outfit,sans-serif';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => {
+    t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(10px)';
+  }, 2200);
+}
+
+/* ── Main loop ── */
+function tick() {
+  tickSB();
+  if (currentTab === 'clock') updateClockPanel();
+  if (currentTab === 'world') renderWorldList();
+  checkAlarms();
+}
+
+// Initial render
+updateClockPanel();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

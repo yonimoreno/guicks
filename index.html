@@ -688,11 +688,34 @@
     body.theme-light .logo { color: #0d0d1a; }
     body.theme-light .tagline { color: #5a5a78; }
     body.theme-light .section-label { color: #9090b0; }
-    body.theme-light .app-name { color: #0d0d1a; }
+    body.theme-light .app-name { color: #0d0d1a; text-shadow: none; }
     body.theme-light .dock { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.1); }
     body.theme-light .dock-slot.empty { border-color: rgba(0,0,0,0.12); }
     body.theme-light .dock-hint { color: #9090b0; }
     body.theme-light .home-bar { background: rgba(0,0,0,0.2); }
+    /* Settings sheet light theme */
+    body.theme-light .settings-sheet { background: #f0f2f7 !important; border-color: rgba(0,0,0,0.1) !important; }
+    body.theme-light .settings-handle { background: rgba(0,0,0,0.15) !important; }
+    body.theme-light .settings-title { color: #0d0d1a !important; }
+    body.theme-light .settings-close { background: rgba(0,0,0,0.07) !important; color: #5a5a78 !important; }
+    body.theme-light .settings-close:hover { background: rgba(0,0,0,0.12) !important; color: #0d0d1a !important; }
+    body.theme-light .settings-group-label { color: rgba(0,0,0,0.4) !important; }
+    body.theme-light .settings-rows { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+    body.theme-light .settings-row { border-bottom-color: rgba(0,0,0,0.06) !important; }
+    body.theme-light .settings-row:hover { background: rgba(0,0,0,0.03) !important; }
+    body.theme-light .settings-row-label { color: #0d0d1a !important; }
+    body.theme-light .settings-row-sub { color: rgba(0,0,0,0.4) !important; }
+    body.theme-light .settings-row-chevron { color: rgba(0,0,0,0.25) !important; }
+    body.theme-light .theme-opt { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: rgba(0,0,0,0.5) !important; }
+    body.theme-light .theme-opt:hover { border-color: rgba(0,0,0,0.25) !important; color: #0d0d1a !important; }
+    body.theme-light .theme-opt.active { background: rgba(79,142,247,0.15) !important; color: #4f8ef7 !important; border-color: rgba(79,142,247,0.4) !important; }
+    body.theme-light .settings-danger-btn { border-color: rgba(255,59,48,0.3) !important; background: rgba(255,59,48,0.07) !important; }
+    body.theme-light .settings-action-btn { border-color: rgba(79,142,247,0.3) !important; background: rgba(79,142,247,0.07) !important; }
+    body.theme-light .confirm-box { background: #fff !important; border-color: rgba(0,0,0,0.1) !important; }
+    body.theme-light .confirm-title { color: #0d0d1a !important; }
+    body.theme-light .confirm-message { color: rgba(0,0,0,0.5) !important; }
+    body.theme-light .confirm-cancel { background: rgba(0,0,0,0.06) !important; border-color: rgba(0,0,0,0.12) !important; color: rgba(0,0,0,0.6) !important; }
+    body.theme-light .settings-overlay { background: rgba(200,200,220,0.7) !important; }
   </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -746,179 +769,102 @@
     <div class="app-grid" id="mainGrid">
 
       <!-- QR Generator -->
-      <div class="app" onclick="openTool('./guicks-qr.html', 'QR Generator')">
-        <div class="icon icon-qr">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
-            <rect x="5" y="5" width="3" height="3" fill="white"/>
-            <rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
-            <rect x="16" y="5" width="3" height="3" fill="white"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
-            <rect x="5" y="16" width="3" height="3" fill="white"/>
-            <rect x="14" y="14" width="2" height="2" fill="white"/>
-            <rect x="18" y="14" width="3" height="3" rx="0.5" fill="white"/>
-            <rect x="14" y="18" width="3" height="3" rx="0.5" fill="white"/>
-            <rect x="19" y="19" width="2" height="2" fill="white"/>
-          </svg>
+      <div class="app" onclick="openTool('./guicks-qr.html', 'QR Generator')" draggable="true" data-tool-name="QR Generator" data-tool-url="./guicks-qr.html">
+        <div class="icon" style="background: linear-gradient(145deg, #3a1fa8, #6c3fe0);">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="5" width="3" height="3" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="16" y="5" width="3" height="3" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="16" width="3" height="3" fill="white"/><rect x="14" y="14" width="2" height="2" fill="white"/><rect x="18" y="14" width="3" height="3" rx=".5" fill="white"/><rect x="14" y="18" width="3" height="3" rx=".5" fill="white"/><rect x="19" y="19" width="2" height="2" fill="white"/></svg>
         </div>
         <span class="app-name">QR Generator</span>
       </div>
 
       <!-- Currency Converter -->
-      <div class="app" onclick="openTool('./guicks-currency.html', 'Currency Converter')">
-        <div class="icon icon-currency">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
-            <path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
+      <div class="app" onclick="openTool('./guicks-currency.html', 'Currency')" draggable="true" data-tool-name="Currency" data-tool-url="./guicks-currency.html">
+        <div class="icon" style="background: linear-gradient(145deg, #0d4a2e, #1a7a4a);">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
         <span class="app-name">Currency</span>
       </div>
 
-      <!-- Sheep Count -->
-      <div class="app" onclick="openTool('https://sheepcount.rest', 'Sheep Count')">
-        <div class="icon" style="background: linear-gradient(145deg, #1a4a3a, #2d7a5a);">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:44px;height:44px;">
-            <!-- Fence posts -->
-            <rect x="1.5" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
-            <rect x="5.5" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
-            <!-- Fence rails -->
-            <rect x="1.5" y="14" width="5.5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
-            <rect x="1.5" y="17" width="5.5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
-
-            <!-- Sheep body (fluffy, mid-jump, tilted) -->
-            <g transform="translate(12, 8) rotate(-15)">
-              <circle cx="0"  cy="0"   r="3.2" fill="white"/>
-              <circle cx="2.5" cy="1"  r="2.5" fill="white"/>
-              <circle cx="-2.5" cy="1" r="2.5" fill="white"/>
-              <circle cx="1"  cy="-2"  r="2.5" fill="white"/>
-              <circle cx="-1" cy="-2"  r="2.5" fill="white"/>
-              <!-- Face -->
-              <ellipse cx="3.2" cy="2.5" rx="2" ry="1.6" fill="white"/>
-              <!-- Eye -->
-              <circle cx="3.8" cy="2" r="0.5" fill="#2d7a5a"/>
-              <!-- Front legs (tucked mid-jump) -->
-              <line x1="-1" y1="3" x2="-2.5" y2="5.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-              <line x1="1"  y1="3" x2="0"    y2="6"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-              <!-- Back legs (kicked up) -->
-              <line x1="-2" y1="2" x2="-4"   y2="0"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-              <line x1="-1" y1="2.5" x2="-3" y2="1"   stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-            </g>
-
-            <!-- Right side fence (partially behind sheep) -->
-            <rect x="19" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
-            <rect x="22" y="13" width="1.5" height="7" rx="0.5" fill="white" opacity="0.9"/>
-            <rect x="19" y="14" width="5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
-            <rect x="19" y="17" width="5" height="1.2" rx="0.5" fill="white" opacity="0.9"/>
-
-            <!-- Ground line -->
-            <line x1="1" y1="20.5" x2="23" y2="20.5" stroke="white" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
-          </svg>
-        </div>
-        <span class="app-name">Sheep Count</span>
-      </div>
       <!-- Favorites -->
-      <div class="app" onclick="openTool('./guicks-favorites.html', 'Favorites')">
+      <div class="app" onclick="openTool('./guicks-favorites.html', 'Favorites')" draggable="true" data-tool-name="Favorites" data-tool-url="./guicks-favorites.html">
         <div class="icon" style="background: linear-gradient(145deg, #e8820a, #f5c842);">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/></svg>
         </div>
         <span class="app-name">Favorites</span>
       </div>
 
       <!-- Unit Converter -->
-      <div class="app" onclick="openTool('./guicks-converter.html', 'Unit Converter')">
+      <div class="app" onclick="openTool('./guicks-converter.html', 'Converter')" draggable="true" data-tool-name="Converter" data-tool-url="./guicks-converter.html">
         <div class="icon" style="background: linear-gradient(145deg, #005ecb, #0a84ff);">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
-            <path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <span class="app-name">Converter</span>
       </div>
 
       <!-- Weather -->
-      <div class="app" onclick="openTool('./guicks-weather.html', 'Weather')">
+      <div class="app" onclick="openTool('./guicks-weather.html', 'Weather')" draggable="true" data-tool-name="Weather" data-tool-url="./guicks-weather.html">
         <div class="icon" style="background: linear-gradient(145deg, #1a6dd4, #5ba5f5);">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="12" cy="12" r="4" fill="white"/>
-            <path d="M6 16.5A3.5 3.5 0 009.5 20h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 16.5z" fill="rgba(255,255,255,0.5)"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><path d="M6 18.5A3.5 3.5 0 009.5 22h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 18.5z" fill="rgba(255,255,255,0.7)"/><path d="M12 2v1.5M5.5 5.5l1 1M2 12h1.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
         <span class="app-name">Weather</span>
       </div>
 
       <!-- Lucky -->
-      <div class="app" onclick="openTool('./guicks-lucky.html', 'Lucky')">
+      <div class="app" onclick="openTool('./guicks-lucky.html', 'Lucky')" draggable="true" data-tool-name="Lucky" data-tool-url="./guicks-lucky.html">
         <div class="icon" style="background: linear-gradient(145deg, #d43a18, #ff5c35);">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
-            <circle cx="8.5" cy="8.5" r="1.6" fill="white"/>
-            <circle cx="15.5" cy="8.5" r="1.6" fill="white"/>
-            <circle cx="8.5" cy="15.5" r="1.6" fill="white"/>
-            <circle cx="15.5" cy="15.5" r="1.6" fill="white"/>
-            <circle cx="12" cy="12" r="1.6" fill="white"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.6" fill="white"/><circle cx="15.5" cy="8.5" r="1.6" fill="white"/><circle cx="8.5" cy="15.5" r="1.6" fill="white"/><circle cx="15.5" cy="15.5" r="1.6" fill="white"/><circle cx="12" cy="12" r="1.6" fill="white"/></svg>
         </div>
         <span class="app-name">Lucky</span>
       </div>
 
       <!-- Calculator -->
-      <div class="app" onclick="openTool('./guicks-calculator.html', 'Calculator')">
+      <div class="app" onclick="openTool('./guicks-calculator.html', 'Calculator')" draggable="true" data-tool-name="Calculator" data-tool-url="./guicks-calculator.html">
         <div class="icon" style="background: linear-gradient(145deg, #4a1fb8, #6c3fe0);">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/>
-            <rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/>
-            <circle cx="8" cy="14" r="1.2" fill="white"/>
-            <circle cx="12" cy="14" r="1.2" fill="white"/>
-            <circle cx="16" cy="14" r="1.2" fill="white"/>
-            <circle cx="8" cy="18.5" r="1.2" fill="white"/>
-            <circle cx="12" cy="18.5" r="1.2" fill="white"/>
-            <circle cx="16" cy="18.5" r="1.2" fill="rgba(255,255,255,0.4)"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/><rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/><circle cx="8" cy="14" r="1.2" fill="white"/><circle cx="12" cy="14" r="1.2" fill="white"/><circle cx="16" cy="14" r="1.2" fill="white"/><circle cx="8" cy="18.5" r="1.2" fill="white"/><circle cx="12" cy="18.5" r="1.2" fill="white"/></svg>
         </div>
         <span class="app-name">Calculator</span>
       </div>
 
-
-      <!-- Coming Soon: Stock Market -->
       <!-- Stocks -->
-      <div class="app" onclick="openTool('./guicks-stocks.html', 'Stocks')">
+      <div class="app" onclick="openTool('./guicks-stocks.html', 'Stocks')" draggable="true" data-tool-name="Stocks" data-tool-url="./guicks-stocks.html">
         <div class="icon" style="background: linear-gradient(145deg, #0d0d1a, #1a1a2e);">
-          <svg viewBox="0 0 24 24" fill="none">
-            <polyline points="3,17 7,11 11,14 15,7 21,10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><polyline points="3,17 7,11 11,14 15,7 21,10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
         <span class="app-name">Stocks</span>
       </div>
 
       <!-- Translate -->
-      <div class="app" onclick="openTool('./guicks-translate.html', 'Translate')">
+      <div class="app" onclick="openTool('./guicks-translate.html', 'Translate')" draggable="true" data-tool-name="Translate" data-tool-url="./guicks-translate.html">
         <div class="icon" style="background: linear-gradient(145deg, #1a2a00, #2e4a00); border: 1px solid rgba(200,240,96,0.2);">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
         <span class="app-name">Translate</span>
+      </div>
+
+      <!-- Calendar -->
+      <div class="app" onclick="openTool('./guicks-calendar.html', 'Calendar')" draggable="true" data-tool-name="Calendar" data-tool-url="./guicks-calendar.html">
+        <div class="icon" style="background: linear-gradient(145deg, #2d1a6e, #5b3fb8);">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/><rect x="7" y="13" width="4" height="4" rx="1" fill="rgba(255,255,255,.75)"/></svg>
+        </div>
+        <span class="app-name">Calendar</span>
+      </div>
+
+      <!-- Clock -->
+      <div class="app" onclick="openTool('./guicks-clock.html', 'Clock')" draggable="true" data-tool-name="Clock" data-tool-url="./guicks-clock.html">
+        <div class="icon" style="background: linear-gradient(145deg, #1c1c2e, #2d2d55);">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="app-name">Clock</span>
       </div>
 
       <!-- Settings -->
       <div class="app" onclick="openSettings()">
         <div class="icon" style="background: linear-gradient(145deg, #3a3a4a, #6e6e80);">
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </div>
         <span class="app-name">Settings</span>
       </div>
 
-    </div>
+    
   </div>
 
   <!-- Dock -->
@@ -1040,7 +986,8 @@
   const TOOLS = [
     { name: 'QR Generator', desc: 'Create QR codes for links, contacts & more', url: './guicks-qr.html', iconBg: 'linear-gradient(145deg,#3a1fa8,#6c3fe0)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="5" width="3" height="3" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="16" y="5" width="3" height="3" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="16" width="3" height="3" fill="white"/><rect x="14" y="14" width="2" height="2" fill="white"/><rect x="18" y="14" width="3" height="3" rx=".5" fill="white"/><rect x="14" y="18" width="3" height="3" rx=".5" fill="white"/><rect x="19" y="19" width="2" height="2" fill="white"/></svg>` },
     { name: 'Currency', desc: 'Live exchange rates for 170+ currencies', url: './guicks-currency.html', iconBg: 'linear-gradient(145deg,#0d4a2e,#1a7a4a)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
-    { name: 'Sheep Count', desc: 'Count sheep — try it!', url: 'https://sheepcount.rest', iconBg: 'linear-gradient(145deg,#1a4a3a,#2d7a5a)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><circle cx="8.5" cy="11.5" r="3" fill="white"/><circle cx="15.5" cy="11.5" r="3" fill="white"/><circle cx="9.5" cy="8" r="3" fill="white"/><circle cx="14.5" cy="8" r="3" fill="white"/><circle cx="12" cy="6.5" r="2.8" fill="white"/><ellipse cx="12" cy="13.5" rx="3" ry="2.5" fill="white"/><circle cx="10.8" cy="13" r="0.6" fill="#2d7a5a"/><circle cx="13.2" cy="13" r="0.6" fill="#2d7a5a"/><rect x="9.8" y="15.5" width="1.4" height="4" rx="0.7" fill="white"/><rect x="12.8" y="15.5" width="1.4" height="4" rx="0.7" fill="white"/></svg>` },
+    { name: 'Calendar', desc: 'Year, month, week & day views with events', url: './guicks-calendar.html', iconBg: 'linear-gradient(145deg,#2d1a6e,#5b3fb8)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
+    { name: 'Clock', desc: 'Analog clock, world time & alarms', url: './guicks-clock.html', iconBg: 'linear-gradient(145deg,#1c1c2e,#2d2d55)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
     { name: 'Favorites', desc: 'Your personal bookmarks, auto-categorized', url: './guicks-favorites.html', iconBg: 'linear-gradient(145deg,#e8820a,#f5c842)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/></svg>` },
     { name: 'Converter', desc: 'Length, weight, temperature & more', url: './guicks-converter.html', iconBg: 'linear-gradient(145deg,#005ecb,#0a84ff)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
     { name: 'Weather', desc: 'Real-time weather with hourly & 7-day forecast', url: './guicks-weather.html', iconBg: 'linear-gradient(145deg,#1a6dd4,#5ba5f5)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><path d="M6 18.5A3.5 3.5 0 009.5 22h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 18.5z" fill="rgba(255,255,255,0.7)"/><path d="M12 2v1.5M5.5 5.5l1 1M2 12h1.5M5.5 18.5l1-1M18.5 5.5l-1 1M22 12h-1.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
@@ -1530,7 +1477,7 @@
           <div class="settings-row-icon" style="background:rgba(79,142,247,0.15)">🧰</div>
           <div class="settings-row-text">
             <div class="settings-row-label">10 Apps Available</div>
-            <div class="settings-row-sub">QR · Currency · Sheep · Favorites · Converter · Weather · Translate · Calculator · Stocks · Lucky</div>
+            <div class="settings-row-sub">QR · Currency · Favorites · Converter · Weather · Translate · Calculator · Stocks · Lucky · Clock</div>
           </div>
         </div>
       </div>

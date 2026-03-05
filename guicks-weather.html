@@ -723,13 +723,41 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
 loadLocations();
 renderSavedLocations();
 
-// Load first saved location or default to Tel Aviv as example
+// Load first saved location, or request GPS, falling back to Las Palmas
+const DEFAULT_LOC = { name: 'Las Palmas', country: 'Spain', lat: 28.1235, lon: -15.4363 };
+
 if (savedLocations.length > 0) {
   loadWeather(savedLocations[0]);
 } else {
-  // Default: Tel Aviv (matching guicks.com's likely audience)
-  const def = { name: 'Tel Aviv', country: 'Israel', lat: 32.0853, lon: 34.7818 };
-  loadWeather(def);
+  // First visit — request location permission immediately
+  if (navigator.geolocation) {
+    showToast('📍 Detecting your location…');
+    navigator.geolocation.getCurrentPosition(
+      async pos => {
+        const lat = pos.coords.latitude.toFixed(4);
+        const lon = pos.coords.longitude.toFixed(4);
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=en`);
+          const geo = await res.json();
+          const city = geo.address?.city || geo.address?.town || geo.address?.village || geo.address?.county || 'My Location';
+          const country = geo.address?.country || '';
+          const loc = { name: city, country, lat: parseFloat(lat), lon: parseFloat(lon) };
+          addLocation(loc);
+          loadWeather(loc);
+        } catch {
+          const loc = { name: 'My Location', country: '', lat: parseFloat(lat), lon: parseFloat(lon) };
+          loadWeather(loc);
+        }
+      },
+      () => {
+        // Permission denied — fall back to Las Palmas
+        loadWeather(DEFAULT_LOC);
+      },
+      { timeout: 10000 }
+    );
+  } else {
+    loadWeather(DEFAULT_LOC);
+  }
 }
 </script>
 </body>

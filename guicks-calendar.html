@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .back-btn svg{stroke:currentColor!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Calendar — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070d;
+  --surface:rgba(255,255,255,.06);
+  --surface2:rgba(255,255,255,.04);
+  --border:rgba(255,255,255,.09);
+  --border2:rgba(255,255,255,.05);
+  --text:#f0f0f5;
+  --text2:rgba(240,240,245,.6);
+  --text3:rgba(240,240,245,.3);
+  --accent:#7c5ce4;
+  --accent2:#a78bfa;
+  --today-bg:rgba(124,92,228,.25);
+  --today-border:#7c5ce4;
+  --radius:14px;
+  --shadow:0 8px 32px rgba(0,0,0,.4);
+}
+html.guicks-light{
+  --bg:#f0f2f7;
+  --surface:#fff;
+  --surface2:#f7f8fc;
+  --border:rgba(0,0,0,.08);
+  --border2:rgba(0,0,0,.04);
+  --text:#0d0d1a;
+  --text2:rgba(13,13,26,.55);
+  --text3:rgba(13,13,26,.28);
+  --accent:#6c3fe0;
+  --accent2:#7c5ce4;
+  --today-bg:rgba(108,63,224,.12);
+  --today-border:#6c3fe0;
+  --shadow:0 4px 20px rgba(0,0,0,.08);
+}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 55% at 10% 0%,rgba(60,28,140,.38) 0%,transparent 65%),
+    radial-gradient(ellipse 50% 45% at 90% 100%,rgba(28,20,80,.3) 0%,transparent 65%);
+}
+html.guicks-light body::before{display:none}
+
+/* ── Shell ── */
+.shell{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+}
+
+/* ── Status bar ── */
+.statusbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 0;font-size:13px;font-weight:700;color:var(--text);
+}
+.statusbar .sb-time{font-size:16px;font-weight:800;}
+.statusbar .sb-icons{display:flex;gap:5px;align-items:center;}
+.statusbar svg{width:16px;height:16px;fill:var(--text);}
+
+/* ── Top nav ── */
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 0;}
+.back-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  color:var(--accent2);font-size:15px;font-weight:700;
+  text-decoration:none;padding:6px 10px 6px 4px;
+  border-radius:10px;transition:background .15s;
+}
+.back-btn:hover{background:rgba(124,92,228,.1);}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.topnav-right{display:flex;gap:8px;align-items:center;}
+.btn-icon{
+  width:34px;height:34px;border-radius:10px;border:none;cursor:pointer;
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text2);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.btn-icon:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ── App header ── */
+.app-header{
+  display:flex;align-items:center;gap:14px;
+  padding:8px 20px 12px;
+}
+.app-icon-wrap{
+  width:50px;height:50px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(145deg,#2d1a6e,#5b3fb8);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(93,58,184,.4),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.app-icon-wrap svg{width:26px;height:26px;}
+.app-header-text h1{font-size:22px;font-weight:800;letter-spacing:-.5px;}
+.app-header-text p{font-size:12px;color:var(--text2);margin-top:2px;}
+
+/* ── View switcher ── */
+.view-bar{
+  display:flex;gap:4px;
+  margin:0 16px 12px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:13px;padding:4px;
+}
+.vbtn{
+  flex:1;padding:8px 4px;
+  border-radius:9px;border:none;
+  background:none;font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  color:var(--text3);cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.vbtn.active{
+  background:linear-gradient(135deg,#2d1a6e,#5b3fb8);
+  color:#fff;box-shadow:0 3px 12px rgba(93,58,184,.4);
+}
+
+/* ── Nav row ── */
+.nav-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px 10px;
+}
+.nav-title{font-size:18px;font-weight:800;letter-spacing:-.3px;}
+.nav-arrows{display:flex;gap:4px;}
+.arrow-btn{
+  width:32px;height:32px;border-radius:9px;
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--text2);
+  font-size:14px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.arrow-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.today-btn{
+  padding:7px 14px;border-radius:9px;
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--text2);
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.today-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* ── Calendar grid ── */
+.cal-wrap{padding:0 12px;flex:1;}
+.day-headers{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:2px;margin-bottom:4px;
+}
+.day-hdr{
+  text-align:center;font-size:10px;font-weight:700;
+  letter-spacing:.6px;color:var(--text3);
+  padding:4px 0;text-transform:uppercase;
+}
+.month-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:2px;
+}
+.cal-day{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  min-height:72px;padding:5px;
+  cursor:pointer;transition:all .15s;
+  position:relative;overflow:hidden;
+}
+.cal-day:hover{background:var(--surface);border-color:var(--border);}
+.cal-day.other-month{opacity:.35;}
+.cal-day.today{
+  background:var(--today-bg);
+  border-color:var(--today-border);
+}
+.cal-day.selected{
+  border-color:var(--accent2);
+  box-shadow:0 0 0 2px rgba(124,92,228,.25);
+}
+.cal-day-num{
+  font-size:13px;font-weight:700;
+  color:var(--text2);margin-bottom:3px;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;
+  transition:all .15s;
+}
+.cal-day.today .cal-day-num{
+  background:var(--accent);color:#fff;
+  box-shadow:0 2px 8px rgba(124,92,228,.5);
+}
+.day-events-mini{display:flex;flex-direction:column;gap:2px;}
+.evt-dot{
+  height:16px;border-radius:5px;
+  font-size:9px;font-weight:700;
+  padding:0 5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  display:flex;align-items:center;
+  color:#fff;
+}
+.more-badge{
+  font-size:9px;font-weight:700;
+  color:var(--text3);padding-left:2px;
+}
+
+/* ── Week view ── */
+.week-wrap{padding:0 12px;overflow-x:auto;}
+.week-grid{
+  display:grid;
+  grid-template-columns:48px repeat(7,1fr);
+  min-width:520px;
+}
+.week-col-hdr{
+  text-align:center;padding:4px 2px 8px;
+  font-size:11px;font-weight:700;color:var(--text3);
+  letter-spacing:.4px;
+}
+.week-col-hdr .wday{display:block;font-size:11px;margin-bottom:2px;text-transform:uppercase;}
+.week-col-hdr .wnum{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:50%;
+  font-size:14px;font-weight:800;color:var(--text2);
+}
+.week-col-hdr.today-col .wnum{
+  background:var(--accent);color:#fff;
+  box-shadow:0 2px 8px rgba(124,92,228,.5);
+}
+.time-col{display:flex;flex-direction:column;}
+.time-label{
+  height:48px;display:flex;align-items:flex-start;
+  font-size:10px;font-weight:600;color:var(--text3);
+  padding-top:2px;
+}
+.week-day-col{
+  position:relative;
+  border-left:1px solid var(--border2);
+  cursor:pointer;
+}
+.week-day-col:hover{background:rgba(124,92,228,.04);}
+.week-hour-row{
+  height:48px;
+  border-bottom:1px solid var(--border2);
+}
+.week-evt{
+  position:absolute;left:2px;right:2px;
+  border-radius:6px;padding:3px 6px;
+  font-size:10px;font-weight:700;
+  color:#fff;cursor:pointer;
+  overflow:hidden;z-index:2;
+  transition:filter .15s;
+  line-height:1.3;
+}
+.week-evt:hover{filter:brightness(1.15);}
+
+/* ── Day view ── */
+.day-wrap{padding:0 12px;overflow-x:hidden;}
+.day-header-row{
+  display:flex;align-items:center;gap:10px;
+  padding-bottom:10px;
+}
+.day-date-big{
+  font-size:32px;font-weight:800;letter-spacing:-1px;
+}
+.day-date-sub{font-size:14px;color:var(--text2);margin-top:2px;}
+.day-grid{
+  display:grid;
+  grid-template-columns:48px 1fr;
+}
+.day-hour-row{
+  height:56px;
+  border-bottom:1px solid var(--border2);
+  position:relative;
+}
+.day-time-label{
+  height:56px;display:flex;align-items:flex-start;padding-top:3px;
+  font-size:10px;font-weight:600;color:var(--text3);
+}
+.day-slot{
+  position:relative;cursor:pointer;
+}
+.day-slot:hover{background:rgba(124,92,228,.06);}
+.day-evt{
+  position:absolute;left:3px;right:3px;
+  border-radius:8px;padding:4px 8px;
+  font-size:11px;font-weight:700;color:#fff;
+  cursor:pointer;z-index:2;overflow:hidden;
+  transition:filter .15s;
+  display:flex;flex-direction:column;gap:1px;
+}
+.day-evt:hover{filter:brightness(1.15);}
+.day-evt-label{font-size:9px;opacity:.8;}
+.now-line{
+  position:absolute;left:0;right:0;height:2px;
+  background:var(--accent);z-index:10;
+  pointer-events:none;
+}
+.now-line::before{
+  content:'';position:absolute;
+  left:-4px;top:-4px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--accent);
+}
+
+/* ── Year view ── */
+.year-wrap{padding:0 12px 20px;}
+.year-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+@media(max-width:600px){.year-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:380px){.year-grid{grid-template-columns:1fr 1fr;}}
+.mini-month{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;padding:10px;
+  cursor:pointer;transition:all .18s;
+}
+.mini-month:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(124,92,228,.2);}
+.mini-month-title{
+  font-size:12px;font-weight:800;
+  text-align:center;margin-bottom:6px;
+  color:var(--text);
+}
+.mini-day-hdrs{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  margin-bottom:3px;
+}
+.mini-day-hdr{
+  font-size:7px;font-weight:700;
+  text-align:center;color:var(--text3);
+}
+.mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
+.mini-cell{
+  font-size:8px;font-weight:600;
+  text-align:center;padding:2px 0;
+  color:var(--text2);border-radius:4px;
+  position:relative;
+}
+.mini-cell.today{
+  background:var(--accent);color:#fff;border-radius:4px;
+}
+.mini-cell.other{color:var(--text3);}
+.mini-cell.has-evt::after{
+  content:'';position:absolute;
+  bottom:0;left:50%;transform:translateX(-50%);
+  width:3px;height:3px;border-radius:50%;
+  background:var(--accent2);
+}
+.mini-cell.today.has-evt::after{background:#fff;}
+
+/* ── Event modal ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(16px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-sheet{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:640px;
+  padding:0 20px 44px;
+  transform:translateY(60px);
+  transition:transform .3s cubic-bezier(.34,1.2,.64,1);
+  max-height:90vh;overflow-y:auto;
+}
+.modal-sheet::-webkit-scrollbar{width:0;}
+.modal-overlay.open .modal-sheet{transform:translateY(0);}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--border);margin:14px auto 18px;}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.3px;margin-bottom:16px;}
+
+.form-group{margin-bottom:14px;}
+.form-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.form-input{
+  width:100%;padding:12px 14px;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  color:var(--text);
+  font-family:'Outfit',sans-serif;font-size:14px;
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.form-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(124,92,228,.15);
+}
+.form-input::placeholder{color:var(--text3);}
+.form-row{display:flex;gap:10px;}
+.form-row .form-group{flex:1;}
+
+/* Category pills */
+.cat-list{display:flex;flex-wrap:wrap;gap:8px;}
+.cat-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 12px;border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .15s;color:var(--text2);
+}
+.cat-pill:hover{border-color:var(--accent);color:var(--text);}
+.cat-pill.selected{color:#fff;border-color:transparent;}
+.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* Action buttons */
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.btn-save{
+  flex:1;padding:14px;border-radius:13px;border:none;
+  background:linear-gradient(135deg,#2d1a6e,#5b3fb8);
+  color:#fff;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;
+  cursor:pointer;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 16px rgba(93,58,184,.4);
+}
+.btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(93,58,184,.5);}
+.btn-cancel{
+  padding:14px 20px;border-radius:13px;
+  border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text2);
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.btn-cancel:hover{background:var(--surface2);color:var(--text);}
+.btn-delete{
+  padding:14px 16px;border-radius:13px;
+  border:1.5px solid rgba(255,59,48,.3);
+  background:rgba(255,59,48,.08);
+  color:#ff3b30;
+  font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.btn-delete:hover{background:rgba(255,59,48,.16);}
+
+/* ── Event list panel (day detail) ── */
+.day-events-panel{
+  margin:0 12px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+}
+.dep-header{
+  padding:12px 16px;
+  font-size:12px;font-weight:800;
+  color:var(--text2);
+  border-bottom:1px solid var(--border2);
+  letter-spacing:.3px;
+}
+.dep-evt{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;
+  border-bottom:1px solid var(--border2);
+  cursor:pointer;transition:background .12s;
+}
+.dep-evt:last-child{border-bottom:none;}
+.dep-evt:hover{background:var(--surface2);}
+.dep-evt-bar{width:4px;align-self:stretch;border-radius:3px;flex-shrink:0;}
+.dep-evt-info{flex:1;min-width:0;}
+.dep-evt-title{font-size:14px;font-weight:700;color:var(--text);}
+.dep-evt-time{font-size:11px;color:var(--text2);margin-top:2px;}
+.dep-evt-cat{
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:20px;color:#fff;
+}
+.dep-empty{
+  padding:24px;text-align:center;
+  font-size:13px;color:var(--text3);font-style:italic;
+}
+.dep-add-btn{
+  width:100%;padding:13px;border:none;
+  background:none;color:var(--accent2);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;border-top:1px solid var(--border2);
+  transition:background .15s;
+}
+.dep-add-btn:hover{background:var(--surface2);}
+
+/* ── Categories manager ── */
+.cats-overlay{
+  position:fixed;inset:0;z-index:900;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(16px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.cats-overlay.open{opacity:1;pointer-events:all;}
+.cats-sheet{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:24px 24px 0 0;
+  width:100%;max-width:640px;
+  padding:0 20px 44px;
+  transform:translateY(60px);
+  transition:transform .3s cubic-bezier(.34,1.2,.64,1);
+  max-height:80vh;overflow-y:auto;
+}
+.cats-sheet::-webkit-scrollbar{width:0;}
+.cats-overlay.open .cats-sheet{transform:translateY(0);}
+.cat-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border2);
+}
+.cat-row:last-child{border-bottom:none;}
+.cat-color-swatch{
+  width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;flex-shrink:0;
+  transition:transform .15s;border:2px solid transparent;
+}
+.cat-color-swatch:hover{transform:scale(1.1);}
+.cat-name-disp{flex:1;font-size:14px;font-weight:700;}
+.cat-evt-count{font-size:11px;color:var(--text3);}
+.cat-del-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:16px;opacity:.35;transition:opacity .15s;padding:4px;
+}
+.cat-del-btn:hover{opacity:.8;}
+.new-cat-row{display:flex;gap:8px;margin-top:14px;align-items:center;}
+.color-swatches{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.clr-sw{
+  width:28px;height:28px;border-radius:8px;
+  cursor:pointer;border:2px solid transparent;
+  transition:transform .15s,border-color .15s;
+}
+.clr-sw:hover{transform:scale(1.12);}
+.clr-sw.picked{border-color:#fff;transform:scale(1.15);}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(20,20,36,.93);backdrop-filter:blur(20px);
+  border:1px solid var(--border);color:#fff;
+  font-size:13px;font-weight:500;padding:10px 20px;
+  border-radius:20px;pointer-events:none;
+  opacity:0;transition:opacity .2s,transform .2s;
+  white-space:nowrap;z-index:9999;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="sb-time" id="sb-time">9:41</span>
+    <div class="sb-icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity=".4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Top nav -->
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+    <div class="topnav-right">
+      <button class="btn-icon" onclick="openCats()" title="Categories">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/></svg>
+      </button>
+      <button class="btn-icon" onclick="openEventModal(null, new Date())" title="New event">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- App header -->
+  <div class="app-header">
+    <div class="app-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="4" width="18" height="17" rx="3" stroke="white" stroke-width="1.8"/>
+        <path d="M3 9h18" stroke="white" stroke-width="1.8"/>
+        <path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <rect x="7" y="13" width="4" height="4" rx="1" fill="rgba(255,255,255,.7)"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1>Calendar</h1>
+      <p id="header-sub">Your events, all in one place</p>
+    </div>
+  </div>
+
+  <!-- View switcher -->
+  <div class="view-bar">
+    <button class="vbtn active" id="vbtn-year"  onclick="setView('year')">Year</button>
+    <button class="vbtn"        id="vbtn-month" onclick="setView('month')">Month</button>
+    <button class="vbtn"        id="vbtn-week"  onclick="setView('week')">Week</button>
+    <button class="vbtn"        id="vbtn-day"   onclick="setView('day')">Day</button>
+  </div>
+
+  <!-- Nav row -->
+  <div class="nav-row">
+    <div class="nav-arrows">
+      <button class="arrow-btn" onclick="navigate(-1)">‹</button>
+      <button class="arrow-btn" onclick="navigate(1)">›</button>
+    </div>
+    <div class="nav-title" id="nav-title">—</div>
+    <button class="today-btn" onclick="goToday()">Today</button>
+  </div>
+
+  <!-- View containers -->
+  <div id="view-year"  class="year-wrap"></div>
+  <div id="view-month" style="display:none">
+    <div class="cal-wrap">
+      <div class="day-headers" id="month-day-hdrs"></div>
+      <div class="month-grid" id="month-grid"></div>
+    </div>
+  </div>
+  <div id="view-week"  class="week-wrap" style="display:none"></div>
+  <div id="view-day"   style="display:none;padding-bottom:40px;">
+    <div class="day-wrap" id="day-timeline"></div>
+    <div id="day-events-list"></div>
+  </div>
+
+</div><!-- /shell -->
+
+<!-- Event modal -->
+<div class="modal-overlay" id="evt-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">New Event</div>
+    <div class="form-group">
+      <div class="form-label">Title</div>
+      <input class="form-input" id="evt-title" placeholder="Event name…" maxlength="60" autocomplete="off">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <div class="form-label">Date</div>
+        <input class="form-input" id="evt-date" type="date">
+      </div>
+      <div class="form-group">
+        <div class="form-label">All day</div>
+        <select class="form-input" id="evt-allday" onchange="toggleTimeFields()">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+    </div>
+    <div id="time-fields" style="display:none">
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">Start</div>
+          <input class="form-input" id="evt-start" type="time" value="09:00">
+        </div>
+        <div class="form-group">
+          <div class="form-label">End</div>
+          <input class="form-input" id="evt-end" type="time" value="10:00">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-label">Notes</div>
+      <input class="form-input" id="evt-notes" placeholder="Optional notes…" maxlength="200" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <div class="form-label">Category</div>
+      <div class="cat-list" id="modal-cat-list"></div>
+    </div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- Categories manager -->
+<div class="cats-overlay" id="cats-modal" onclick="if(event.target===this)closeCats()">
+  <div class="cats-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Categories</div>
+    <div id="cats-list"></div>
+    <div style="margin-top:18px">
+      <div class="form-label" style="margin-bottom:8px">New Category</div>
+      <div class="color-swatches" id="new-cat-swatches"></div>
+      <div class="new-cat-row">
+        <input class="form-input" id="new-cat-name" placeholder="Category name…" maxlength="24" style="flex:1" autocomplete="off">
+        <button class="btn-save" style="flex:none;padding:12px 20px;font-size:14px" onclick="addCategory()">Add</button>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn-cancel" style="width:100%" onclick="closeCats()">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const EVENTS_KEY = 'guicks_cal_events_v1';
+const CATS_KEY   = 'guicks_cal_cats_v1';
+
+const DEFAULT_CATS = [
+  { id:'work',     name:'Work',      color:'#4f8ef7' },
+  { id:'personal', name:'Personal',  color:'#34c759' },
+  { id:'health',   name:'Health',    color:'#ff6b6b' },
+  { id:'social',   name:'Social',    color:'#ffa040' },
+  { id:'travel',   name:'Travel',    color:'#a78bfa' },
+];
+
+const CAT_COLORS = [
+  '#4f8ef7','#34c759','#ff6b6b','#ffa040','#a78bfa',
+  '#ff3b30','#00c7be','#30d158','#ffcc00','#ff9500',
+  '#af52de','#5ac8fa','#ff2d55','#5856d6','#64d2ff',
+];
+
+let events = [];
+let cats   = [];
+
+function loadData() {
+  try { events = JSON.parse(localStorage.getItem(EVENTS_KEY)) || []; } catch(e){ events=[]; }
+  try {
+    const c = JSON.parse(localStorage.getItem(CATS_KEY));
+    cats = (c && c.length) ? c : JSON.parse(JSON.stringify(DEFAULT_CATS));
+  } catch(e){ cats = JSON.parse(JSON.stringify(DEFAULT_CATS)); }
+}
+function saveEvents(){ localStorage.setItem(EVENTS_KEY, JSON.stringify(events)); }
+function saveCats()  { localStorage.setItem(CATS_KEY,   JSON.stringify(cats));   }
+
+function getCat(id){ return cats.find(c=>c.id===id) || {name:'Other',color:'#888'}; }
+function evtsOnDate(y,m,d){
+  const key = dateKey(new Date(y,m,d));
+  return events.filter(e=>e.date===key);
+}
+function dateKey(dt){ return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; }
+function parseDK(k){ const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d); }
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+const TODAY = new Date();
+let view    = 'year';
+let cursor  = new Date(TODAY);
+
+function setView(v){
+  view = v;
+  ['year','month','week','day'].forEach(x=>{
+    document.getElementById('vbtn-'+x).classList.toggle('active',x===v);
+    const el=document.getElementById('view-'+x);
+    if(el) el.style.display=(x===v?'':'none');
+  });
+  render();
+}
+
+function navigate(dir){
+  if(view==='year')  cursor.setFullYear(cursor.getFullYear()+dir);
+  else if(view==='month') cursor.setMonth(cursor.getMonth()+dir);
+  else if(view==='week')  cursor.setDate(cursor.getDate()+dir*7);
+  else if(view==='day')   cursor.setDate(cursor.getDate()+dir);
+  render();
+}
+
+function goToday(){
+  cursor = new Date(TODAY);
+  render();
+}
+
+/* ═══════════════════════════════════════════
+   RENDER DISPATCH
+═══════════════════════════════════════════ */
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS_S=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function render(){
+  updateNavTitle();
+  if(view==='year')  renderYear();
+  else if(view==='month') renderMonth();
+  else if(view==='week')  renderWeek();
+  else if(view==='day')   renderDay();
+}
+
+function updateNavTitle(){
+  const t = document.getElementById('nav-title');
+  if(view==='year')  t.textContent = cursor.getFullYear();
+  else if(view==='month') t.textContent = MONTHS[cursor.getMonth()]+' '+cursor.getFullYear();
+  else if(view==='week'){
+    const mon = weekStart(cursor);
+    const sun = new Date(mon); sun.setDate(sun.getDate()+6);
+    t.textContent = MONTHS[mon.getMonth()].slice(0,3)+' '+mon.getDate()+'–'+MONTHS[sun.getMonth()].slice(0,3)+' '+sun.getDate()+', '+sun.getFullYear();
+  }
+  else t.textContent = DAYS_S[cursor.getDay()]+', '+MONTHS[cursor.getMonth()]+' '+cursor.getDate()+', '+cursor.getFullYear();
+}
+
+/* ═══════════════════════════════════════════
+   YEAR VIEW
+═══════════════════════════════════════════ */
+function renderYear(){
+  const yr = cursor.getFullYear();
+  const wrap = document.getElementById('view-year');
+  let html = '<div class="year-grid">';
+  for(let m=0;m<12;m++){
+    const firstDay = new Date(yr,m,1).getDay();
+    const daysInMonth = new Date(yr,m+1,0).getDate();
+    html += `<div class="mini-month" onclick="jumpToMonth(${m})">
+      <div class="mini-month-title">${MONTHS[m]}</div>
+      <div class="mini-day-hdrs">${'SMTWTFS'.split('').map(d=>`<div class="mini-day-hdr">${d}</div>`).join('')}</div>
+      <div class="mini-grid">`;
+    for(let i=0;i<firstDay;i++) html+=`<div class="mini-cell other"></div>`;
+    for(let d=1;d<=daysInMonth;d++){
+      const isToday = d===TODAY.getDate()&&m===TODAY.getMonth()&&yr===TODAY.getFullYear();
+      const hasEvt  = evtsOnDate(yr,m,d).length>0;
+      html+=`<div class="mini-cell${isToday?' today':''}${hasEvt?' has-evt':''}">${d}</div>`;
+    }
+    html+='</div></div>';
+  }
+  html+='</div>';
+  wrap.innerHTML=html;
+}
+
+function jumpToMonth(m){
+  cursor.setMonth(m);
+  setView('month');
+}
+
+/* ═══════════════════════════════════════════
+   MONTH VIEW
+═══════════════════════════════════════════ */
+function renderMonth(){
+  const yr=cursor.getFullYear(), mo=cursor.getMonth();
+  const hdrs=document.getElementById('month-day-hdrs');
+  hdrs.innerHTML=DAYS_S.map(d=>`<div class="day-hdr">${d}</div>`).join('');
+
+  const firstDay=new Date(yr,mo,1).getDay();
+  const daysInMo=new Date(yr,mo+1,0).getDate();
+  const prevDays=new Date(yr,mo,0).getDate();
+
+  const grid=document.getElementById('month-grid');
+  let cells=[];
+
+  // prev month
+  for(let i=firstDay-1;i>=0;i--) cells.push({d:prevDays-i,m:mo-1,y:yr,other:true});
+  // this month
+  for(let d=1;d<=daysInMo;d++) cells.push({d,m:mo,y:yr,other:false});
+  // next month
+  const rem=(7-cells.length%7)%7;
+  for(let d=1;d<=rem;d++) cells.push({d,m:mo+1,y:yr,other:true});
+
+  grid.innerHTML = cells.map(({d,m,y,other})=>{
+    const realM = ((m%12)+12)%12;
+    const realY = y + Math.floor(m/12);
+    const isToday=d===TODAY.getDate()&&realM===TODAY.getMonth()&&realY===TODAY.getFullYear();
+    const evts=evtsOnDate(realY,realM,d);
+    const dots=evts.slice(0,3).map(e=>{
+      const c=getCat(e.cat);
+      return `<div class="evt-dot" style="background:${c.color}">${e.title}</div>`;
+    }).join('');
+    const more=evts.length>3?`<div class="more-badge">+${evts.length-3} more</div>`:'';
+    return `<div class="cal-day${other?' other-month':''}${isToday?' today':''}" onclick="dayClick(${realY},${realM},${d})">
+      <div class="cal-day-num">${d}</div>
+      <div class="day-events-mini">${dots}${more}</div>
+    </div>`;
+  }).join('');
+}
+
+function dayClick(y,m,d){
+  cursor=new Date(y,m,d);
+  setView('day');
+}
+
+/* ═══════════════════════════════════════════
+   WEEK VIEW
+═══════════════════════════════════════════ */
+function weekStart(dt){
+  const d=new Date(dt);
+  d.setDate(d.getDate()-d.getDay());
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function renderWeek(){
+  const ws=weekStart(cursor);
+  const wrap=document.getElementById('view-week');
+  const days=Array.from({length:7},(_,i)=>{const d=new Date(ws);d.setDate(d.getDate()+i);return d;});
+
+  let html=`<div class="week-grid" style="margin-bottom:20px">
+    <div class="week-col-hdr"></div>`;
+  days.forEach(d=>{
+    const isToday=d.toDateString()===TODAY.toDateString();
+    html+=`<div class="week-col-hdr${isToday?' today-col':''}">
+      <span class="wday">${DAYS_S[d.getDay()]}</span>
+      <span class="wnum">${d.getDate()}</span>
+    </div>`;
+  });
+
+  // 24 hour rows
+  html+=`<div class="time-col">`;
+  for(let h=0;h<24;h++){
+    const lbl=h===0?'':h<12?`${h}am`:h===12?'12pm':`${h-12}pm`;
+    html+=`<div class="time-label">${lbl}</div>`;
+  }
+  html+=`</div>`;
+
+  days.forEach((d,di)=>{
+    const dk=dateKey(d);
+    const dayEvts=events.filter(e=>e.date===dk&&!e.allDay);
+    html+=`<div class="week-day-col" onclick="weekDayClick(event,${d.getFullYear()},${d.getMonth()},${d.getDate()})">`;
+    for(let h=0;h<24;h++) html+=`<div class="week-hour-row"></div>`;
+    // Now line
+    if(d.toDateString()===TODAY.toDateString()){
+      const pct=(TODAY.getHours()*60+TODAY.getMinutes())/(24*60)*100;
+      html+=`<div class="now-line" style="top:${pct}%"></div>`;
+    }
+    // Events
+    dayEvts.forEach(e=>{
+      const [sh,sm]=e.start.split(':').map(Number);
+      const [eh,em]=e.end.split(':').map(Number);
+      const top=((sh*60+sm)/(24*60)*100).toFixed(2);
+      const height=(((eh*60+em)-(sh*60+sm))/(24*60)*100).toFixed(2);
+      const c=getCat(e.cat);
+      html+=`<div class="week-evt" style="top:${top}%;height:${Math.max(height,2)}%;background:${c.color}" onclick="event.stopPropagation();openEventModal('${e.id}')">
+        ${e.title}
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  wrap.innerHTML=html;
+
+  // Scroll to 8am
+  setTimeout(()=>{wrap.scrollTop=48*8;},0);
+}
+
+function weekDayClick(e, y, m, d){
+  // calc hour from click
+  const col=e.currentTarget;
+  const rect=col.getBoundingClientRect();
+  const relY=e.clientY-rect.top;
+  const hr=Math.floor(relY/(48)*1);
+  const dt=new Date(y,m,d,hr);
+  cursor=new Date(y,m,d);
+  openEventModal(null,dt);
+}
+
+/* ═══════════════════════════════════════════
+   DAY VIEW
+═══════════════════════════════════════════ */
+function renderDay(){
+  const y=cursor.getFullYear(),m=cursor.getMonth(),d=cursor.getDate();
+  const dk=dateKey(cursor);
+  const isToday=cursor.toDateString()===TODAY.toDateString();
+  const timedEvts=events.filter(e=>e.date===dk&&!e.allDay);
+  const allDayEvts=events.filter(e=>e.date===dk&&e.allDay);
+
+  const tl=document.getElementById('day-timeline');
+  let html=``;
+
+  // All-day strip
+  if(allDayEvts.length){
+    html+=`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">`;
+    allDayEvts.forEach(e=>{
+      const c=getCat(e.cat);
+      html+=`<div onclick="openEventModal('${e.id}')" style="padding:6px 12px;border-radius:20px;background:${c.color};color:#fff;font-size:12px;font-weight:700;cursor:pointer;">${e.title}</div>`;
+    });
+    html+=`</div>`;
+  }
+
+  html+=`<div class="day-grid">`;
+  // Time labels
+  html+=`<div class="time-col">`;
+  for(let h=0;h<24;h++){
+    const lbl=h===0?'':h<12?`${h}am`:h===12?'12pm':`${h-12}pm`;
+    html+=`<div class="day-time-label">${lbl}</div>`;
+  }
+  html+=`</div>`;
+
+  // Slot column
+  html+=`<div style="position:relative">`;
+  for(let h=0;h<24;h++){
+    html+=`<div class="day-hour-row day-slot" onclick="daySlotClick(${h})"></div>`;
+  }
+  // Events
+  timedEvts.forEach(e=>{
+    const [sh,sm]=e.start.split(':').map(Number);
+    const [eh,em]=e.end.split(':').map(Number);
+    const top=((sh*60+sm)/60*56).toFixed(1);
+    const height=(((eh*60+em)-(sh*60+sm))/60*56).toFixed(1);
+    const c=getCat(e.cat);
+    html+=`<div class="day-evt" style="top:${top}px;height:${Math.max(parseFloat(height),28)}px;background:${c.color}" onclick="openEventModal('${e.id}')">
+      <div>${e.title}</div>
+      <div class="day-evt-label">${e.start}–${e.end}</div>
+    </div>`;
+  });
+  // Now line
+  if(isToday){
+    const top=(TODAY.getHours()*60+TODAY.getMinutes())/60*56;
+    html+=`<div class="now-line" style="top:${top}px"></div>`;
+  }
+  html+=`</div></div>`;
+  tl.innerHTML=html;
+
+  // Scroll to 8am
+  setTimeout(()=>{tl.scrollTop=56*8;},50);
+
+  // Event list below
+  const list=document.getElementById('day-events-list');
+  const all=[...allDayEvts,...timedEvts].sort((a,b)=>(a.allDay&&!b.allDay)?-1:(a.start||'').localeCompare(b.start||''));
+  if(!all.length){
+    list.innerHTML=`<div class="day-events-panel"><div class="dep-empty">No events this day</div><button class="dep-add-btn" onclick="openEventModal(null,cursor)">+ Add event</button></div>`;
+  } else {
+    let lh=`<div class="day-events-panel"><div class="dep-header">${isToday?'Today — ':''}${all.length} event${all.length!==1?'s':''}</div>`;
+    all.forEach(e=>{
+      const c=getCat(e.cat);
+      lh+=`<div class="dep-evt" onclick="openEventModal('${e.id}')">
+        <div class="dep-evt-bar" style="background:${c.color}"></div>
+        <div class="dep-evt-info">
+          <div class="dep-evt-title">${e.title}</div>
+          <div class="dep-evt-time">${e.allDay?'All day':e.start+' – '+e.end}${e.notes?` · ${e.notes}`:''}</div>
+        </div>
+        <div class="dep-evt-cat" style="background:${c.color}">${c.name}</div>
+      </div>`;
+    });
+    lh+=`<button class="dep-add-btn" onclick="openEventModal(null,cursor)">+ Add event</button></div>`;
+    list.innerHTML=lh;
+  }
+}
+
+function daySlotClick(h){
+  const dt=new Date(cursor);
+  dt.setHours(h,0,0,0);
+  openEventModal(null,dt);
+}
+
+/* ═══════════════════════════════════════════
+   EVENT MODAL
+═══════════════════════════════════════════ */
+let editingId=null;
+
+function openEventModal(id, dateHint){
+  editingId = id || null;
+  const modal=document.getElementById('evt-modal');
+  const isEdit=!!id;
+
+  document.getElementById('modal-title').textContent = isEdit ? 'Edit Event' : 'New Event';
+
+  let evt=null;
+  if(isEdit){ evt=events.find(e=>e.id===id); if(!evt)return; }
+
+  // Date
+  const dt = isEdit ? parseDK(evt.date) : (dateHint instanceof Date ? dateHint : new Date());
+  document.getElementById('evt-date').value = dateKey(dt);
+
+  // Title / notes
+  document.getElementById('evt-title').value  = isEdit ? evt.title : '';
+  document.getElementById('evt-notes').value  = isEdit ? (evt.notes||'') : '';
+
+  // All day
+  const allDay = isEdit ? (evt.allDay?'1':'0') : '1';
+  document.getElementById('evt-allday').value = allDay;
+  toggleTimeFields();
+
+  if(isEdit && !evt.allDay){
+    document.getElementById('evt-start').value = evt.start||'09:00';
+    document.getElementById('evt-end').value   = evt.end||'10:00';
+  } else {
+    const h=dateHint instanceof Date?dateHint.getHours():9;
+    document.getElementById('evt-start').value = `${String(h).padStart(2,'0')}:00`;
+    document.getElementById('evt-end').value   = `${String(h+1).padStart(2,'0')}:00`;
+  }
+
+  // Category pills
+  renderCatPills(isEdit ? evt.cat : cats[0]?.id);
+
+  // Actions
+  const acts=document.getElementById('modal-actions');
+  if(isEdit){
+    acts.innerHTML=`<button class="btn-delete" onclick="deleteEvent('${id}')">Delete</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEvent()">Save</button>`;
+  } else {
+    acts.innerHTML=`<button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEvent()">Save</button>`;
+  }
+
+  modal.classList.add('open');
+  setTimeout(()=>document.getElementById('evt-title').focus(),300);
+}
+
+function renderCatPills(selectedId){
+  const wrap=document.getElementById('modal-cat-list');
+  wrap.innerHTML=cats.map(c=>`
+    <div class="cat-pill${c.id===selectedId?' selected':''}" id="cpill-${c.id}" onclick="selectCat('${c.id}')" style="${c.id===selectedId?`background:${c.color};border-color:${c.color}`:''}">
+      <div class="cat-dot" style="background:${c.color}"></div>${c.name}
+    </div>`).join('');
+}
+
+let selectedCat = null;
+function selectCat(id){
+  selectedCat=id;
+  renderCatPills(id);
+}
+
+function toggleTimeFields(){
+  const allDay=document.getElementById('evt-allday').value==='1';
+  document.getElementById('time-fields').style.display=allDay?'none':'block';
+}
+
+function saveEvent(){
+  const title=document.getElementById('evt-title').value.trim();
+  if(!title){showToast('Please enter a title');return;}
+  const date=document.getElementById('evt-date').value;
+  if(!date){showToast('Please pick a date');return;}
+  const allDay=document.getElementById('evt-allday').value==='1';
+  const start=allDay?null:document.getElementById('evt-start').value;
+  const end=allDay?null:document.getElementById('evt-end').value;
+  const notes=document.getElementById('evt-notes').value.trim();
+  const catId=selectedCat||cats[0]?.id||'personal';
+
+  if(editingId){
+    const idx=events.findIndex(e=>e.id===editingId);
+    if(idx>=0) events[idx]={...events[idx],title,date,allDay,start,end,notes,cat:catId};
+    showToast('✅ Event updated');
+  } else {
+    events.push({id:`e${Date.now()}`,title,date,allDay,start,end,notes,cat:catId});
+    showToast('✅ Event saved');
+  }
+  saveEvents();
+  closeModal();
+  render();
+}
+
+function deleteEvent(id){
+  events=events.filter(e=>e.id!==id);
+  saveEvents();
+  closeModal();
+  showToast('🗑 Event deleted');
+  render();
+}
+
+function closeModal(){
+  document.getElementById('evt-modal').classList.remove('open');
+  editingId=null; selectedCat=null;
+}
+
+/* ═══════════════════════════════════════════
+   CATEGORIES MANAGER
+═══════════════════════════════════════════ */
+let newCatColor = CAT_COLORS[0];
+
+function openCats(){
+  renderCatManager();
+  renderColorSwatches();
+  document.getElementById('cats-modal').classList.add('open');
+}
+function closeCats(){
+  document.getElementById('cats-modal').classList.remove('open');
+  render(); // refresh in case cats changed
+}
+
+function renderCatManager(){
+  const list=document.getElementById('cats-list');
+  if(!cats.length){list.innerHTML='<div style="color:var(--text3);font-size:13px;padding:8px 0">No categories yet</div>';return;}
+  list.innerHTML=cats.map(c=>{
+    const count=events.filter(e=>e.cat===c.id).length;
+    return `<div class="cat-row">
+      <div class="cat-color-swatch" style="background:${c.color}"></div>
+      <div class="cat-name-disp">${c.name}</div>
+      <div class="cat-evt-count">${count} event${count!==1?'s':''}</div>
+      <button class="cat-del-btn" onclick="deleteCat('${c.id}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function renderColorSwatches(){
+  const wrap=document.getElementById('new-cat-swatches');
+  wrap.innerHTML=CAT_COLORS.map(clr=>`
+    <div class="clr-sw${clr===newCatColor?' picked':''}" style="background:${clr}" onclick="pickColor('${clr}')"></div>
+  `).join('');
+}
+
+function pickColor(clr){
+  newCatColor=clr;
+  renderColorSwatches();
+}
+
+function addCategory(){
+  const name=document.getElementById('new-cat-name').value.trim();
+  if(!name){showToast('Enter a category name');return;}
+  const id='cat_'+Date.now();
+  cats.push({id,name,color:newCatColor});
+  saveCats();
+  document.getElementById('new-cat-name').value='';
+  renderCatManager();
+  showToast('✅ '+name+' added');
+}
+
+function deleteCat(id){
+  const hasEvts=events.some(e=>e.cat===id);
+  if(hasEvts){
+    showToast('⚠️ Reassign events first');
+    return;
+  }
+  cats=cats.filter(c=>c.id!==id);
+  saveCats();
+  renderCatManager();
+}
+
+/* ═══════════════════════════════════════════
+   STATUS BAR CLOCK
+═══════════════════════════════════════════ */
+function tickSB(){
+  const n=new Date();
+  document.getElementById('sb-time').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+}
+tickSB(); setInterval(tickSB,10000);
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+let _tt;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+loadData();
+setView('month'); // start on month view
+</script>
+</body>
+</html>
