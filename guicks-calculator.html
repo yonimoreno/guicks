@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important}
+html.guicks-light body::before,html.guicks-light body::after{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!important}
+html.guicks-light .back-btn svg{stroke:currentColor!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Calculator — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0f2f7;
+  --surface: #fff;
+  --surface2: #f4f5f9;
+  --border: rgba(0,0,0,0.07);
+  --text: #0d0d1a;
+  --text-2: #5a5a78;
+  --text-3: #9090b0;
+  --accent: #6c3fe0;
+  --accent2: #9b6ff5;
+  --accent-light: #ede8fd;
+  --green: #12b76a;
+  --red: #f04438;
+  --orange: #f79009;
+  --mono: 'DM Mono', monospace;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 24px rgba(0,0,0,0.1);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.14);
+  --radius: 18px;
+}
+html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%, rgba(108,63,224,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(108,63,224,0.05) 0%, transparent 55%);
+  pointer-events: none;
+}
+.shell { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; max-width: 680px; margin: 0 auto; }
+
+/* ── Status bar ── */
+.statusbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px 0; font-size: 13px; font-weight: 700; color: var(--text); }
+.statusbar .time { font-size: 16px; font-weight: 800; }
+.statusbar .icons { display: flex; gap: 5px; align-items: center; }
+.statusbar .icons svg { width: 16px; height: 16px; fill: var(--text); }
+
+/* ── Top nav ── */
+.topnav { display: flex; align-items: center; padding: 10px 20px 0; }
+.back-btn { display: inline-flex; align-items: center; gap: 4px; color: var(--accent); font-size: 15px; font-weight: 600; text-decoration: none; background: none; border: none; cursor: pointer; padding: 6px 10px 6px 4px; border-radius: 10px; transition: background 0.15s; }
+.back-btn:hover { background: var(--accent-light); }
+.back-btn svg { width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── App header ── */
+.app-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px 10px; }
+.app-icon { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(145deg, #4a1fb8, #6c3fe0); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 20px rgba(108,63,224,0.3), inset 0 1px 0 rgba(255,255,255,0.2); }
+.app-icon svg { width: 26px; height: 26px; }
+.app-header-text h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.app-header-text p { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+/* ── Mode switcher ── */
+.mode-bar { margin: 0 16px 12px; background: var(--surface); border-radius: 14px; border: 1px solid var(--border); display: flex; padding: 4px; gap: 2px; box-shadow: var(--shadow-sm); }
+.mode-btn { flex: 1; padding: 9px 6px; border-radius: 10px; border: none; background: none; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text-3); transition: all 0.18s; }
+.mode-btn.active { background: linear-gradient(135deg, #4a1fb8, #6c3fe0); color: white; box-shadow: 0 3px 12px rgba(108,63,224,0.3); }
+.mode-btn:hover:not(.active) { color: var(--accent); background: var(--accent-light); }
+
+/* ── Display ── */
+.display {
+  margin: 0 16px 12px; background: var(--surface);
+  border-radius: var(--radius); border: 1px solid var(--border);
+  box-shadow: var(--shadow-md); padding: 16px 20px; min-height: 100px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+}
+.display::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(108,63,224,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.display-history { font-family: var(--mono); font-size: 12px; color: var(--text-3); min-height: 18px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 6px; }
+.display-expr { font-family: var(--mono); font-size: 16px; color: var(--text-2); text-align: right; min-height: 22px; overflow-x: auto; white-space: nowrap; margin-bottom: 4px; }
+.display-result {
+  font-family: var(--mono); font-size: 42px; font-weight: 500;
+  color: var(--text); text-align: right; line-height: 1;
+  overflow-x: auto; white-space: nowrap; transition: color 0.2s;
+}
+.display-result.error { font-size: 18px; color: var(--red); }
+.display-result.small { font-size: 28px; }
+.display-result.tiny  { font-size: 20px; }
+.display-deg { position: absolute; top: 12px; left: 14px; font-size: 11px; font-weight: 700; color: var(--text-3); background: var(--surface2); border: 1px solid var(--border); padding: 3px 8px; border-radius: 20px; cursor: pointer; transition: all 0.15s; }
+.display-deg:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Keypad ── */
+.keypad { margin: 0 16px 12px; display: grid; gap: 8px; }
+.keypad.simple  { grid-template-columns: repeat(4, 1fr); }
+.keypad.sci     { grid-template-columns: repeat(5, 1fr); }
+.keypad.adv     { grid-template-columns: repeat(4, 1fr); }
+
+.key {
+  height: 58px; border-radius: 14px; border: 1px solid var(--border);
+  background: var(--surface); font-family: 'Outfit', sans-serif;
+  font-size: 18px; font-weight: 700; cursor: pointer; color: var(--text);
+  box-shadow: var(--shadow-sm); transition: all 0.12s;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+  position: relative; overflow: hidden;
+}
+.key::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(108,63,224,0.15) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.15s;
+}
+.key:active::after { opacity: 1; }
+.key:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: rgba(108,63,224,0.2); }
+.key:active { transform: scale(0.95); box-shadow: var(--shadow-sm); }
+
+/* Key variants */
+.key.op    { background: var(--surface2); color: var(--accent); font-size: 20px; }
+.key.eq    { background: linear-gradient(135deg, #4a1fb8, #6c3fe0); color: white; border-color: transparent; box-shadow: 0 4px 16px rgba(108,63,224,0.3); font-size: 22px; }
+.key.eq:hover { box-shadow: 0 6px 22px rgba(108,63,224,0.4); }
+.key.clear { background: rgba(240,68,56,0.08); color: var(--red); border-color: rgba(240,68,56,0.15); }
+.key.clear:hover { background: rgba(240,68,56,0.15); }
+.key.back  { background: var(--surface2); color: var(--text-2); font-size: 20px; }
+.key.fn    { background: var(--surface2); color: var(--accent2); font-size: 13px; font-weight: 700; }
+.key.fn:hover { background: var(--accent-light); color: var(--accent); }
+.key.const { background: rgba(18,183,106,0.07); color: var(--green); font-size: 14px; border-color: rgba(18,183,106,0.15); }
+.key.span2 { grid-column: span 2; }
+.key.orange { background: rgba(247,144,9,0.08); color: var(--orange); border-color: rgba(247,144,9,0.15); font-size: 14px; }
+
+/* Sci extra height */
+.keypad.sci .key { height: 52px; font-size: 13px; }
+.keypad.sci .key.num { font-size: 17px; }
+
+/* ── Advanced: Equation solver ── */
+.adv-section { margin: 0 16px 10px; }
+.adv-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.adv-tab { padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text-3); transition: all 0.15s; }
+.adv-tab.active { background: var(--accent-light); color: var(--accent); border-color: rgba(108,63,224,0.25); }
+
+/* Equation solver */
+.eq-solver { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); padding: 16px; }
+.eq-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-3); margin-bottom: 8px; }
+.eq-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.eq-input {
+  flex: 1; background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--text); font-family: var(--mono); font-size: 14px;
+  padding: 11px 14px; border-radius: 12px; outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.eq-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,63,224,0.1); }
+.eq-input::placeholder { color: var(--text-3); font-family: 'Outfit', sans-serif; }
+.eq-solve-btn { background: linear-gradient(135deg, #4a1fb8, #6c3fe0); color: white; border: none; border-radius: 12px; padding: 11px 20px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.eq-solve-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(108,63,224,0.3); }
+.eq-result { font-family: var(--mono); font-size: 15px; color: var(--text); background: var(--surface2); border-radius: 12px; padding: 12px 14px; margin-top: 4px; min-height: 42px; border: 1px solid var(--border); word-break: break-all; }
+.eq-result .sol-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-3); display: block; margin-bottom: 4px; }
+.eq-result .sol-val { color: var(--accent); font-weight: 600; }
+.eq-result.error-result { color: var(--red); }
+.eq-hint { font-size: 11px; color: var(--text-3); margin-top: 6px; line-height: 1.5; }
+
+/* Graph plotter */
+.graph-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; }
+.graph-inputs { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.graph-fn-row { display: flex; gap: 8px; align-items: center; }
+.graph-fn-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.graph-input {
+  flex: 1; background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--text); font-family: var(--mono); font-size: 13px;
+  padding: 9px 12px; border-radius: 10px; outline: none;
+  transition: border-color 0.18s; min-width: 0;
+}
+.graph-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,63,224,0.08); }
+.graph-input::placeholder { color: var(--text-3); font-family: 'Outfit', sans-serif; font-size: 12px; }
+.graph-plot-btn { background: linear-gradient(135deg, #4a1fb8, #6c3fe0); color: white; border: none; border-radius: 10px; padding: 9px 16px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.graph-plot-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(108,63,224,0.3); }
+.graph-canvas-wrap { position: relative; background: #0d0d1a; }
+canvas#graphCanvas { display: block; width: 100%; }
+.graph-controls { position: absolute; bottom: 8px; right: 8px; display: flex; gap: 4px; }
+.graph-ctrl-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); color: white; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.graph-ctrl-btn:hover { background: rgba(255,255,255,0.2); }
+.graph-info { position: absolute; top: 8px; left: 10px; font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.4); pointer-events: none; }
+
+/* History strip */
+.calc-history { margin: 0 16px 12px; background: var(--surface); border-radius: 14px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; max-height: 150px; overflow-y: auto; }
+.calc-history::-webkit-scrollbar { width: 3px; }
+.calc-history::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.hist-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; gap: 12px; }
+.hist-item:last-child { border-bottom: none; }
+.hist-item:hover { background: var(--surface2); }
+.hist-expr { font-family: var(--mono); font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hist-res  { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--accent); flex-shrink: 0; }
+.hist-empty { padding: 14px; text-align: center; font-size: 12px; color: var(--text-3); }
+.hist-item .hist-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; flex-shrink: 0; }
+.hist-item:hover .hist-actions { opacity: 1; }
+.hist-act-btn { width: 26px; height: 26px; border-radius: 7px; border: none; background: var(--surface2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.hist-act-btn:hover { background: var(--accent-light); }
+.hist-act-btn.fav-on { background: var(--accent-light); }
+.hist-act-btn svg { width: 12px; height: 12px; fill: none; stroke: var(--text-3); stroke-width: 2; stroke-linejoin: round; }
+.hist-act-btn.fav-on svg { stroke: var(--accent); fill: var(--accent); }
+.hist-act-btn.del-btn:hover { background: rgba(240,68,56,0.1); }
+.hist-act-btn.del-btn:hover svg { stroke: var(--red); }
+.hist-tabs { display: flex; gap: 6px; }
+.hist-tab { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; color: var(--text-3); transition: all 0.15s; }
+.hist-tab.active { background: var(--accent-light); color: var(--accent); border-color: rgba(108,63,224,0.2); }
+.display-fav-btn { position: absolute; top: 12px; right: 14px; background: none; border: none; cursor: pointer; padding: 4px; border-radius: 8px; transition: all 0.15s; opacity: 0.4; }
+.display-fav-btn:hover { opacity: 1; background: var(--accent-light); }
+.display-fav-btn.on { opacity: 1; }
+.display-fav-btn svg { width: 16px; height: 16px; fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; display: block; }
+.display-fav-btn.on svg { fill: var(--accent); }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(13,13,26,0.9); backdrop-filter: blur(20px); color: white; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 20px; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; white-space: nowrap; z-index: 300; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Footer / Cookie ── */
+.footer { text-align: center; padding: 8px 0 24px; font-size: 11px; color: var(--text-3); margin-top: auto; }
+.cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 200; }
+.cookie-banner p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.cookie-btn { flex-shrink: 0; background: var(--accent); color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Outfit', sans-serif; }
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TPNLYBBFTF');
+</script>
+</head>
+<body>
+<div class="shell">
+  <div class="statusbar">
+    <span class="time" id="clock">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity="0.3"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+  </div>
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/>
+        <rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="8" cy="14" r="1.2" fill="white"/><circle cx="12" cy="14" r="1.2" fill="white"/><circle cx="16" cy="14" r="1.2" fill="white"/>
+        <circle cx="8" cy="18" r="1.2" fill="white"/><circle cx="12" cy="18" r="1.2" fill="white"/><circle cx="16" cy="18" r="1.2" fill="rgba(255,255,255,0.4)"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1>Calculator</h1>
+      <p>Simple · Scientific · Advanced</p>
+    </div>
+  </div>
+
+  <!-- Mode switcher -->
+  <div class="mode-bar">
+    <button class="mode-btn active" id="modeSimple"    onclick="setMode('simple')">Simple</button>
+    <button class="mode-btn"        id="modeSci"       onclick="setMode('sci')">Scientific</button>
+    <button class="mode-btn"        id="modeAdv"       onclick="setMode('adv')">Advanced</button>
+  </div>
+
+  <!-- Display -->
+  <div class="display" id="display">
+    <button class="display-deg" id="degBtn" onclick="toggleDeg()" style="display:none">DEG</button>
+    <button class="display-fav-btn" id="displayFavBtn" onclick="toggleFavoriteCurrent()" title="Save as favorite">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </button>
+    <div class="display-history" id="dispHistory"></div>
+    <div class="display-expr"   id="dispExpr"></div>
+    <div class="display-result" id="dispResult">0</div>
+  </div>
+
+  <!-- Simple keypad -->
+  <div class="keypad simple" id="keypadSimple">
+    <button class="key clear"      onclick="clearAll()">AC</button>
+    <button class="key back"       onclick="backspace()">⌫</button>
+    <button class="key op"         onclick="inp('%')">%</button>
+    <button class="key op"         onclick="inp('/')">÷</button>
+
+    <button class="key num"        onclick="inp('7')">7</button>
+    <button class="key num"        onclick="inp('8')">8</button>
+    <button class="key num"        onclick="inp('9')">9</button>
+    <button class="key op"         onclick="inp('*')">×</button>
+
+    <button class="key num"        onclick="inp('4')">4</button>
+    <button class="key num"        onclick="inp('5')">5</button>
+    <button class="key num"        onclick="inp('6')">6</button>
+    <button class="key op"         onclick="inp('-')">−</button>
+
+    <button class="key num"        onclick="inp('1')">1</button>
+    <button class="key num"        onclick="inp('2')">2</button>
+    <button class="key num"        onclick="inp('3')">3</button>
+    <button class="key op"         onclick="inp('+')">+</button>
+
+    <button class="key num span2"  onclick="inp('0')">0</button>
+    <button class="key num"        onclick="inp('.')">.</button>
+    <button class="key eq"         onclick="calculate()">=</button>
+  </div>
+
+  <!-- Scientific keypad -->
+  <div class="keypad sci" id="keypadSci" style="display:none">
+    <button class="key fn"  onclick="inpFn('sin(')">sin</button>
+    <button class="key fn"  onclick="inpFn('cos(')">cos</button>
+    <button class="key fn"  onclick="inpFn('tan(')">tan</button>
+    <button class="key fn"  onclick="inpFn('log(')">log</button>
+    <button class="key fn"  onclick="inpFn('ln(')">ln</button>
+
+    <button class="key fn"  onclick="inpFn('asin(')">sin⁻¹</button>
+    <button class="key fn"  onclick="inpFn('acos(')">cos⁻¹</button>
+    <button class="key fn"  onclick="inpFn('atan(')">tan⁻¹</button>
+    <button class="key fn"  onclick="inpFn('sqrt(')">√</button>
+    <button class="key fn"  onclick="inp('^')">xʸ</button>
+
+    <button class="key const" onclick="inpConst('pi')">π</button>
+    <button class="key const" onclick="inpConst('e')">e</button>
+    <button class="key fn"    onclick="inp('!')">n!</button>
+    <button class="key fn"    onclick="inp('(')"> ( </button>
+    <button class="key fn"    onclick="inp(')')"> ) </button>
+
+    <button class="key clear"    onclick="clearAll()">AC</button>
+    <button class="key back"     onclick="backspace()">⌫</button>
+    <button class="key op"       onclick="inp('%')">%</button>
+    <button class="key op"       onclick="inp('/')">÷</button>
+    <button class="key op"       onclick="inp('*')">×</button>
+
+    <button class="key num"      onclick="inp('7')">7</button>
+    <button class="key num"      onclick="inp('8')">8</button>
+    <button class="key num"      onclick="inp('9')">9</button>
+    <button class="key op"       onclick="inp('-')">−</button>
+    <button class="key op"       onclick="inp('+')">+</button>
+
+    <button class="key num"      onclick="inp('4')">4</button>
+    <button class="key num"      onclick="inp('5')">5</button>
+    <button class="key num"      onclick="inp('6')">6</button>
+    <button class="key fn"       onclick="inpFn('abs(')">|x|</button>
+    <button class="key fn"       onclick="inp('^2')">x²</button>
+
+    <button class="key num"      onclick="inp('1')">1</button>
+    <button class="key num"      onclick="inp('2')">2</button>
+    <button class="key num"      onclick="inp('3')">3</button>
+    <button class="key num"      onclick="inp('0')">0</button>
+    <button class="key eq"       onclick="calculate()">=</button>
+
+    <button class="key num span2" onclick="inp('.')">.</button>
+    <button class="key fn"        onclick="inp('(-')">+/−</button>
+    <button class="key fn span2"  onclick="inpFn('cbrt(')">∛</button>
+  </div>
+
+  <!-- Advanced section -->
+  <div id="advSection" style="display:none">
+    <div class="adv-section">
+      <div class="adv-tabs">
+        <button class="adv-tab active" id="advTabEq"    onclick="switchAdv('eq')">📐 Equations</button>
+        <button class="adv-tab"        id="advTabGraph" onclick="switchAdv('graph')">📈 Graph</button>
+        <button class="adv-tab"        id="advTabCalc"  onclick="switchAdv('calc')">🔢 Compute</button>
+      </div>
+
+      <!-- Equation solver -->
+      <div id="advEq" class="eq-solver">
+        <div class="eq-label">Solve equation for x</div>
+        <div class="eq-input-row">
+          <input class="eq-input" id="eqInput" placeholder="e.g.  x^2 - 5*x + 6 = 0" onkeydown="if(event.key==='Enter')solveEq()"/>
+          <button class="eq-solve-btn" onclick="solveEq()">Solve</button>
+        </div>
+        <div class="eq-result" id="eqResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px">Enter an equation above and tap Solve</span></div>
+        <div class="eq-hint">Supports: linear, quadratic, cubic, trig, log equations. Use <code>*</code> for multiply, <code>^</code> for powers.</div>
+      </div>
+
+      <!-- Graph plotter -->
+      <div id="advGraph" class="graph-card" style="display:none">
+        <div class="graph-inputs">
+          <div class="eq-label">Plot functions of x</div>
+          <div class="graph-fn-row">
+            <div class="graph-fn-dot" style="background:#6c3fe0"></div>
+            <input class="graph-input" id="fn1" placeholder="sin(x)" value="sin(x)"/>
+          </div>
+          <div class="graph-fn-row">
+            <div class="graph-fn-dot" style="background:#f79009"></div>
+            <input class="graph-input" id="fn2" placeholder="Optional: cos(x)"/>
+          </div>
+          <div class="graph-fn-row">
+            <div class="graph-fn-dot" style="background:#12b76a"></div>
+            <input class="graph-input" id="fn3" placeholder="Optional: x^2/10"/>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:12px;color:var(--text-3);font-weight:600">x from</span>
+            <input class="graph-input" id="xMin" value="-10" style="width:60px;text-align:center"/>
+            <span style="font-size:12px;color:var(--text-3);font-weight:600">to</span>
+            <input class="graph-input" id="xMax" value="10" style="width:60px;text-align:center"/>
+            <button class="graph-plot-btn" onclick="plotGraph()">Plot</button>
+          </div>
+        </div>
+        <div class="graph-canvas-wrap">
+          <canvas id="graphCanvas" height="280"></canvas>
+          <div class="graph-controls">
+            <button class="graph-ctrl-btn" onclick="zoomGraph(-1)" title="Zoom in">+</button>
+            <button class="graph-ctrl-btn" onclick="zoomGraph(1)"  title="Zoom out">−</button>
+            <button class="graph-ctrl-btn" onclick="resetGraph()"  title="Reset">⟳</button>
+          </div>
+          <div class="graph-info" id="graphInfo"></div>
+        </div>
+      </div>
+
+      <!-- Compute (advanced expression) -->
+      <div id="advCalc" style="display:none">
+        <div class="eq-solver">
+          <div class="eq-label">Advanced computation</div>
+          <div class="eq-input-row">
+            <input class="eq-input" id="advExprInput" placeholder="e.g.  derivative('sin(x)', 'x')" onkeydown="if(event.key==='Enter')computeAdv()"/>
+            <button class="eq-solve-btn" onclick="computeAdv()">Compute</button>
+          </div>
+          <div class="eq-result" id="advExprResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px">Enter expression above</span></div>
+          <div class="eq-hint">
+            Examples:<br>
+            <code>derivative('x^3 + 2x', 'x')</code> → derivative<br>
+            <code>simplify('2x + 3x')</code> → simplified form<br>
+            <code>factorial(15)</code> · <code>gcd(48, 18)</code> · <code>nthRoot(27, 3)</code><br>
+            <code>matrix([[1,2],[3,4]])</code> operations
+          </div>
+        </div>
+        <!-- Keypad for advanced calc mode -->
+        <div class="keypad adv" style="margin-top:10px">
+          <button class="key clear"  onclick="advClear()">AC</button>
+          <button class="key back"   onclick="advBack()">⌫</button>
+          <button class="key fn"     onclick="advInp('(')"> ( </button>
+          <button class="key fn"     onclick="advInp(')')"> ) </button>
+
+          <button class="key orange" onclick="advInp('derivative(\'', 'derivative')">d/dx</button>
+          <button class="key orange" onclick="advInp('simplify(\'', 'simplify')">simplify</button>
+          <button class="key const"  onclick="advInp('factorial(')">n!</button>
+          <button class="key const"  onclick="advInp('gcd(')">gcd</button>
+
+          <button class="key fn"     onclick="advInp('sqrt(')">√x</button>
+          <button class="key fn"     onclick="advInp('nthRoot(')">ⁿ√x</button>
+          <button class="key fn"     onclick="advInp('abs(')">|x|</button>
+          <button class="key fn"     onclick="advInp('^')">xⁿ</button>
+
+          <button class="key num"    onclick="advInp('x')">x</button>
+          <button class="key num"    onclick="advInp('y')">y</button>
+          <button class="key const"  onclick="advInp('pi')">π</button>
+          <button class="key const"  onclick="advInp('e')">e</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculation history -->
+  <div style="padding: 0 16px 8px; display:flex; align-items:center; justify-content:space-between;" id="histHeader">
+    <div class="hist-tabs">
+      <button class="hist-tab active" id="histTabHistory"   onclick="switchHistTab('history')">🕐 History</button>
+      <button class="hist-tab"        id="histTabFavorites" onclick="switchHistTab('favorites')">⭐ Favorites</button>
+    </div>
+    <button onclick="clearCurrentTab()" style="font-size:12px;font-weight:600;color:var(--red);background:none;border:none;cursor:pointer;font-family:inherit;opacity:0.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">Clear</button>
+  </div>
+  <div class="calc-history" id="calcHistory">
+    <div class="hist-empty">No calculations yet</div>
+  </div>
+
+  <div class="footer">© 2026 Yoni Moreno · Powered by math.js</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="cookie-banner" id="cookieBanner">
+  <p>🍪 This website uses cookies to analyze traffic with Google Analytics.</p>
+  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+</div>
+
+<script>
+// ── Clock ──
+function updateClock(){ const n=new Date(); document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0'); }
+updateClock(); setInterval(updateClock,10000);
+
+// ── Cookie ──
+if(localStorage.getItem('cookiesAccepted')) document.getElementById('cookieBanner').style.display='none';
+function acceptCookies(){ localStorage.setItem('cookiesAccepted','true'); const b=document.getElementById('cookieBanner'); b.style.transition='opacity 0.3s,transform 0.3s'; b.style.opacity='0'; b.style.transform='translateY(20px)'; setTimeout(()=>b.style.display='none',300); }
+
+// ── Toast ──
+let toastT;
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2000); }
+
+// ── State ──
+let expr = '';
+let lastResult = '';
+let degMode = true;
+let currentMode = 'simple';
+let calcHistory = [];
+let calcFavorites = [];
+let currentHistTab = 'history';
+let lastCalculation = null; // { ex, res } of last = press
+const HIST_KEY = 'guicks_calc_history_v1';
+const FAV_KEY  = 'guicks_calc_favs_v1';
+try { calcHistory   = JSON.parse(localStorage.getItem(HIST_KEY)) || []; } catch { calcHistory = []; }
+try { calcFavorites = JSON.parse(localStorage.getItem(FAV_KEY))  || []; } catch { calcFavorites = []; }
+
+// ── Display ──
+function updateDisplay(){
+  const res = document.getElementById('dispResult');
+  const ex  = document.getElementById('dispExpr');
+  const display = expr || '0';
+  ex.textContent = '';
+
+  if (!expr) { res.textContent = '0'; res.className='display-result'; return; }
+
+  // Live preview while typing
+  try {
+    const previewExpr = prepareExpr(expr);
+    const val = math.evaluate(previewExpr);
+    const formatted = formatResult(val);
+    res.textContent = formatted;
+    res.className = 'display-result' + (formatted.length > 12 ? ' small' : '') + (formatted.length > 18 ? ' tiny' : '');
+    ex.textContent = displayExpr(expr);
+  } catch {
+    res.textContent = displayExpr(expr);
+    res.className = 'display-result small';
+    ex.textContent = '';
+  }
+}
+
+function displayExpr(e){
+  return e.replace(/\*/g,'×').replace(/\//g,'÷').replace(/pi/g,'π');
+}
+
+function prepareExpr(e){
+  let p = e.replace(/×/g,'*').replace(/÷/g,'/');
+  if (degMode){
+    p = p.replace(/\bsin\(/g,'sin(pi/180*').replace(/\bcos\(/g,'cos(pi/180*').replace(/\btan\(/g,'tan(pi/180*');
+    p = p.replace(/\basin\(/g,'(180/pi)*asin(').replace(/\bacos\(/g,'(180/pi)*acos(').replace(/\batan\(/g,'(180/pi)*atan(');
+  }
+  return p;
+}
+
+function formatResult(val){
+  if (typeof val === 'object' && val !== null){
+    if (val.isComplex) return `${round14(val.re)} + ${round14(val.im)}i`;
+    return String(val);
+  }
+  const n = Number(val);
+  if (!isFinite(n)) return String(val);
+  if (Math.abs(n) > 1e15 || (Math.abs(n) < 1e-9 && n !== 0)) return n.toExponential(6);
+  return String(parseFloat(n.toPrecision(14))).replace(/\.?0+$/, '');
+}
+function round14(n){ return parseFloat(n.toPrecision(14)); }
+
+// ── Input ──
+function inp(v){ expr += v; updateDisplay(); }
+function inpFn(fn){ expr += fn; updateDisplay(); }
+function inpConst(c){ expr += c; updateDisplay(); }
+function clearAll(){ expr=''; lastResult=''; document.getElementById('dispHistory').textContent=''; updateDisplay(); }
+function backspace(){ expr=expr.slice(0,-1); updateDisplay(); }
+
+function toggleDeg(){
+  degMode = !degMode;
+  const btn = document.getElementById('degBtn');
+  btn.textContent = degMode ? 'DEG' : 'RAD';
+  btn.style.color = degMode ? '' : 'var(--accent)';
+}
+
+// ── Calculate ──
+function calculate(){
+  if (!expr) return;
+  try {
+    const prepped = prepareExpr(expr);
+    const result = math.evaluate(prepped);
+    const formatted = formatResult(result);
+    document.getElementById('dispHistory').textContent = displayExpr(expr) + ' =';
+    addToHistory(displayExpr(expr), formatted);
+    expr = formatted.replace(/,/g,'');
+    lastResult = formatted;
+    updateDisplay();
+    document.getElementById('dispExpr').textContent = '';
+  } catch(e){
+    document.getElementById('dispResult').textContent = 'Error';
+    document.getElementById('dispResult').className = 'display-result error';
+    setTimeout(()=>{ document.getElementById('dispResult').textContent = expr||'0'; document.getElementById('dispResult').className='display-result'; },1200);
+  }
+}
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if (currentMode === 'adv') return;
+  if (e.key >= '0' && e.key <= '9') inp(e.key);
+  else if (e.key === '+') inp('+');
+  else if (e.key === '-') inp('-');
+  else if (e.key === '*') inp('*');
+  else if (e.key === '/') { e.preventDefault(); inp('/'); }
+  else if (e.key === '.') inp('.');
+  else if (e.key === '%') inp('%');
+  else if (e.key === '(') inp('(');
+  else if (e.key === ')') inp(')');
+  else if (e.key === '^') inp('^');
+  else if (e.key === 'Enter' || e.key === '=') calculate();
+  else if (e.key === 'Backspace') backspace();
+  else if (e.key === 'Escape') clearAll();
+});
+
+// ── History ──
+function addToHistory(ex, res){
+  const entry = { id: Date.now(), ex, res };
+  lastCalculation = entry;
+  updateDisplayFavBtn();
+  calcHistory.unshift(entry);
+  if (calcHistory.length > 50) calcHistory = calcHistory.slice(0,50);
+  localStorage.setItem(HIST_KEY, JSON.stringify(calcHistory));
+  renderHistory();
+}
+
+function clearHistory(){ calcHistory=[]; localStorage.removeItem(HIST_KEY); renderHistory(); }
+function clearFavorites(){ calcFavorites=[]; localStorage.removeItem(FAV_KEY); renderHistory(); }
+function clearCurrentTab(){ currentHistTab==='history' ? clearHistory() : clearFavorites(); }
+
+function isFav(id){ return calcFavorites.some(f=>f.id===id); }
+
+function toggleFavById(id){
+  const entry = calcHistory.find(h=>h.id===id) || calcFavorites.find(f=>f.id===id);
+  if (!entry) return;
+  const idx = calcFavorites.findIndex(f=>f.id===id);
+  if (idx>=0){ calcFavorites.splice(idx,1); showToast('Removed from favorites'); }
+  else { calcFavorites.unshift({...entry}); showToast('⭐ Saved to favorites!'); }
+  localStorage.setItem(FAV_KEY, JSON.stringify(calcFavorites));
+  if (lastCalculation?.id===id) updateDisplayFavBtn();
+  renderHistory();
+}
+
+function toggleFavoriteCurrent(){
+  if (!lastCalculation){ showToast('Calculate something first!'); return; }
+  toggleFavById(lastCalculation.id);
+}
+
+function updateDisplayFavBtn(){
+  const btn = document.getElementById('displayFavBtn');
+  if (!btn) return;
+  const on = lastCalculation && isFav(lastCalculation.id);
+  btn.classList.toggle('on', !!on);
+  btn.title = on ? 'Remove from favorites' : 'Save as favorite';
+}
+
+function switchHistTab(tab){
+  currentHistTab = tab;
+  document.getElementById('histTabHistory').classList.toggle('active', tab==='history');
+  document.getElementById('histTabFavorites').classList.toggle('active', tab==='favorites');
+  renderHistory();
+}
+
+function renderHistory(){
+  const el = document.getElementById('calcHistory');
+  const items = currentHistTab==='history' ? calcHistory : calcFavorites;
+  const emptyMsg = currentHistTab==='history' ? 'No calculations yet' : 'No saved favorites';
+
+  if (!items.length){
+    el.innerHTML=`<div class="hist-empty">${emptyMsg}</div>`;
+    return;
+  }
+
+  el.innerHTML = items.map((h,i)=>{
+    const faved = isFav(h.id);
+    return `
+    <div class="hist-item" onclick="loadHistory('${h.id}')">
+      <span class="hist-expr">${esc(h.ex)}</span>
+      <span class="hist-res">${esc(h.res)}</span>
+      <div class="hist-actions">
+        <button class="hist-act-btn ${faved?'fav-on':''}" onclick="event.stopPropagation();toggleFavById('${h.id}')" title="${faved?'Remove favorite':'Save favorite'}">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </button>
+        <button class="hist-act-btn del-btn" onclick="event.stopPropagation();deleteEntry('${h.id}')" title="Delete">
+          <svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteEntry(id){
+  calcHistory   = calcHistory.filter(h=>h.id!==id);
+  calcFavorites = calcFavorites.filter(f=>f.id!==id);
+  localStorage.setItem(HIST_KEY, JSON.stringify(calcHistory));
+  localStorage.setItem(FAV_KEY,  JSON.stringify(calcFavorites));
+  if (lastCalculation?.id===id){ lastCalculation=null; updateDisplayFavBtn(); }
+  renderHistory();
+}
+
+function loadHistory(id){
+  const entry = [...calcHistory,...calcFavorites].find(h=>h.id===id||String(h.id)===String(id));
+  if (entry){ expr=entry.res; lastCalculation=entry; updateDisplay(); updateDisplayFavBtn(); }
+}
+renderHistory();
+
+// ── Mode switching ──
+function setMode(m){
+  currentMode = m;
+  ['simple','sci','adv'].forEach(id => document.getElementById('mode'+id.charAt(0).toUpperCase()+id.slice(1)).classList.toggle('active', id===m));
+  document.getElementById('keypadSimple').style.display = m==='simple' ? 'grid' : 'none';
+  document.getElementById('keypadSci').style.display    = m==='sci'    ? 'grid' : 'none';
+  document.getElementById('advSection').style.display   = m==='adv'    ? 'block': 'none';
+  document.getElementById('degBtn').style.display       = m==='sci'    ? 'block': 'none';
+  document.getElementById('histHeader').style.display   = m==='adv'    ? 'none' : 'flex';
+  document.getElementById('calcHistory').style.display  = m==='adv'    ? 'none' : 'block';
+  clearAll();
+}
+
+// ── Advanced: Equation Solver ──
+let currentAdv = 'eq';
+function switchAdv(tab){
+  currentAdv = tab;
+  ['eq','graph','calc'].forEach(t=>{
+    document.getElementById('advTab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active',t===tab);
+    document.getElementById('adv'+t.charAt(0).toUpperCase()+t.slice(1)).style.display = t===tab?'block':'none';
+  });
+  document.getElementById('display').style.display = tab==='graph' ? 'none' : 'flex';
+  if (tab==='graph') setTimeout(plotGraph, 100);
+}
+
+function solveEq(){
+  const raw = document.getElementById('eqInput').value.trim();
+  const out = document.getElementById('eqResult');
+  if (!raw){ out.innerHTML='<span style="color:var(--text-3);font-family:Outfit,sans-serif;font-size:13px">Enter an equation first</span>'; return; }
+
+  try {
+    let solutions = [];
+    let methodUsed = '';
+
+    if (raw.includes('=')){
+      // Move everything to LHS: ax = 0
+      const parts = raw.split('=');
+      const lhs = parts[0].trim();
+      const rhs = parts[1].trim();
+      const combined = `(${lhs})-(${rhs})`;
+
+      // Try to solve symbolically
+      try {
+        const result = math.simplify(combined);
+        const str = result.toString();
+
+        // Check if it's linear: ax + b = 0 → x = -b/a
+        if (/^[^x]*x[^x]*$/.test(str.replace(/\s/g,''))){
+          // Linear
+          const fn = x => math.evaluate(combined, { x });
+          const sol = bisect(fn, -1e6, 1e6);
+          if (sol !== null){
+            solutions = [sol];
+            methodUsed = 'Linear';
+          }
+        }
+
+        // Try quadratic formula
+        const qm = combined.replace(/\s/g,'').match(/^([+-]?[\d.]*)\*?x\^2([+-][\d.]*)\*?x([+-][\d.]+)$/);
+        if (qm){
+          const a=parseFloat(qm[1]||1), b=parseFloat(qm[2]), c=parseFloat(qm[3]);
+          const disc = b*b - 4*a*c;
+          if (disc >= 0){
+            solutions = [(-b+Math.sqrt(disc))/(2*a), (-b-Math.sqrt(disc))/(2*a)];
+          } else {
+            solutions = [`${formatResult(-b/(2*a))} ± ${formatResult(Math.sqrt(-disc)/(2*a))}i`];
+          }
+          methodUsed = 'Quadratic formula';
+        }
+
+        // Fallback: numerical root finding
+        if (!solutions.length){
+          const fn = x => { try { return math.evaluate(combined, {x}); } catch { return NaN; } };
+          const roots = findRoots(fn);
+          solutions = roots;
+          methodUsed = roots.length ? 'Numerical' : '';
+        }
+      } catch {
+        const fn = x => { try { return math.evaluate(combined, {x}); } catch { return NaN; } };
+        const roots = findRoots(fn);
+        solutions = roots;
+        methodUsed = 'Numerical';
+      }
+    } else {
+      // Just evaluate expression
+      const val = math.evaluate(raw);
+      out.innerHTML = `<span class="sol-label">Result</span><span class="sol-val">${esc(formatResult(val))}</span>`;
+      return;
+    }
+
+    if (!solutions.length){
+      out.innerHTML = `<span style="color:var(--orange);font-family:Outfit,sans-serif;font-size:13px">⚠️ No real solution found in range [−10000, 10000]</span>`;
+      return;
+    }
+
+    const solStr = solutions.map((s,i) => {
+      const formatted = typeof s === 'string' ? s : formatResult(s);
+      return `<div style="margin-bottom:4px"><span style="color:var(--text-3);font-size:11px">x${solutions.length>1?'<sub>'+(i+1)+'</sub>':''} = </span><span class="sol-val">${esc(formatted)}</span></div>`;
+    }).join('');
+    out.innerHTML = `<span class="sol-label">${methodUsed} · ${solutions.length} solution${solutions.length>1?'s':''}</span>${solStr}`;
+  } catch(e){
+    out.innerHTML = `<span style="color:var(--red);font-family:Outfit,sans-serif;font-size:13px">Error: ${esc(e.message)}</span>`;
+    out.className = 'eq-result';
+  }
+}
+
+// Bisection method for single root
+function bisect(fn, a, b, tol=1e-8, maxIter=100){
+  let fa = fn(a), fb = fn(b);
+  if (fa*fb > 0) return null;
+  for (let i=0; i<maxIter; i++){
+    const m = (a+b)/2, fm = fn(m);
+    if (Math.abs(fm) < tol || (b-a)/2 < tol) return m;
+    if (fa*fm < 0){ b=m; fb=fm; } else { a=m; fa=fm; }
+  }
+  return (a+b)/2;
+}
+
+// Find multiple roots by scanning
+function findRoots(fn, lo=-1000, hi=1000, steps=2000){
+  const roots = [];
+  const dx = (hi-lo)/steps;
+  let prev = fn(lo);
+  for (let i=1; i<=steps; i++){
+    const x = lo + i*dx;
+    const curr = fn(x);
+    if (isFinite(prev) && isFinite(curr) && prev*curr < 0){
+      const root = bisect(fn, x-dx, x);
+      if (root !== null && !roots.some(r => Math.abs(r-root)<1e-4)){
+        roots.push(root);
+        if (roots.length >= 10) break;
+      }
+    }
+    prev = curr;
+  }
+  return roots;
+}
+
+// ── Advanced Compute ──
+function advInp(v, mode){
+  const el = document.getElementById('advExprInput');
+  el.value += v; el.focus();
+}
+function advClear(){ document.getElementById('advExprInput').value=''; document.getElementById('advExprResult').innerHTML='<span style="color:var(--text-3);font-family:Outfit,sans-serif;font-size:13px">Enter expression above</span>'; }
+function advBack(){ const el=document.getElementById('advExprInput'); el.value=el.value.slice(0,-1); }
+
+function computeAdv(){
+  const raw = document.getElementById('advExprInput').value.trim();
+  const out = document.getElementById('advExprResult');
+  if (!raw){ out.innerHTML='<span style="color:var(--text-3);font-family:Outfit,sans-serif;font-size:13px">Enter an expression first</span>'; return; }
+  try {
+    const result = math.evaluate(raw);
+    const formatted = typeof result === 'object' ? result.toString() : formatResult(result);
+    out.innerHTML = `<span class="sol-label">Result</span><span class="sol-val">${esc(formatted)}</span>`;
+    addToHistory(raw, formatted);
+  } catch(e){
+    out.innerHTML = `<span style="color:var(--red);font-family:Outfit,sans-serif;font-size:13px">Error: ${esc(e.message)}</span>`;
+  }
+}
+
+// ── Graph Plotter ──
+let graphZoom = 1;
+let graphOffsetX = 0;
+let graphOffsetY = 0;
+let isDragging = false;
+let dragStart = { x:0, y:0 };
+
+const GRAPH_COLORS = ['#9b6ff5','#f79009','#12b76a','#f04438'];
+
+function getCanvasSize(){
+  const wrap = document.querySelector('.graph-canvas-wrap');
+  return { w: wrap ? wrap.clientWidth : 400, h: 280 };
+}
+
+function plotGraph(){
+  const canvas = document.getElementById('graphCanvas');
+  const {w, h} = getCanvasSize();
+  canvas.width = w * (window.devicePixelRatio||1);
+  canvas.height = h * (window.devicePixelRatio||1);
+  canvas.style.width = w+'px'; canvas.style.height = h+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+
+  const xMinRaw = parseFloat(document.getElementById('xMin').value) || -10;
+  const xMaxRaw = parseFloat(document.getElementById('xMax').value) || 10;
+  const xMin = xMinRaw / graphZoom + graphOffsetX;
+  const xMax = xMaxRaw / graphZoom + graphOffsetX;
+  const yRange = (xMax - xMin) * (h / w);
+  const yMid = graphOffsetY;
+  const yMin = yMid - yRange/2, yMax = yMid + yRange/2;
+
+  ctx.fillStyle = '#0d0d1a';
+  ctx.fillRect(0,0,w,h);
+
+  // Grid
+  drawGrid(ctx, w, h, xMin, xMax, yMin, yMax);
+
+  // Functions
+  const fns = [
+    document.getElementById('fn1').value.trim(),
+    document.getElementById('fn2').value.trim(),
+    document.getElementById('fn3').value.trim(),
+  ];
+
+  fns.forEach((fnStr, fi) => {
+    if (!fnStr) return;
+    ctx.beginPath();
+    ctx.strokeStyle = GRAPH_COLORS[fi];
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    let started = false;
+    const steps = w * 2;
+    for (let i=0; i<=steps; i++){
+      const x = xMin + (xMax - xMin) * (i/steps);
+      try {
+        const y = math.evaluate(fnStr, { x, pi: Math.PI, e: Math.E });
+        if (!isFinite(y) || Math.abs(y) > 1e10) { started = false; continue; }
+        const cx = (x - xMin)/(xMax - xMin) * w;
+        const cy = (1-(y - yMin)/(yMax - yMin)) * h;
+        if (!started) { ctx.moveTo(cx, cy); started=true; }
+        else ctx.lineTo(cx, cy);
+      } catch { started=false; }
+    }
+    ctx.stroke();
+  });
+
+  // Axes labels
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.font = `10px ${getComputedStyle(document.body).fontFamily}`;
+  ctx.textAlign = 'center';
+  [Math.ceil(xMin), 0, Math.floor(xMax)].forEach(v => {
+    const cx = (v-xMin)/(xMax-xMin)*w;
+    if (cx>10 && cx<w-10) ctx.fillText(v, cx, h-4);
+  });
+
+  document.getElementById('graphInfo').textContent = `x: [${xMin.toFixed(1)}, ${xMax.toFixed(1)}]`;
+}
+
+function drawGrid(ctx, w, h, xMin, xMax, yMin, yMax){
+  const xRange = xMax - xMin, yRange = yMax - yMin;
+  const step = niceStep(xRange / 8);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+
+  // Vertical grid lines
+  for (let x = Math.ceil(xMin/step)*step; x<=xMax; x+=step){
+    const cx = (x-xMin)/xRange*w;
+    ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,h); ctx.stroke();
+  }
+  // Horizontal grid lines
+  for (let y = Math.ceil(yMin/step)*step; y<=yMax; y+=step){
+    const cy = (1-(y-yMin)/yRange)*h;
+    ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 1.5;
+  const ax = (0-xMin)/xRange*w;
+  const ay = (1-(0-yMin)/yRange)*h;
+  if (ax>=0&&ax<=w){ ctx.beginPath(); ctx.moveTo(ax,0); ctx.lineTo(ax,h); ctx.stroke(); }
+  if (ay>=0&&ay<=h){ ctx.beginPath(); ctx.moveTo(0,ay); ctx.lineTo(w,ay); ctx.stroke(); }
+}
+
+function niceStep(rough){
+  const exp = Math.floor(Math.log10(rough));
+  const base = Math.pow(10,exp);
+  if (rough/base < 1.5) return base;
+  if (rough/base < 3.5) return 2*base;
+  if (rough/base < 7.5) return 5*base;
+  return 10*base;
+}
+
+function zoomGraph(dir){ graphZoom = Math.max(0.1, graphZoom * (dir>0 ? 0.7 : 1.4)); plotGraph(); }
+function resetGraph(){ graphZoom=1; graphOffsetX=0; graphOffsetY=0; plotGraph(); }
+
+// Canvas pan
+const gc = document.getElementById('graphCanvas');
+gc.addEventListener('mousedown', e=>{ isDragging=true; dragStart={x:e.offsetX,y:e.offsetY}; });
+gc.addEventListener('mousemove', e=>{
+  if (!isDragging) return;
+  const {w,h}=getCanvasSize();
+  const xMinRaw = parseFloat(document.getElementById('xMin').value)||(-10);
+  const xMaxRaw = parseFloat(document.getElementById('xMax').value)||10;
+  const xRange = (xMaxRaw-xMinRaw)/graphZoom;
+  const yRange = xRange*(h/w);
+  graphOffsetX -= (e.offsetX-dragStart.x)/w*xRange;
+  graphOffsetY += (e.offsetY-dragStart.y)/h*yRange;
+  dragStart={x:e.offsetX,y:e.offsetY};
+  plotGraph();
+});
+gc.addEventListener('mouseup',()=>isDragging=false);
+gc.addEventListener('mouseleave',()=>isDragging=false);
+gc.addEventListener('wheel', e=>{ e.preventDefault(); zoomGraph(e.deltaY>0?1:-1); },{passive:false});
+
+// Touch pan
+let lastTouch = null;
+gc.addEventListener('touchstart', e=>{ lastTouch = e.touches[0]; });
+gc.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  const t = e.touches[0];
+  if (!lastTouch) return;
+  const {w,h}=getCanvasSize();
+  const rect = gc.getBoundingClientRect();
+  const dx = t.clientX-lastTouch.clientX, dy = t.clientY-lastTouch.clientY;
+  const xMinRaw = parseFloat(document.getElementById('xMin').value)||(-10);
+  const xMaxRaw = parseFloat(document.getElementById('xMax').value)||10;
+  const xRange = (xMaxRaw-xMinRaw)/graphZoom;
+  const yRange = xRange*(h/w);
+  graphOffsetX -= dx/w*xRange;
+  graphOffsetY += dy/h*yRange;
+  lastTouch = t;
+  plotGraph();
+},{passive:false});
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Init
+updateDisplay();
+</script>
+</body>
+</html>

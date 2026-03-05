@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TPNLYBBFTF');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Guicks — Quick Tools</title>
@@ -70,6 +61,257 @@
       align-items: center;
       justify-content: space-between;
     }
+
+    /* ── Search trigger button ── */
+    .search-trigger {
+      background: none; border: none; cursor: pointer;
+      padding: 2px; display: flex; align-items: center;
+      opacity: 0.9; transition: opacity 0.15s;
+    }
+    .search-trigger:hover { opacity: 1; }
+    .search-trigger svg { width: 17px; height: 17px; }
+
+    /* ── Backup button ── */
+    .backup-trigger {
+      background: none; border: none; cursor: pointer;
+      padding: 2px; display: flex; align-items: center;
+      opacity: 0.9; transition: opacity 0.15s;
+    }
+    .backup-trigger:hover { opacity: 1; }
+    .backup-trigger svg { width: 17px; height: 17px; }
+
+    /* ── Backup modal ── */
+    .backup-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(20px);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .backup-overlay.open { opacity: 1; pointer-events: all; }
+    .backup-modal {
+      background: rgba(20,20,40,0.95);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px 28px 0 0;
+      padding: 20px 24px 44px;
+      width: 100%; max-width: 600px;
+      transform: translateY(40px);
+      transition: transform 0.3s cubic-bezier(0.34,1.4,0.64,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+    }
+    .backup-overlay.open .backup-modal { transform: translateY(0); }
+    .backup-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.2); margin: 0 auto 20px;
+    }
+    .backup-title {
+      font-size: 17px; font-weight: 700; color: white;
+      margin-bottom: 6px;
+    }
+    .backup-subtitle {
+      font-size: 12px; color: rgba(255,255,255,0.4);
+      margin-bottom: 22px; line-height: 1.5;
+    }
+    .backup-btn {
+      width: 100%; padding: 15px 20px;
+      border-radius: 14px; border: none;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all 0.18s;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .backup-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .backup-btn.save {
+      background: linear-gradient(135deg, #1a6e3a, #2ecc71);
+      color: white;
+      box-shadow: 0 4px 16px rgba(46,204,113,0.3);
+    }
+    .backup-btn.save:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(46,204,113,0.4); }
+    .backup-btn.load {
+      background: linear-gradient(135deg, #1a4a8e, #4f8ef7);
+      color: white;
+      box-shadow: 0 4px 16px rgba(79,142,247,0.3);
+    }
+    .backup-btn.load:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(79,142,247,0.4); }
+    .backup-btn .btn-text { display: flex; flex-direction: column; align-items: flex-start; }
+    .backup-btn .btn-title { font-size: 15px; font-weight: 700; }
+    .backup-btn .btn-sub { font-size: 11px; font-weight: 400; opacity: 0.75; margin-top: 1px; }
+    .backup-divider {
+      text-align: center; font-size: 11px; color: rgba(255,255,255,0.2);
+      margin: 4px 0 14px; letter-spacing: 0.05em;
+    }
+    .backup-close {
+      width: 100%; padding: 13px;
+      border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .backup-close:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── Spotlight overlay ── */
+    .spotlight {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+      align-items: center; padding-top: 80px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .spotlight.open {
+      opacity: 1; pointer-events: all;
+    }
+
+    .spotlight-box {
+      width: 100%; max-width: 500px;
+      padding: 0 20px;
+      transform: translateY(-10px);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .spotlight.open .spotlight-box { transform: translateY(0); }
+
+    .spotlight-input-wrap {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .spotlight-input-wrap svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .spotlight-input {
+      flex: 1; background: none; border: none; outline: none;
+      font-size: 17px; font-weight: 500;
+      color: white; font-family: inherit;
+    }
+    .spotlight-input::placeholder { color: rgba(255,255,255,0.4); }
+    .spotlight-clear {
+      background: rgba(255,255,255,0.15); border: none;
+      color: white; font-size: 12px; font-weight: 600;
+      padding: 4px 10px; border-radius: 10px;
+      cursor: pointer; opacity: 0.7;
+      font-family: inherit;
+      display: none;
+    }
+    .spotlight-clear.visible { display: block; }
+
+    /* Results */
+    .spotlight-results {
+      margin-top: 14px;
+      background: rgba(30,30,50,0.85);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+    .spotlight-result {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.12s;
+    }
+    .spotlight-result:last-child { border-bottom: none; }
+    .spotlight-result:hover, .spotlight-result.active { background: rgba(255,255,255,0.08); }
+    .spotlight-result-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .spotlight-result-icon svg { width: 20px; height: 20px; }
+    .spotlight-result-info { flex: 1; }
+    .spotlight-result-name { font-size: 15px; font-weight: 600; color: white; }
+    .spotlight-result-desc { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+    .spotlight-result-arrow { opacity: 0.3; font-size: 14px; }
+
+    .spotlight-empty {
+      padding: 24px 16px; text-align: center;
+      font-size: 14px; color: rgba(255,255,255,0.35);
+    }
+
+    /* ── Dock ── */
+    .dock-wrap {
+      width: 100%; max-width: 600px;
+      padding: 0 24px 28px;
+    }
+    .dock {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.13);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      min-height: 82px;
+      transition: box-shadow 0.2s;
+    }
+    .dock.drag-over {
+      box-shadow: 0 8px 32px rgba(79,142,247,0.3), 0 0 0 2px rgba(79,142,247,0.4);
+    }
+
+    /* Dock slots */
+    .dock-slot {
+      width: 58px; height: 58px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .dock-slot.empty {
+      border: 2px dashed rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.03);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .dock-slot.empty.drag-over {
+      border-color: rgba(79,142,247,0.6);
+      background: rgba(79,142,247,0.1);
+    }
+    .dock-slot .icon {
+      width: 58px; height: 58px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+    .dock-slot .icon svg { width: 28px; height: 28px; }
+
+    /* Remove badge on dock icons in edit mode */
+    .dock-editing .dock-slot .icon::before {
+      content: '✕';
+      position: absolute; top: -5px; left: -5px; z-index: 10;
+      width: 18px; height: 18px;
+      background: rgba(255,255,255,0.9);
+      color: #111;
+      font-size: 10px; font-weight: 800;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      cursor: pointer;
+    }
+    .dock-editing .icon { animation: wiggle 0.5s ease infinite alternate; }
+    @keyframes wiggle {
+      from { transform: rotate(-2deg); }
+      to   { transform: rotate(2deg); }
+    }
+
+    /* Hint label */
+    .dock-hint {
+      text-align: center;
+      font-size: 10px; color: rgba(255,255,255,0.25);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+      transition: opacity 0.3s;
+    }
+    .dock-hint.editing { color: rgba(79,142,247,0.8); }
+
+    /* Dragging state on grid apps */
+    .app.dragging { opacity: 0.4; transform: scale(0.9); }
+    .app[draggable="true"] { cursor: grab; }
 
     /* ── Status bar ── */
     .statusbar {
@@ -289,7 +531,177 @@
 
     /* scrollbar */
     .grid-wrap::-webkit-scrollbar { width: 0; }
+
+    /* ── Settings panel ── */
+    .settings-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(20px);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .settings-overlay.open { opacity: 1; pointer-events: all; }
+    .settings-sheet {
+      background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px 28px 0 0;
+      width: 100%; max-width: 600px;
+      max-height: 92vh; overflow-y: auto;
+      transform: translateY(50px);
+      transition: transform 0.3s cubic-bezier(0.34,1.3,0.64,1);
+      padding-bottom: 40px;
+    }
+    .settings-sheet::-webkit-scrollbar { width: 0; }
+    .settings-overlay.open .settings-sheet { transform: translateY(0); }
+    .settings-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.2); margin: 16px auto 0; }
+
+    /* Settings header */
+    .settings-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px 8px;
+    }
+    .settings-title { font-size: 20px; font-weight: 800; color: #f0f0f8; letter-spacing: -0.4px; }
+    .settings-close {
+      width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.1);
+      border: none; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 16px;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    }
+    .settings-close:hover { background: rgba(255,255,255,0.18); color: white; }
+
+    /* Section group */
+    .settings-group { margin: 10px 16px 0; }
+    .settings-group-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: rgba(255,255,255,0.3); margin-bottom: 6px; padding: 0 4px;
+    }
+    .settings-rows {
+      background: rgba(255,255,255,0.05); border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.07); overflow: hidden;
+    }
+    .settings-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.15s;
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-row:hover { background: rgba(255,255,255,0.04); }
+    .settings-row-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .settings-row-text { flex: 1; }
+    .settings-row-label { font-size: 14px; font-weight: 600; color: #f0f0f8; }
+    .settings-row-sub   { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+    .settings-row-action { flex-shrink: 0; }
+    .settings-row-chevron { color: rgba(255,255,255,0.25); font-size: 14px; }
+    .settings-row-badge {
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; background: rgba(79,142,247,0.2); color: #4f8ef7;
+    }
+
+    /* Theme picker */
+    .theme-picker { display: flex; gap: 6px; }
+    .theme-opt {
+      display: flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 20px; border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+      font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .theme-opt:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.9); }
+    .theme-opt.active { background: rgba(79,142,247,0.2); color: #4f8ef7; border-color: rgba(79,142,247,0.4); }
+
+    /* Danger button */
+    .settings-danger-btn {
+      width: 100%; padding: 13px 16px; border-radius: 14px;
+      border: 1.5px solid rgba(255,59,48,0.3); background: rgba(255,59,48,0.08);
+      color: #ff3b30; font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+    }
+    .settings-danger-btn:hover { background: rgba(255,59,48,0.16); border-color: rgba(255,59,48,0.5); }
+    .settings-action-btn {
+      width: 100%; padding: 13px 16px; border-radius: 14px;
+      border: 1.5px solid rgba(79,142,247,0.3); background: rgba(79,142,247,0.08);
+      color: #4f8ef7; font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+    }
+    .settings-action-btn:hover { background: rgba(79,142,247,0.16); }
+
+    /* Confirm dialog */
+    .confirm-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(20px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-box {
+      background: #1a1a2e; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; padding: 28px 24px; width: 100%; max-width: 340px;
+      text-align: center;
+      transform: scale(0.9); transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1);
+    }
+    .confirm-overlay.open .confirm-box { transform: scale(1); }
+    .confirm-icon { font-size: 44px; margin-bottom: 14px; }
+    .confirm-title { font-size: 18px; font-weight: 800; color: #f0f0f8; margin-bottom: 8px; }
+    .confirm-msg { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 22px; }
+    .confirm-btns { display: flex; gap: 10px; }
+    .confirm-cancel { flex: 1; padding: 13px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .confirm-cancel:hover { background: rgba(255,255,255,0.1); }
+    .confirm-ok { flex: 1; padding: 13px; border-radius: 14px; border: none; background: #ff3b30; color: white; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .confirm-ok:hover { background: #ff5f55; }
+
+    /* Privacy / info sheet */
+    .info-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(20px);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .info-overlay.open { opacity: 1; pointer-events: all; }
+    .info-sheet {
+      background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px 28px 0 0;
+      width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto;
+      padding: 0 24px 48px;
+      transform: translateY(40px);
+      transition: transform 0.3s cubic-bezier(0.34,1.3,0.64,1);
+    }
+    .info-sheet::-webkit-scrollbar { width: 0; }
+    .info-overlay.open .info-sheet { transform: translateY(0); }
+    .info-handle { width: 36px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.2); margin: 16px auto 20px; }
+    .info-title { font-size: 20px; font-weight: 800; color: #f0f0f8; margin-bottom: 16px; }
+    .info-body { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.8; }
+    .info-body h3 { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); margin: 16px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .info-body p { margin-bottom: 8px; }
+    .info-close { margin-top: 24px; width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .info-close:hover { background: rgba(255,255,255,0.1); }
+
+    /* Dark mode support */
+    body.theme-light { background: #f0f2f7; }
+    body.theme-light .bg-wrap { display: none; }
+    body.theme-light .statusbar { color: #0d0d1a; }
+    body.theme-light .statusbar svg { fill: #0d0d1a; }
+    body.theme-light .statusbar .time { color: #0d0d1a; }
+    body.theme-light .search-trigger svg { stroke: #0d0d1a !important; }
+    body.theme-light .backup-trigger svg { stroke: #0d0d1a !important; }
+    body.theme-light .logo { color: #0d0d1a; }
+    body.theme-light .tagline { color: #5a5a78; }
+    body.theme-light .section-label { color: #9090b0; }
+    body.theme-light .app-name { color: #0d0d1a; }
+    body.theme-light .dock { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.1); }
+    body.theme-light .dock-slot.empty { border-color: rgba(0,0,0,0.12); }
+    body.theme-light .dock-hint { color: #9090b0; }
+    body.theme-light .home-bar { background: rgba(0,0,0,0.2); }
   </style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TPNLYBBFTF');
+</script>
 </head>
 <body>
 
@@ -311,6 +723,14 @@
       <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
       <!-- Battery -->
       <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+      <!-- Search -->
+      <button class="search-trigger" onclick="openSearch()" title="Search tools">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg>
+      </button>
+      <!-- Backup -->
+      <button class="backup-trigger" onclick="openBackup()" title="Save / Load data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
     </div>
   </div>
 
@@ -326,7 +746,7 @@
     <div class="app-grid" id="mainGrid">
 
       <!-- QR Generator -->
-      <div class="app" onclick="openTool('https://qr.guicks.com', 'QR Generator')">
+      <div class="app" onclick="openTool('./guicks-qr.html', 'QR Generator')">
         <div class="icon icon-qr">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/>
@@ -345,7 +765,7 @@
       </div>
 
       <!-- Currency Converter -->
-      <div class="app" onclick="openTool('https://currency.guicks.com', 'Currency Converter')">
+      <div class="app" onclick="openTool('./guicks-currency.html', 'Currency Converter')">
         <div class="icon icon-currency">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/>
@@ -397,83 +817,118 @@
         </div>
         <span class="app-name">Sheep Count</span>
       </div>
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
-            <circle cx="12" cy="12" r="3" fill="rgba(255,255,255,0.4)"/>
-            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Favorites -->
+      <div class="app" onclick="openTool('./guicks-favorites.html', 'Favorites')">
+        <div class="icon" style="background: linear-gradient(145deg, #e8820a, #f5c842);">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Spin Wheel</span>
+        <span class="app-name">Favorites</span>
       </div>
 
-      <!-- Coming Soon: Random Number -->
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="3" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
-            <circle cx="8.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="15.5" cy="8.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="8.5" cy="15.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="15.5" cy="15.5" r="1.5" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="12" cy="12" r="1.5" fill="rgba(255,255,255,0.4)"/>
+      <!-- Unit Converter -->
+      <div class="app" onclick="openTool('./guicks-converter.html', 'Unit Converter')">
+        <div class="icon" style="background: linear-gradient(145deg, #005ecb, #0a84ff);">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Random №</span>
+        <span class="app-name">Converter</span>
       </div>
 
-      <!-- Coming Soon: Calculator -->
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
+      <!-- Weather -->
+      <div class="app" onclick="openTool('./guicks-weather.html', 'Weather')">
+        <div class="icon" style="background: linear-gradient(145deg, #1a6dd4, #5ba5f5);">
           <svg viewBox="0 0 24 24" fill="none">
-            <rect x="4" y="3" width="16" height="18" rx="2" stroke="rgba(255,255,255,0.4)" stroke-width="1.6"/>
-            <rect x="7" y="6" width="10" height="4" rx="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="8" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="12" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="16" cy="15" r="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="8" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="12" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
-            <circle cx="16" cy="19" r="1" fill="rgba(255,255,255,0.4)"/>
+            <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="4" fill="white"/>
+            <path d="M6 16.5A3.5 3.5 0 009.5 20h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 16.5z" fill="rgba(255,255,255,0.5)"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Calculator</span>
+        <span class="app-name">Weather</span>
       </div>
 
-      <!-- Coming Soon: Measure Converter -->
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
+      <!-- Lucky -->
+      <div class="app" onclick="openTool('./guicks-lucky.html', 'Lucky')">
+        <div class="icon" style="background: linear-gradient(145deg, #d43a18, #ff5c35);">
           <svg viewBox="0 0 24 24" fill="none">
-            <path d="M3 12h18M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M8 7v2M12 5v4M16 7v2" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round"/>
+            <rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
+            <circle cx="8.5" cy="8.5" r="1.6" fill="white"/>
+            <circle cx="15.5" cy="8.5" r="1.6" fill="white"/>
+            <circle cx="8.5" cy="15.5" r="1.6" fill="white"/>
+            <circle cx="15.5" cy="15.5" r="1.6" fill="white"/>
+            <circle cx="12" cy="12" r="1.6" fill="white"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Converter</span>
+        <span class="app-name">Lucky</span>
       </div>
+
+      <!-- Calculator -->
+      <div class="app" onclick="openTool('./guicks-calculator.html', 'Calculator')">
+        <div class="icon" style="background: linear-gradient(145deg, #4a1fb8, #6c3fe0);">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/>
+            <rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/>
+            <circle cx="8" cy="14" r="1.2" fill="white"/>
+            <circle cx="12" cy="14" r="1.2" fill="white"/>
+            <circle cx="16" cy="14" r="1.2" fill="white"/>
+            <circle cx="8" cy="18.5" r="1.2" fill="white"/>
+            <circle cx="12" cy="18.5" r="1.2" fill="white"/>
+            <circle cx="16" cy="18.5" r="1.2" fill="rgba(255,255,255,0.4)"/>
+          </svg>
+        </div>
+        <span class="app-name">Calculator</span>
+      </div>
+
 
       <!-- Coming Soon: Stock Market -->
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
+      <!-- Stocks -->
+      <div class="app" onclick="openTool('./guicks-stocks.html', 'Stocks')">
+        <div class="icon" style="background: linear-gradient(145deg, #0d0d1a, #1a1a2e);">
           <svg viewBox="0 0 24 24" fill="none">
-            <polyline points="3,17 7,11 11,14 15,7 21,10" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round"/>
+            <polyline points="3,17 7,11 11,14 15,7 21,10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Stocks</span>
+        <span class="app-name">Stocks</span>
       </div>
 
-      <!-- Coming Soon: Translate -->
-      <div class="app coming-soon" onclick="showToast('Coming soon!')">
-        <div class="icon icon-soon">
+      <!-- Translate -->
+      <div class="app" onclick="openTool('./guicks-translate.html', 'Translate')">
+        <div class="icon" style="background: linear-gradient(145deg, #1a2a00, #2e4a00); border: 1px solid rgba(200,240,96,0.2);">
           <svg viewBox="0 0 24 24" fill="none">
-            <path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M14 8l2 2-2 2M19 8l-2 2 2 2" stroke="rgba(255,255,255,0.4)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M13 19c1.5-2 4-2 5.5 0" stroke="rgba(255,255,255,0.4)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
-        <span class="app-name" style="color:rgba(255,255,255,0.4)">Translate</span>
+        <span class="app-name">Translate</span>
       </div>
 
+      <!-- Settings -->
+      <div class="app" onclick="openSettings()">
+        <div class="icon" style="background: linear-gradient(145deg, #3a3a4a, #6e6e80);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+        </div>
+        <span class="app-name">Settings</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Dock -->
+  <div class="dock-wrap">
+    <div class="dock-hint" id="dockHint">Hold an app to drag it into the dock</div>
+    <div class="dock" id="dock">
+      <div class="dock-slot empty" id="dock-0" ondragover="dockDragOver(event,0)" ondragleave="dockDragLeave(0)" ondrop="dockDrop(event,0)"></div>
+      <div class="dock-slot empty" id="dock-1" ondragover="dockDragOver(event,1)" ondragleave="dockDragLeave(1)" ondrop="dockDrop(event,1)"></div>
+      <div class="dock-slot empty" id="dock-2" ondragover="dockDragOver(event,2)" ondragleave="dockDragLeave(2)" ondrop="dockDrop(event,2)"></div>
+      <div class="dock-slot empty" id="dock-3" ondragover="dockDragOver(event,3)" ondragleave="dockDragLeave(3)" ondrop="dockDrop(event,3)"></div>
     </div>
   </div>
 
@@ -482,12 +937,173 @@
 
 </div>
 
+<!-- Backup Modal -->
+<div class="backup-overlay" id="backupOverlay" onclick="closeBackupOnBg(event)">
+  <div class="backup-modal">
+    <div class="backup-handle"></div>
+    <div class="backup-title">💾 Save & Load Data</div>
+    <div class="backup-subtitle">Export all your favorites, dock layout and custom categories to a file — then reload anytime, even after cache clears.</div>
+    <button class="backup-btn save" onclick="saveToFile()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="btn-text">
+        <span class="btn-title">Save to file</span>
+        <span class="btn-sub">Downloads a .json backup to your device</span>
+      </span>
+    </button>
+    <div class="backup-divider">— or —</div>
+    <button class="backup-btn load" onclick="document.getElementById('loadFileInput').click()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span class="btn-text">
+        <span class="btn-title">Load from file</span>
+        <span class="btn-sub">Restore a previously saved backup</span>
+      </span>
+    </button>
+    <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadFromFile(event)" />
+    <div style="margin-top:14px">
+      <button class="backup-close" onclick="closeBackup()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Spotlight Search -->
+<div class="spotlight" id="spotlight" onclick="closeSearchOnBg(event)">
+  <div class="spotlight-box">
+    <div class="spotlight-input-wrap">
+      <svg fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg>
+      <input class="spotlight-input" id="spotlightInput" placeholder="Search tools…" oninput="filterTools(this.value)" autocomplete="off"/>
+      <button class="spotlight-clear" id="spotlightClear" onclick="clearSearch()">✕</button>
+    </div>
+    <div class="spotlight-results" id="spotlightResults"></div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 <div class="home-bar"></div>
 
 <script>
-  // Live clock
+  // ── Backup / Restore ──
+  const BACKUP_KEYS = [
+    'guicks_favorites_v1',
+    'guicks_custom_cats_v1',
+    'guicks_dock_v1',
+    'cookiesAccepted',
+  ];
+
+  function openBackup() { document.getElementById('backupOverlay').classList.add('open'); }
+  function closeBackup() { document.getElementById('backupOverlay').classList.remove('open'); }
+  function closeBackupOnBg(e) { if (e.target === document.getElementById('backupOverlay')) closeBackup(); }
+
+  function saveToFile() {
+    const data = { _version: 1, _saved: new Date().toISOString() };
+    BACKUP_KEYS.forEach(k => {
+      const val = localStorage.getItem(k);
+      if (val !== null) data[k] = val;
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0,10);
+    a.href = url; a.download = `guicks-backup-${date}.json`;
+    a.click(); URL.revokeObjectURL(url);
+    closeBackup();
+    showToast('✅ Backup saved to file!');
+  }
+
+  function loadFromFile(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (!data._version) throw new Error('Invalid backup file');
+        let restored = 0;
+        BACKUP_KEYS.forEach(k => {
+          if (data[k] !== undefined) {
+            localStorage.setItem(k, data[k]);
+            restored++;
+          }
+        });
+        closeBackup();
+        showToast(`✅ Restored! Reloading…`);
+        setTimeout(() => location.reload(), 1200);
+      } catch(err) {
+        showToast('❌ Invalid backup file');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  // ── Spotlight Search ──
+  const TOOLS = [
+    { name: 'QR Generator', desc: 'Create QR codes for links, contacts & more', url: './guicks-qr.html', iconBg: 'linear-gradient(145deg,#3a1fa8,#6c3fe0)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="5" width="3" height="3" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="16" y="5" width="3" height="3" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="16" width="3" height="3" fill="white"/><rect x="14" y="14" width="2" height="2" fill="white"/><rect x="18" y="14" width="3" height="3" rx=".5" fill="white"/><rect x="14" y="18" width="3" height="3" rx=".5" fill="white"/><rect x="19" y="19" width="2" height="2" fill="white"/></svg>` },
+    { name: 'Currency', desc: 'Live exchange rates for 170+ currencies', url: './guicks-currency.html', iconBg: 'linear-gradient(145deg,#0d4a2e,#1a7a4a)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
+    { name: 'Sheep Count', desc: 'Count sheep — try it!', url: 'https://sheepcount.rest', iconBg: 'linear-gradient(145deg,#1a4a3a,#2d7a5a)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><circle cx="8.5" cy="11.5" r="3" fill="white"/><circle cx="15.5" cy="11.5" r="3" fill="white"/><circle cx="9.5" cy="8" r="3" fill="white"/><circle cx="14.5" cy="8" r="3" fill="white"/><circle cx="12" cy="6.5" r="2.8" fill="white"/><ellipse cx="12" cy="13.5" rx="3" ry="2.5" fill="white"/><circle cx="10.8" cy="13" r="0.6" fill="#2d7a5a"/><circle cx="13.2" cy="13" r="0.6" fill="#2d7a5a"/><rect x="9.8" y="15.5" width="1.4" height="4" rx="0.7" fill="white"/><rect x="12.8" y="15.5" width="1.4" height="4" rx="0.7" fill="white"/></svg>` },
+    { name: 'Favorites', desc: 'Your personal bookmarks, auto-categorized', url: './guicks-favorites.html', iconBg: 'linear-gradient(145deg,#e8820a,#f5c842)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/></svg>` },
+    { name: 'Converter', desc: 'Length, weight, temperature & more', url: './guicks-converter.html', iconBg: 'linear-gradient(145deg,#005ecb,#0a84ff)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
+    { name: 'Weather', desc: 'Real-time weather with hourly & 7-day forecast', url: './guicks-weather.html', iconBg: 'linear-gradient(145deg,#1a6dd4,#5ba5f5)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><path d="M6 18.5A3.5 3.5 0 009.5 22h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 18.5z" fill="rgba(255,255,255,0.7)"/><path d="M12 2v1.5M5.5 5.5l1 1M2 12h1.5M5.5 18.5l1-1M18.5 5.5l-1 1M22 12h-1.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
+    { name: 'Lucky', desc: 'Dice roller & spin wheel for names and decisions', url: './guicks-lucky.html', iconBg: 'linear-gradient(145deg,#d43a18,#ff5c35)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.6" fill="white"/><circle cx="15.5" cy="8.5" r="1.6" fill="white"/><circle cx="8.5" cy="15.5" r="1.6" fill="white"/><circle cx="15.5" cy="15.5" r="1.6" fill="white"/><circle cx="12" cy="12" r="1.6" fill="white"/></svg>` },
+    { name: 'Calculator', desc: 'Simple, scientific & graphing calculator', url: './guicks-calculator.html', iconBg: 'linear-gradient(145deg,#4a1fb8,#6c3fe0)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/><rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/><circle cx="8" cy="14" r="1.2" fill="white"/><circle cx="12" cy="14" r="1.2" fill="white"/><circle cx="16" cy="14" r="1.2" fill="white"/><circle cx="8" cy="18.5" r="1.2" fill="white"/><circle cx="12" cy="18.5" r="1.2" fill="white"/></svg>` },
+    { name: 'Stocks', desc: 'Real-time stock market viewer & watchlist', url: './guicks-stocks.html', iconBg: 'linear-gradient(145deg,#0d0d1a,#1a1a2e)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><polyline points="3,17 7,11 11,14 15,7 21,10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg>` },
+    { name: 'Translate', desc: '100+ languages with history & favorites', url: './guicks-translate.html', iconBg: 'linear-gradient(145deg,#1a2a00,#2e4a00)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/></svg>` },
+  ];
+
+  function openSearch() {
+    document.getElementById('spotlight').classList.add('open');
+    setTimeout(() => document.getElementById('spotlightInput').focus(), 50);
+    renderResults(TOOLS);
+  }
+
+  function closeSearch() {
+    document.getElementById('spotlight').classList.remove('open');
+    document.getElementById('spotlightInput').value = '';
+    document.getElementById('spotlightClear').classList.remove('visible');
+    renderResults(TOOLS);
+  }
+
+  function closeSearchOnBg(e) {
+    if (e.target === document.getElementById('spotlight')) closeSearch();
+  }
+
+  function clearSearch() {
+    document.getElementById('spotlightInput').value = '';
+    document.getElementById('spotlightClear').classList.remove('visible');
+    document.getElementById('spotlightInput').focus();
+    renderResults(TOOLS);
+  }
+
+  function filterTools(query) {
+    document.getElementById('spotlightClear').classList.toggle('visible', query.length > 0);
+    const q = query.toLowerCase();
+    const filtered = q ? TOOLS.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)) : TOOLS;
+    renderResults(filtered, query);
+  }
+
+  function renderResults(tools, query = '') {
+    const el = document.getElementById('spotlightResults');
+    if (!tools.length) {
+      el.innerHTML = `<div class="spotlight-empty">No tools found for "<strong style="color:rgba(255,255,255,0.6)">${query}</strong>"</div>`;
+      return;
+    }
+    el.innerHTML = tools.map(t => `
+      <div class="spotlight-result" onclick="${t.url ? `window.location.href='${t.url}'` : `closeSearch();showToast('${t.name} — coming soon!')`}">
+        <div class="spotlight-result-icon" style="background:${t.iconBg}">
+          ${t.iconSvg || `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>`}
+        </div>
+        <div class="spotlight-result-info">
+          <div class="spotlight-result-name">${t.name}</div>
+          <div class="spotlight-result-desc">${t.desc}</div>
+        </div>
+        <span class="spotlight-result-arrow">${t.url ? '→' : ''}</span>
+      </div>`).join('');
+  }
+
+  // Close with Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearch();
+  });
   function updateClock() {
     const now = new Date();
     const h = now.getHours().toString().padStart(2, '0');
@@ -507,8 +1123,292 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
   }
 
-  // Navigate to tool
-  function openTool(url, name) {
+  // ── Dock system ──
+  const DOCK_SIZE = 4;
+  const DOCK_KEY = 'guicks_dock_v1';
+  let dockItems = [null, null, null, null]; // array of tool names or null
+  let draggingTool = null;
+  let dockEditing = false;
+  let editTimeout = null;
+
+  function saveDock() {
+    localStorage.setItem(DOCK_KEY, JSON.stringify(dockItems));
+  }
+
+  function loadDock() {
+    try {
+      const saved = localStorage.getItem(DOCK_KEY);
+      if (saved) dockItems = JSON.parse(saved);
+    } catch(e) { dockItems = [null,null,null,null]; }
+    renderDock();
+  }
+
+  function getToolByName(name) {
+    return TOOLS.find(t => t.name === name) || null;
+  }
+
+  function renderDock() {
+    for (let i = 0; i < DOCK_SIZE; i++) {
+      const slot = document.getElementById(`dock-${i}`);
+      const toolName = dockItems[i];
+      const tool = toolName ? getToolByName(toolName) : null;
+
+      if (tool) {
+        slot.className = 'dock-slot';
+        slot.innerHTML = `
+          <div class="icon" style="background:${tool.iconBg}"
+            onclick="dockIconClick(${i})"
+            ondragover="dockDragOver(event,${i})"
+            ondragleave="dockDragLeave(${i})"
+            ondrop="dockDrop(event,${i})">
+            ${tool.iconSvg || ''}
+          </div>`;
+      } else {
+        slot.className = 'dock-slot empty';
+        slot.innerHTML = '';
+      }
+    }
+    updateDockHint();
+  }
+
+  function dockIconClick(slotIndex) {
+    if (dockEditing) {
+      // Remove from dock
+      dockItems[slotIndex] = null;
+      saveDock();
+      renderDock();
+      if (dockItems.every(x => x === null)) exitDockEdit();
+    } else {
+      const tool = getToolByName(dockItems[slotIndex]);
+      if (tool && tool.url) window.location.href = tool.url;
+      else if (tool) showToast(`${tool.name} — coming soon!`);
+    }
+  }
+
+  function updateDockHint() {
+    const hint = document.getElementById('dockHint');
+    if (dockEditing) {
+      hint.textContent = 'Tap an icon to remove it · Tap elsewhere to finish';
+      hint.classList.add('editing');
+    } else if (dockItems.every(x => x === null)) {
+      hint.textContent = 'Long press an app to drag it into the dock';
+      hint.classList.remove('editing');
+    } else {
+      hint.textContent = 'Long press an app to edit dock';
+      hint.classList.remove('editing');
+    }
+  }
+
+  function enterDockEdit() {
+    dockEditing = true;
+    document.getElementById('dock').classList.add('dock-editing');
+    updateDockHint();
+    // Make grid apps draggable
+    document.querySelectorAll('.app:not(.coming-soon)').forEach(app => {
+      app.setAttribute('draggable', 'true');
+    });
+  }
+
+  function exitDockEdit() {
+    dockEditing = false;
+    document.getElementById('dock').classList.remove('dock-editing');
+    document.querySelectorAll('.app').forEach(app => app.removeAttribute('draggable'));
+    updateDockHint();
+  }
+
+  // Long press to enter edit mode
+  document.getElementById('dock').addEventListener('pointerdown', () => {
+    editTimeout = setTimeout(() => {
+      enterDockEdit();
+    }, 600);
+  });
+  document.getElementById('dock').addEventListener('pointerup', () => clearTimeout(editTimeout));
+  document.getElementById('dock').addEventListener('pointerleave', () => clearTimeout(editTimeout));
+
+  // Click outside dock to exit edit
+  document.addEventListener('pointerdown', (e) => {
+    if (dockEditing && !document.getElementById('dock').contains(e.target) && !document.querySelector('.dock-wrap').contains(e.target)) {
+      exitDockEdit();
+    }
+  });
+
+  // Drag from grid
+  document.getElementById('mainGrid').addEventListener('dragstart', (e) => {
+    const app = e.target.closest('.app');
+    if (!app) return;
+    const name = app.querySelector('.app-name')?.textContent?.trim();
+    draggingTool = name;
+    app.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.setData('text/plain', name);
+    enterDockEdit();
+  });
+
+  document.getElementById('mainGrid').addEventListener('dragend', (e) => {
+    const app = e.target.closest('.app');
+    if (app) app.classList.remove('dragging');
+    draggingTool = null;
+  });
+
+  // Also support long-press on grid apps (mobile)
+  document.querySelectorAll('.app:not(.coming-soon)').forEach(app => {
+    let pressTimer;
+    app.addEventListener('pointerdown', () => {
+      pressTimer = setTimeout(() => {
+        enterDockEdit();
+        app.setAttribute('draggable', 'true');
+        showToast('Drag to the dock!');
+      }, 600);
+    });
+    app.addEventListener('pointerup', () => clearTimeout(pressTimer));
+    app.addEventListener('pointermove', () => clearTimeout(pressTimer));
+  });
+
+  function dockDragOver(e, slotIndex) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    document.getElementById(`dock-${slotIndex}`).classList.add('drag-over');
+    document.getElementById('dock').classList.add('drag-over');
+  }
+
+  function dockDragLeave(slotIndex) {
+    document.getElementById(`dock-${slotIndex}`).classList.remove('drag-over');
+    document.getElementById('dock').classList.remove('drag-over');
+  }
+
+  function dockDrop(e, slotIndex) {
+    e.preventDefault();
+    document.getElementById(`dock-${slotIndex}`).classList.remove('drag-over');
+    document.getElementById('dock').classList.remove('drag-over');
+    const name = e.dataTransfer.getData('text/plain') || draggingTool;
+    if (!name) return;
+    const tool = getToolByName(name);
+    if (!tool) return;
+    // Don't add coming-soon tools
+    if (!tool.url) { showToast(`${tool.name} isn't available yet!`); return; }
+    // Remove from other slots if already there
+    dockItems = dockItems.map(x => x === name ? null : x);
+    dockItems[slotIndex] = name;
+    saveDock();
+    renderDock();
+    exitDockEdit();
+    showToast(`${name} added to dock!`);
+  }
+
+  // ── Settings ──
+  const THEME_KEY = 'guicks_theme_v1';
+  const APP_THEME_KEY = 'guicks_app_theme_v1';
+
+  function openSettings() {
+    document.getElementById('settingsOverlay').classList.add('open');
+    updateThemeButtons();
+  }
+  function closeSettings() {
+    document.getElementById('settingsOverlay').classList.remove('open');
+  }
+  function settingsOverlayClick(e) {
+    if (e.target === document.getElementById('settingsOverlay')) closeSettings();
+  }
+
+  // ── Theme ──
+  function setTheme(mode) {
+    localStorage.setItem(THEME_KEY, mode);
+    localStorage.setItem(APP_THEME_KEY, mode); // read by all apps
+    applyTheme(mode);
+    updateThemeButtons();
+    showToast(mode === 'light' ? '☀️ Light mode' : mode === 'dark' ? '🌙 Dark mode' : '🔄 Auto mode');
+  }
+
+  function applyTheme(mode) {
+    const body = document.body;
+    body.classList.remove('theme-light', 'theme-dark');
+    if (mode === 'light') {
+      body.classList.add('theme-light');
+    } else if (mode === 'dark') {
+      // dark is default, nothing to add
+    } else {
+      // auto — follow system
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        body.classList.add('theme-light');
+      }
+    }
+  }
+
+  function updateThemeButtons() {
+    const current = localStorage.getItem(THEME_KEY) || 'dark';
+    ['light','dark','auto'].forEach(t => {
+      document.getElementById('theme' + t.charAt(0).toUpperCase() + t.slice(1))
+        .classList.toggle('active', t === current);
+    });
+  }
+
+  // Apply theme on load
+  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+
+  // ── Settings save/load (delegates to existing backup functions) ──
+  function openBackupFromSettings() {
+    closeSettings();
+    setTimeout(() => openBackup(), 200);
+  }
+  function loadFromSettings() {
+    document.getElementById('settingsLoadInput').click();
+  }
+  function handleSettingsLoad(e) {
+    // reuse existing backup load logic
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        BACKUP_KEYS.forEach(k => {
+          if (data[k] !== undefined) localStorage.setItem(k, data[k]);
+        });
+        closeSettings();
+        showToast('✅ Data restored! Reloading…');
+        setTimeout(() => location.reload(), 1200);
+      } catch { showToast('❌ Invalid backup file'); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  // ── Confirm reset ──
+  function confirmReset() {
+    document.getElementById('confirmOverlay').classList.add('open');
+  }
+  function closeConfirm() {
+    document.getElementById('confirmOverlay').classList.remove('open');
+  }
+  function executeReset() {
+    localStorage.clear();
+    closeConfirm();
+    closeSettings();
+    showToast('🗑️ All data cleared');
+    setTimeout(() => location.reload(), 1000);
+  }
+
+  // ── Privacy ──
+  function openPrivacy() {
+    document.getElementById('privacyOverlay').classList.add('open');
+  }
+  function closePrivacy() {
+    document.getElementById('privacyOverlay').classList.remove('open');
+  }
+  function privacyOverlayClick(e) {
+    if (e.target === document.getElementById('privacyOverlay')) closePrivacy();
+  }
+
+  // Close settings/privacy with Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeSearch();
+      closeSettings();
+      closeConfirm();
+      closePrivacy();
+    }
+  });
+
     // Add a press effect then navigate
     window.location.href = url;
   }
@@ -520,6 +1420,175 @@
     app.addEventListener('pointerleave', () => app.classList.remove('pressed'));
   });
 </script>
+<!-- ════════════════════════════════════
+     SETTINGS PANEL
+════════════════════════════════════ -->
+<div class="settings-overlay" id="settingsOverlay" onclick="settingsOverlayClick(event)">
+  <div class="settings-sheet" id="settingsSheet">
+    <div class="settings-handle"></div>
+    <div class="settings-header">
+      <span class="settings-title">⚙️ Settings</span>
+      <button class="settings-close" onclick="closeSettings()">✕</button>
+    </div>
+
+    <!-- Appearance -->
+    <div class="settings-group">
+      <div class="settings-group-label">Appearance</div>
+      <div class="settings-rows">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,200,0,0.15)">☀️</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Interface Theme</div>
+            <div class="settings-row-sub">Applied across all Guicks apps</div>
+          </div>
+          <div class="settings-row-action">
+            <div class="theme-picker">
+              <button class="theme-opt" id="themeLight" onclick="setTheme('light')">☀️ Light</button>
+              <button class="theme-opt" id="themeDark"  onclick="setTheme('dark')">🌙 Dark</button>
+              <button class="theme-opt" id="themeAuto"  onclick="setTheme('auto')">🔄 Auto</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="settings-group" style="margin-top:16px">
+      <div class="settings-group-label">Data</div>
+      <div class="settings-rows">
+        <div class="settings-row" style="cursor:pointer" onclick="openBackupFromSettings()">
+          <div class="settings-row-icon" style="background:rgba(79,142,247,0.15)">💾</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Save Data to File</div>
+            <div class="settings-row-sub">Export favorites, dock & preferences</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
+        </div>
+        <div class="settings-row" style="cursor:pointer" onclick="loadFromSettings()">
+          <div class="settings-row-icon" style="background:rgba(18,183,106,0.15)">📂</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Load Data from File</div>
+            <div class="settings-row-sub">Restore a previously saved backup</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
+        </div>
+        <input type="file" id="settingsLoadInput" accept=".json" style="display:none" onchange="handleSettingsLoad(event)"/>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div class="settings-group" style="margin-top:16px">
+      <div class="settings-group-label">Reset</div>
+      <div class="settings-rows">
+        <div class="settings-row" style="cursor:pointer" onclick="confirmReset()">
+          <div class="settings-row-icon" style="background:rgba(255,59,48,0.15)">🗑️</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" style="color:#ff3b30">Clear All App Data</div>
+            <div class="settings-row-sub">Removes all saved data from this device</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron" style="color:rgba(255,59,48,0.5)">›</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="settings-group" style="margin-top:16px">
+      <div class="settings-group-label">About</div>
+      <div class="settings-rows">
+        <div class="settings-row" style="cursor:pointer" onclick="openPrivacy()">
+          <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">🔒</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Privacy Policy</div>
+            <div class="settings-row-sub">How your data is handled</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">📱</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Version</div>
+            <div class="settings-row-sub">guicks.com</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-badge">v2.1.0</span></div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">👤</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Developer</div>
+            <div class="settings-row-sub">Yoni Moreno · © 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tools count -->
+    <div class="settings-group" style="margin-top:16px">
+      <div class="settings-group-label">Installed Tools</div>
+      <div class="settings-rows">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(79,142,247,0.15)">🧰</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">10 Apps Available</div>
+            <div class="settings-row-sub">QR · Currency · Sheep · Favorites · Converter · Weather · Translate · Calculator · Stocks · Lucky</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     CONFIRM RESET DIALOG
+════════════════════════════════════ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title">Clear All Data?</div>
+    <div class="confirm-msg">This will permanently delete all your saved data — favorites, bookmarks, dock layout, watchlist, calculator history, and all app preferences.<br><br>This action <strong style="color:#ff3b30">cannot be undone.</strong></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-ok" onclick="executeReset()">Yes, Clear All</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PRIVACY SHEET
+════════════════════════════════════ -->
+<div class="info-overlay" id="privacyOverlay" onclick="privacyOverlayClick(event)">
+  <div class="info-sheet" id="privacySheet">
+    <div class="info-handle"></div>
+    <div class="info-title">🔒 Privacy Policy</div>
+    <div class="info-body">
+      <h3>Your data stays on your device</h3>
+      <p>Guicks is designed with privacy as a core principle. <strong style="color:rgba(255,255,255,0.85)">We do not store any of your personal data on any server or cloud.</strong> Everything you save — bookmarks, favorites, preferences, calculator history, watchlists, saved locations, and translation history — lives exclusively in your browser's local storage on your own device.</p>
+
+      <h3>What we store locally</h3>
+      <p>The following data is stored only on your device using your browser's localStorage API and is never transmitted to us:</p>
+      <p>• Saved bookmarks and custom categories<br>• Dock layout preferences<br>• Calculator history and favorites<br>• Currency & unit converter preferences<br>• Weather saved locations<br>• Translation history and favorites<br>• Stock market watchlist<br>• Lucky app entries and history<br>• Theme and interface preferences</p>
+
+      <h3>Analytics</h3>
+      <p>We use Google Analytics to collect anonymized, aggregated usage data (page views, session duration, general location by country). This data contains no personally identifiable information and is used solely to understand how tools are being used so we can improve them. You can opt out via your browser's Do Not Track setting.</p>
+
+      <h3>No accounts required</h3>
+      <p>Guicks requires no registration, login, or account of any kind. There is no user profile, no email address collected, and no way to identify you as an individual.</p>
+
+      <h3>Third-party services</h3>
+      <p>Some tools fetch data from external APIs (Open-Meteo for weather, MyMemory for translation, Finnhub for stocks, ExchangeRate-API for currencies). These requests may include your IP address as part of the standard HTTP request, but Guicks does not pass any personal data to these services beyond what is inherent in a browser network request.</p>
+
+      <h3>Data export & deletion</h3>
+      <p>You can export all your local data at any time using Settings → Save Data to File. You can permanently delete all stored data using Settings → Clear All App Data. Clearing your browser's site data will also remove everything.</p>
+
+      <h3>Contact</h3>
+      <p>Questions? Reach out via guicks.com.</p>
+
+      <p style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.25)">Last updated: March 2026</p>
+    </div>
+    <button class="info-close" onclick="closePrivacy()">Close</button>
+  </div>
+</div>
+
 <!-- Cookie Banner -->
 <div class="cookie-banner" id="cookieBanner">
   <p>🍪 This website uses cookies to analyze traffic with Google Analytics. By continuing, you accept our use of cookies.</p>

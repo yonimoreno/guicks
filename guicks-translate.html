@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important}
+html.guicks-light body::before,html.guicks-light body::after{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!important}
+html.guicks-light .back-btn svg{stroke:currentColor!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Translate — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0e0e16;
+  --surface: #16161f;
+  --surface2: #1e1e2a;
+  --surface3: #252535;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f8;
+  --text-2: #9090b0;
+  --text-3: #5a5a78;
+  --accent: #c8f060;
+  --accent-dim: rgba(200,240,96,0.12);
+  --accent-dark: #8aaa30;
+  --red: #ff5f5f;
+  --radius: 20px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+html, body {
+  width: 100%; min-height: 100%;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg); color: var(--text);
+}
+
+/* grain overlay */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; opacity: 0.6;
+}
+
+/* ambient glow */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 80% 10%, rgba(200,240,96,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 10% 90%, rgba(100,80,200,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.shell {
+  position: relative; z-index: 1;
+  min-height: 100vh; display: flex; flex-direction: column;
+  max-width: 680px; margin: 0 auto;
+}
+
+/* ── Status bar ── */
+.statusbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 24px 0;
+  font-size: 13px; font-weight: 700; color: var(--text-2);
+}
+.statusbar .time { font-size: 16px; font-weight: 800; color: var(--text); }
+.statusbar .icons { display: flex; gap: 5px; align-items: center; }
+.statusbar .icons svg { width: 16px; height: 16px; fill: var(--text-2); }
+
+/* ── Top nav ── */
+.topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px 0;
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--accent); font-size: 15px; font-weight: 600;
+  text-decoration: none; background: none; border: none;
+  cursor: pointer; padding: 6px 10px 6px 4px; border-radius: 10px;
+  transition: background 0.15s;
+}
+.back-btn:hover { background: var(--accent-dim); }
+.back-btn svg { width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── App header ── */
+.app-header {
+  padding: 20px 24px 8px;
+  display: flex; align-items: center; gap: 16px;
+}
+.app-icon {
+  width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+  background: linear-gradient(145deg, #1a2a00, #2e4a00);
+  border: 1px solid rgba(200,240,96,0.2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 0 30px rgba(200,240,96,0.08);
+}
+.app-icon svg { width: 28px; height: 28px; }
+.app-header-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; font-weight: 900; letter-spacing: -0.5px;
+  color: var(--text);
+}
+.app-header-text p { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+/* ── Language selector bar ── */
+.lang-bar {
+  margin: 16px 16px 0;
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.lang-picker {
+  flex: 1; position: relative;
+}
+.lang-select {
+  width: 100%; background: transparent; border: none;
+  color: var(--text); font-family: 'Outfit', sans-serif;
+  font-size: 14px; font-weight: 700;
+  padding: 14px 32px 14px 16px; outline: none; cursor: pointer;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%235a5a78' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+.lang-select:focus { background-color: var(--surface2); }
+.lang-select option { background: #1e1e2a; color: var(--text); }
+.lang-flag { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; pointer-events: none; display: none; }
+
+.lang-divider { width: 1px; height: 28px; background: var(--border2); flex-shrink: 0; }
+
+.swap-btn {
+  width: 52px; height: 52px; background: none; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+  color: var(--text-3);
+}
+.swap-btn:hover { color: var(--accent); background: var(--accent-dim); }
+.swap-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s; }
+.swap-btn:hover svg { transform: rotate(180deg); }
+
+/* ── Main translate panel ── */
+.translate-panel {
+  margin: 12px 16px 0;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+.panel-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.panel-box + .panel-box { margin-top: 8px; }
+
+.panel-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--text-3);
+  padding: 14px 16px 0;
+}
+
+/* Source textarea */
+.source-textarea {
+  width: 100%; background: transparent; border: none;
+  color: var(--text); font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; line-height: 1.4;
+  padding: 10px 16px 14px; outline: none; resize: none;
+  min-height: 120px; caret-color: var(--accent);
+}
+.source-textarea::placeholder {
+  color: var(--text-3); font-style: italic;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Output area */
+.output-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 700; line-height: 1.4;
+  padding: 10px 16px 14px; min-height: 120px;
+  color: var(--accent); transition: color 0.3s;
+}
+.output-text.loading { color: var(--text-3); font-style: italic; font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 400; }
+.output-text.empty { color: var(--text-3); font-style: italic; font-size: 16px; font-family: 'Outfit', sans-serif; font-weight: 400; }
+
+/* Panel actions */
+.panel-actions {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-top: 1px solid var(--border);
+  background: var(--surface2);
+}
+.action-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-3); padding: 6px 8px; border-radius: 8px;
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 5px; transition: all 0.15s;
+}
+.action-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.action-btn:hover { background: var(--surface3); color: var(--text); }
+.action-btn.accent:hover { background: var(--accent-dim); color: var(--accent); }
+.char-count { margin-left: auto; font-size: 11px; color: var(--text-3); }
+.char-count.warn { color: #f5a623; }
+.char-count.over { color: var(--red); }
+
+/* Translate button */
+.translate-btn {
+  margin: 12px 16px 0;
+  width: calc(100% - 32px);
+  padding: 16px; border-radius: 16px; border: none;
+  font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 800;
+  cursor: pointer; letter-spacing: 0.2px;
+  background: var(--accent); color: #0e0e16;
+  box-shadow: 0 4px 20px rgba(200,240,96,0.25);
+  transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.translate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,240,96,0.35); }
+.translate-btn:active { transform: scale(0.98); }
+.translate-btn:disabled { opacity: 0.5; pointer-events: none; }
+.translate-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.btn-spin { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Recent translations ── */
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 20px 10px;
+}
+.section-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--text-3);
+}
+.section-clear { font-size: 12px; font-weight: 600; color: var(--red); background: none; border: none; cursor: pointer; font-family: inherit; opacity: 0.7; transition: opacity 0.15s; }
+.section-clear:hover { opacity: 1; }
+
+/* Tabs: History / Favorites */
+.tabs-wrap { padding: 0 16px 12px; display: flex; gap: 8px; }
+.tab-btn {
+  padding: 7px 18px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-2);
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+.tab-btn.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(200,240,96,0.3); }
+.tab-btn:hover:not(.active) { border-color: var(--border2); color: var(--text); }
+
+/* Translation cards */
+.trans-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+.trans-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 16px;
+  cursor: pointer; transition: all 0.18s;
+  animation: slideIn 0.28s cubic-bezier(0.34,1.5,0.64,1);
+  position: relative;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(8px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+.trans-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); }
+
+.trans-langs {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.6px; color: var(--text-3); margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.trans-langs .arr { opacity: 0.4; }
+.trans-source-text {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.trans-output-text {
+  font-size: 14px; font-weight: 700; color: var(--accent);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 3px;
+}
+
+.trans-card-actions {
+  position: absolute; top: 10px; right: 10px;
+  display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s;
+}
+.trans-card:hover .trans-card-actions { opacity: 1; }
+.tca-btn {
+  width: 28px; height: 28px; border-radius: 8px; border: none;
+  background: var(--surface3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; color: var(--text-3);
+}
+.tca-btn:hover { background: var(--accent-dim); color: var(--accent); }
+.tca-btn.del:hover { background: rgba(255,95,95,0.15); color: var(--red); }
+.tca-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.tca-btn.fav-active { background: var(--accent-dim); color: var(--accent); }
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 32px 24px;
+}
+.empty-icon { font-size: 40px; margin-bottom: 10px; }
+.empty-title { font-size: 15px; font-weight: 700; color: var(--text-2); }
+.empty-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; line-height: 1.6; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(10px);
+  background: rgba(200,240,96,0.15); backdrop-filter: blur(20px);
+  border: 1px solid rgba(200,240,96,0.3);
+  color: var(--accent); font-size: 13px; font-weight: 600;
+  padding: 10px 20px; border-radius: 20px;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap; z-index: 300;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Footer ── */
+.footer { text-align: center; padding: 16px 0 28px; font-size: 11px; color: var(--text-3); margin-top: auto; }
+
+/* ── Cookie ── */
+.cookie-banner {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(22,22,31,0.97); backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border); padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  z-index: 200;
+}
+.cookie-banner p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.cookie-btn {
+  flex-shrink: 0; background: var(--accent); color: #0e0e16;
+  border: none; border-radius: 20px; padding: 8px 18px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+}
+
+@media (max-width: 400px) { .source-textarea, .output-text { font-size: 18px; } }
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TPNLYBBFTF');
+</script>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time" id="clock">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity="0.3"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Top nav -->
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+    <div style="width:80px"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1>Translate</h1>
+      <p>100+ languages · Powered by MyMemory</p>
+    </div>
+  </div>
+
+  <!-- Language bar -->
+  <div class="lang-bar">
+    <div class="lang-picker">
+      <select class="lang-select" id="fromLang"></select>
+    </div>
+    <div class="lang-divider"></div>
+    <button class="swap-btn" onclick="swapLangs()" title="Swap languages">
+      <svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
+    </button>
+    <div class="lang-divider"></div>
+    <div class="lang-picker">
+      <select class="lang-select" id="toLang"></select>
+    </div>
+  </div>
+
+  <!-- Translate panel -->
+  <div class="translate-panel">
+
+    <!-- Source -->
+    <div class="panel-box">
+      <div class="panel-label">Source</div>
+      <textarea class="source-textarea" id="sourceText" placeholder="Type or paste text here…" maxlength="500" oninput="onSourceInput()" onkeydown="onKeyDown(event)"></textarea>
+      <div class="panel-actions">
+        <button class="action-btn" onclick="clearSource()" title="Clear">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          Clear
+        </button>
+        <button class="action-btn" onclick="pasteClipboard()" title="Paste">
+          <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+          Paste
+        </button>
+        <button class="action-btn accent" onclick="speakText('source')" title="Listen">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+          Listen
+        </button>
+        <span class="char-count" id="charCount">0 / 500</span>
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="panel-box">
+      <div class="panel-label">Translation</div>
+      <div class="output-text empty" id="outputText">Translation will appear here…</div>
+      <div class="panel-actions">
+        <button class="action-btn accent" onclick="copyOutput()" title="Copy">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>
+        <button class="action-btn accent" onclick="speakText('output')" title="Listen">
+          <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+          Listen
+        </button>
+        <button class="action-btn accent" id="favBtn" onclick="toggleFavoriteCurrent()" title="Save as favorite">
+          <svg viewBox="0 0 24 24" id="favBtnIcon"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Translate button -->
+  <button class="translate-btn" id="translateBtn" onclick="doTranslate()">
+    <svg viewBox="0 0 24 24"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5M15 5s1 3 3 5c2-2 3-5 3-5M13 19c1.5-2 4.5-2 6 0"/></svg>
+    Translate
+  </button>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap" style="margin-top:16px">
+    <button class="tab-btn active" id="tabHistory" onclick="switchTab('history')">🕐 History</button>
+    <button class="tab-btn" id="tabFavorites" onclick="switchTab('favorites')">⭐ Favorites</button>
+  </div>
+
+  <!-- List -->
+  <div class="trans-list" id="transList"></div>
+
+  <div class="footer">© 2026 Yoni Moreno · Powered by MyMemory</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="cookie-banner" id="cookieBanner">
+  <p>🍪 This website uses cookies to analyze traffic with Google Analytics.</p>
+  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+</div>
+
+<script>
+// ── Clock ──
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+updateClock(); setInterval(updateClock, 10000);
+
+// ── Cookie ──
+if (localStorage.getItem('cookiesAccepted')) document.getElementById('cookieBanner').style.display = 'none';
+function acceptCookies() {
+  localStorage.setItem('cookiesAccepted','true');
+  const b = document.getElementById('cookieBanner');
+  b.style.transition='opacity 0.3s,transform 0.3s'; b.style.opacity='0'; b.style.transform='translateY(20px)';
+  setTimeout(()=>b.style.display='none',300);
+}
+
+// ── Toast ──
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// ── Languages ──
+const LANGUAGES = [
+  ['af','Afrikaans'],['sq','Albanian'],['am','Amharic'],['ar','Arabic'],
+  ['hy','Armenian'],['az','Azerbaijani'],['eu','Basque'],['be','Belarusian'],
+  ['bn','Bengali'],['bs','Bosnian'],['bg','Bulgarian'],['ca','Catalan'],
+  ['ceb','Cebuano'],['zh','Chinese (Simplified)'],['zh-TW','Chinese (Traditional)'],
+  ['co','Corsican'],['hr','Croatian'],['cs','Czech'],['da','Danish'],
+  ['nl','Dutch'],['en','English'],['eo','Esperanto'],['et','Estonian'],
+  ['fi','Finnish'],['fr','French'],['fy','Frisian'],['gl','Galician'],
+  ['ka','Georgian'],['de','German'],['el','Greek'],['gu','Gujarati'],
+  ['ht','Haitian Creole'],['ha','Hausa'],['haw','Hawaiian'],['he','Hebrew'],
+  ['hi','Hindi'],['hmn','Hmong'],['hu','Hungarian'],['is','Icelandic'],
+  ['ig','Igbo'],['id','Indonesian'],['ga','Irish'],['it','Italian'],
+  ['ja','Japanese'],['jv','Javanese'],['kn','Kannada'],['kk','Kazakh'],
+  ['km','Khmer'],['ko','Korean'],['ku','Kurdish'],['ky','Kyrgyz'],
+  ['lo','Lao'],['la','Latin'],['lv','Latvian'],['lt','Lithuanian'],
+  ['lb','Luxembourgish'],['mk','Macedonian'],['mg','Malagasy'],['ms','Malay'],
+  ['ml','Malayalam'],['mt','Maltese'],['mi','Maori'],['mr','Marathi'],
+  ['mn','Mongolian'],['my','Myanmar'],['ne','Nepali'],['no','Norwegian'],
+  ['ny','Nyanja'],['or','Odia'],['ps','Pashto'],['fa','Persian'],
+  ['pl','Polish'],['pt','Portuguese'],['pa','Punjabi'],['ro','Romanian'],
+  ['ru','Russian'],['sm','Samoan'],['gd','Scots Gaelic'],['sr','Serbian'],
+  ['st','Sesotho'],['sn','Shona'],['sd','Sindhi'],['si','Sinhala'],
+  ['sk','Slovak'],['sl','Slovenian'],['so','Somali'],['es','Spanish'],
+  ['su','Sundanese'],['sw','Swahili'],['sv','Swedish'],['tl','Tagalog'],
+  ['tg','Tajik'],['ta','Tamil'],['tt','Tatar'],['te','Telugu'],
+  ['th','Thai'],['tr','Turkish'],['tk','Turkmen'],['uk','Ukrainian'],
+  ['ur','Urdu'],['ug','Uyghur'],['uz','Uzbek'],['vi','Vietnamese'],
+  ['cy','Welsh'],['xh','Xhosa'],['yi','Yiddish'],['yo','Yoruba'],['zu','Zulu'],
+];
+
+// ── Storage ──
+const HISTORY_KEY = 'guicks_translate_history_v1';
+const FAVS_KEY = 'guicks_translate_favs_v1';
+const PREFS_KEY = 'guicks_translate_prefs_v1';
+
+let history = [];
+let favorites = [];
+let prefs = { from: 'en', to: 'fr' };
+let currentTab = 'history';
+let lastTranslation = null;
+
+function loadData() {
+  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { history = []; }
+  try { favorites = JSON.parse(localStorage.getItem(FAVS_KEY)) || []; } catch { favorites = []; }
+  try { const p = JSON.parse(localStorage.getItem(PREFS_KEY)); if (p) prefs = p; } catch {}
+}
+function saveHistory() { localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0,100))); }
+function saveFavs() { localStorage.setItem(FAVS_KEY, JSON.stringify(favorites)); }
+function savePrefs() { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }
+
+// ── Populate language selects ──
+function populateLangs() {
+  const from = document.getElementById('fromLang');
+  const to = document.getElementById('toLang');
+  const opts = LANGUAGES.map(([code, name]) =>
+    `<option value="${code}">${name}</option>`).join('');
+  from.innerHTML = opts; to.innerHTML = opts;
+  from.value = prefs.from;
+  to.value = prefs.to;
+  from.addEventListener('change', ()=>{ prefs.from = from.value; savePrefs(); });
+  to.addEventListener('change', ()=>{ prefs.to = to.value; savePrefs(); });
+}
+
+function swapLangs() {
+  const from = document.getElementById('fromLang');
+  const to = document.getElementById('toLang');
+  [from.value, to.value] = [to.value, from.value];
+  prefs.from = from.value; prefs.to = to.value; savePrefs();
+  // Swap text too
+  const srcEl = document.getElementById('sourceText');
+  const outEl = document.getElementById('outputText');
+  if (!outEl.classList.contains('empty') && !outEl.classList.contains('loading')) {
+    const tmp = srcEl.value;
+    srcEl.value = outEl.textContent;
+    outEl.textContent = tmp;
+    outEl.classList.remove('empty','loading');
+    updateCharCount();
+  }
+}
+
+// ── Input ──
+function onSourceInput() { updateCharCount(); }
+function updateCharCount() {
+  const len = document.getElementById('sourceText').value.length;
+  const el = document.getElementById('charCount');
+  el.textContent = `${len} / 500`;
+  el.className = 'char-count' + (len >= 450 ? ' warn' : '') + (len >= 500 ? ' over' : '');
+}
+function onKeyDown(e) {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); doTranslate(); }
+}
+function clearSource() {
+  document.getElementById('sourceText').value = '';
+  setOutput('empty', 'Translation will appear here…');
+  updateCharCount();
+  lastTranslation = null;
+  updateFavBtn();
+}
+async function pasteClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById('sourceText').value = text.slice(0,500);
+    updateCharCount();
+    showToast('📋 Pasted from clipboard');
+  } catch { showToast('Clipboard access denied'); }
+}
+
+function setOutput(state, text) {
+  const el = document.getElementById('outputText');
+  el.className = 'output-text ' + state;
+  el.textContent = text;
+}
+
+// ── Translate ──
+async function doTranslate() {
+  const text = document.getElementById('sourceText').value.trim();
+  if (!text) { showToast('Please enter some text first'); return; }
+
+  const fromCode = document.getElementById('fromLang').value;
+  const toCode = document.getElementById('toLang').value;
+  const langPair = `${fromCode}|${toCode}`;
+
+  const btn = document.getElementById('translateBtn');
+  btn.disabled = true;
+  btn.innerHTML = `<svg class="btn-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Translating…`;
+  setOutput('loading', 'Translating…');
+
+  try {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.responseStatus === 200) {
+      const translated = data.responseData.translatedText;
+      setOutput('', translated);
+
+      const fromName = LANGUAGES.find(l=>l[0]===fromCode)?.[1] || fromCode;
+      const toName   = LANGUAGES.find(l=>l[0]===toCode)?.[1] || toCode;
+
+      const entry = {
+        id: Date.now(),
+        source: text, translated,
+        fromCode, toCode, fromName, toName,
+        ts: Date.now(),
+      };
+      lastTranslation = entry;
+      updateFavBtn();
+
+      // Add to history (avoid exact duplicate at top)
+      if (!history.length || history[0].source !== text || history[0].toCode !== toCode) {
+        history.unshift(entry);
+        saveHistory();
+      }
+      renderList();
+    } else {
+      setOutput('empty', 'Translation failed — try again');
+      showToast('❌ Translation error');
+    }
+  } catch {
+    setOutput('empty', 'Network error — check connection');
+    showToast('❌ Network error');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5M15 5s1 3 3 5c2-2 3-5 3-5M13 19c1.5-2 4.5-2 6 0"/></svg> Translate`;
+}
+
+// ── Copy / Speak ──
+function copyOutput() {
+  const text = document.getElementById('outputText').textContent;
+  if (!text || document.getElementById('outputText').classList.contains('empty')) { showToast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('✅ Copied!')).catch(() => showToast('Copy failed'));
+}
+
+function speakText(which) {
+  if (!window.speechSynthesis) { showToast('Speech not supported in this browser'); return; }
+  const text = which === 'source'
+    ? document.getElementById('sourceText').value
+    : document.getElementById('outputText').textContent;
+  if (!text || document.getElementById('outputText').classList.contains('empty') && which === 'output') { showToast('Nothing to speak'); return; }
+  const lang = which === 'source'
+    ? document.getElementById('fromLang').value
+    : document.getElementById('toLang').value;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang; utt.rate = 0.9;
+  speechSynthesis.speak(utt);
+  showToast('🔊 Speaking…');
+}
+
+// ── Favorites ──
+function isFav(id) { return favorites.some(f => f.id === id); }
+
+function updateFavBtn() {
+  const btn = document.getElementById('favBtn');
+  const icon = document.getElementById('favBtnIcon');
+  if (!lastTranslation) {
+    btn.style.color = '';
+    icon.querySelector('path').setAttribute('fill', 'none');
+    return;
+  }
+  const faved = isFav(lastTranslation.id);
+  btn.style.color = faved ? 'var(--accent)' : '';
+  icon.querySelector('path').setAttribute('fill', faved ? 'currentColor' : 'none');
+}
+
+function toggleFavoriteCurrent() {
+  if (!lastTranslation) { showToast('Translate something first!'); return; }
+  const idx = favorites.findIndex(f => f.id === lastTranslation.id);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    showToast('Removed from favorites');
+  } else {
+    favorites.unshift({...lastTranslation});
+    showToast('⭐ Saved to favorites!');
+  }
+  saveFavs(); updateFavBtn(); renderList();
+}
+
+function toggleFavCard(id) {
+  const entry = [...history, ...favorites].find(e => e.id === id);
+  if (!entry) return;
+  const idx = favorites.findIndex(f => f.id === id);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+    showToast('Removed from favorites');
+  } else {
+    favorites.unshift({...entry});
+    showToast('⭐ Saved to favorites!');
+  }
+  saveFavs(); renderList();
+  if (lastTranslation?.id === id) updateFavBtn();
+}
+
+function deleteEntry(id, from) {
+  if (from === 'history') {
+    history = history.filter(e => e.id !== id);
+    saveHistory();
+  } else {
+    favorites = favorites.filter(e => e.id !== id);
+    saveFavs();
+  }
+  renderList();
+  if (lastTranslation?.id === id) { lastTranslation = null; updateFavBtn(); }
+}
+
+// ── Load entry into translator ──
+function loadEntry(entry) {
+  document.getElementById('sourceText').value = entry.source;
+  setOutput('', entry.translated);
+  document.getElementById('fromLang').value = entry.fromCode;
+  document.getElementById('toLang').value = entry.toCode;
+  prefs.from = entry.fromCode; prefs.to = entry.toCode; savePrefs();
+  lastTranslation = entry; updateFavBtn(); updateCharCount();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── Tabs ──
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabHistory').classList.toggle('active', tab==='history');
+  document.getElementById('tabFavorites').classList.toggle('active', tab==='favorites');
+  renderList();
+}
+
+// ── Render ──
+function renderList() {
+  const list = document.getElementById('transList');
+  const items = currentTab === 'history' ? history : favorites;
+  const source = currentTab === 'history' ? 'history' : 'favorites';
+
+  if (!items.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">${currentTab === 'history' ? '🕐' : '⭐'}</div>
+      <div class="empty-title">${currentTab === 'history' ? 'No translations yet' : 'No saved favorites'}</div>
+      <div class="empty-sub">${currentTab === 'history' ? 'Your recent translations will appear here.' : 'Hit ⭐ Save after translating to add favorites.'}</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(entry => {
+    const faved = isFav(entry.id);
+    return `<div class="trans-card" onclick="loadEntry(histFav(${entry.id}))">
+      <div class="trans-langs">
+        ${esc(entry.fromName)} <span class="arr">→</span> ${esc(entry.toName)}
+      </div>
+      <div class="trans-source-text">${esc(entry.source)}</div>
+      <div class="trans-output-text">${esc(entry.translated)}</div>
+      <div class="trans-card-actions">
+        <button class="tca-btn ${faved?'fav-active':''}" onclick="event.stopPropagation();toggleFavCard(${entry.id})" title="${faved?'Remove favorite':'Save favorite'}">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="${faved?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="tca-btn del" onclick="event.stopPropagation();deleteEntry(${entry.id},'${source}')" title="Delete">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Helper to find an entry from either history or favorites by id
+function histFav(id) {
+  return [...history, ...favorites].find(e => e.id === id) || {};
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Clear all ──
+document.querySelector('.section-header')?.querySelector('.section-clear')?.addEventListener('click', () => {
+  if (currentTab === 'history') { history = []; saveHistory(); }
+  else { favorites = []; saveFavs(); }
+  renderList();
+});
+
+// ── Init ──
+loadData();
+populateLangs();
+renderList();
+</script>
+</body>
+</html>

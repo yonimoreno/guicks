@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important}
+html.guicks-light body::before,html.guicks-light body::after{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!important}
+html.guicks-light .back-btn svg{stroke:currentColor!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Lucky — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f2f7;
+  --surface: #fff;
+  --surface2: #f7f8fc;
+  --border: rgba(0,0,0,0.07);
+  --text: #0d0d1a;
+  --text-2: #5a5a78;
+  --text-3: #9090b0;
+  --coral: #ff5c35;
+  --coral-light: #fff1ee;
+  --gold: #f5a623;
+  --gold-light: #fff8ec;
+  --teal: #00b8a0;
+  --teal-light: #e6faf7;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 24px rgba(0,0,0,0.1);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.15);
+  --radius: 20px;
+}
+
+html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); }
+
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 10% 0%, rgba(255,92,53,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(245,166,35,0.07) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.shell { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; max-width: 680px; margin: 0 auto; }
+
+/* ── Status bar ── */
+.statusbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px 0; font-size: 13px; font-weight: 700; color: var(--text); }
+.statusbar .time { font-size: 16px; font-weight: 800; }
+.statusbar .icons { display: flex; gap: 5px; align-items: center; }
+.statusbar .icons svg { width: 16px; height: 16px; fill: var(--text); }
+
+/* ── Top nav ── */
+.topnav { display: flex; align-items: center; padding: 10px 20px 0; }
+.back-btn { display: inline-flex; align-items: center; gap: 4px; color: var(--coral); font-size: 15px; font-weight: 600; text-decoration: none; background: none; border: none; cursor: pointer; padding: 6px 10px 6px 4px; border-radius: 10px; transition: background 0.15s; }
+.back-btn:hover { background: var(--coral-light); }
+.back-btn svg { width: 18px; height: 18px; fill: none; stroke: var(--coral); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── App header ── */
+.app-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px 10px; }
+.app-icon { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(145deg, #d43a18, #ff5c35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 6px 20px rgba(255,92,53,0.3), inset 0 1px 0 rgba(255,255,255,0.2); font-size: 28px; }
+.app-header-text h1 { font-family: 'Boogaloo', cursive; font-size: 28px; letter-spacing: 0.5px; line-height: 1; }
+.app-header-text p { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+
+/* ── Mode switcher ── */
+.mode-bar { margin: 0 16px 14px; display: flex; gap: 8px; }
+.mode-btn {
+  flex: 1; padding: 12px 8px; border-radius: 16px; border: 1.5px solid var(--border);
+  background: var(--surface); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; color: var(--text-2); transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  box-shadow: var(--shadow-sm);
+}
+.mode-btn .mode-icon { font-size: 18px; }
+.mode-btn:hover { border-color: var(--coral); color: var(--coral); }
+.mode-btn.active { background: linear-gradient(135deg, #d43a18, #ff5c35); color: white; border-color: transparent; box-shadow: 0 4px 16px rgba(255,92,53,0.3); }
+
+/* ── Entries panel ── */
+.entries-card { margin: 0 16px 12px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); padding: 16px; }
+.entries-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-3); margin-bottom: 10px; }
+.entries-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.entry-input {
+  flex: 1; background: var(--surface2); border: 1.5px solid var(--border);
+  color: var(--text); font-family: 'Outfit', sans-serif; font-size: 14px;
+  padding: 10px 14px; border-radius: 12px; outline: none; transition: all 0.18s;
+}
+.entry-input:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,92,53,0.1); background: #fff; }
+.entry-input::placeholder { color: var(--text-3); }
+.add-entry-btn {
+  background: var(--coral); color: white; border: none; border-radius: 12px;
+  padding: 10px 16px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.add-entry-btn:hover { background: #e84a22; transform: translateY(-1px); }
+
+.chips-wrap { display: flex; flex-wrap: wrap; gap: 7px; min-height: 32px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px 5px 14px; border-radius: 20px;
+  font-size: 13px; font-weight: 600; cursor: default;
+  animation: chipPop 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes chipPop { from { opacity:0; transform:scale(0.7); } to { opacity:1; transform:scale(1); } }
+.chip-del { background: none; border: none; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; opacity: 0.6; transition: opacity 0.15s; }
+.chip-del:hover { opacity: 1; }
+.chips-empty { font-size: 12px; color: var(--text-3); padding: 4px 0; font-style: italic; }
+
+.entries-actions { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.preset-btn { padding: 6px 12px; border-radius: 20px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+.preset-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-light); }
+.clear-entries-btn { margin-left: auto; padding: 6px 12px; border-radius: 20px; font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 700; border: 1.5px solid rgba(255,92,53,0.2); background: var(--coral-light); color: var(--coral); cursor: pointer; transition: all 0.15s; }
+.clear-entries-btn:hover { background: var(--coral); color: white; }
+
+/* ── Dice section ── */
+#diceSection { margin: 0 16px 12px; }
+
+.dice-count-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 18px; }
+.dice-count-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--text-2); font-weight: 700; box-shadow: var(--shadow-sm); }
+.dice-count-btn:hover { border-color: var(--coral); color: var(--coral); }
+.dice-count-label { font-size: 15px; font-weight: 700; color: var(--text); min-width: 60px; text-align: center; }
+
+.dice-arena { display: flex; justify-content: center; gap: 20px; align-items: center; min-height: 130px; padding: 10px 0 16px; }
+
+/* 3D CSS Dice */
+.die-wrap { perspective: 300px; width: 90px; height: 90px; cursor: pointer; }
+.die {
+  width: 90px; height: 90px;
+  transform-style: preserve-3d;
+  transition: transform 0.08s;
+  position: relative;
+}
+.die.rolling { animation: diceRoll 0.7s cubic-bezier(0.34, 1.1, 0.64, 1); }
+@keyframes diceRoll {
+  0%   { transform: var(--roll-start); }
+  30%  { transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg); }
+  60%  { transform: rotateX(900deg) rotateY(540deg) rotateZ(270deg); }
+  80%  { transform: var(--roll-end); }
+  90%  { transform: var(--roll-end) scale(1.05); }
+  100% { transform: var(--roll-end); }
+}
+
+.die-face {
+  position: absolute; width: 90px; height: 90px; border-radius: 14px;
+  background: linear-gradient(145deg, #fff 0%, #f0f0f5 100%);
+  border: 2px solid rgba(0,0,0,0.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-family: 'Boogaloo', cursive;
+  font-weight: 400; color: var(--text);
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,0,0,0.06);
+  backface-visibility: hidden; user-select: none;
+}
+.die-face.front  { transform: translateZ(45px); }
+.die-face.back   { transform: rotateY(180deg) translateZ(45px); }
+.die-face.right  { transform: rotateY(90deg)  translateZ(45px); }
+.die-face.left   { transform: rotateY(-90deg) translateZ(45px); }
+.die-face.top    { transform: rotateX(90deg)  translateZ(45px); }
+.die-face.bottom { transform: rotateX(-90deg) translateZ(45px); }
+
+/* Pip layout */
+.die-face .pips { display: grid; width: 70px; height: 70px; padding: 6px; }
+.pip { width: 10px; height: 10px; border-radius: 50%; background: var(--text); justify-self: center; align-self: center; }
+.pips-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+.pips-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.pips-2 .pip:nth-child(1) { align-self: start; justify-self: start; }
+.pips-2 .pip:nth-child(2) { align-self: end;   justify-self: end; }
+.pips-3 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
+.pips-3 .pip:nth-child(1) { grid-column:1; grid-row:1; }
+.pips-3 .pip:nth-child(2) { grid-column:2; grid-row:2; }
+.pips-3 .pip:nth-child(3) { grid-column:3; grid-row:3; }
+.pips-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.pips-5 { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; }
+.pips-5 .pip:nth-child(1) { grid-column:1; grid-row:1; }
+.pips-5 .pip:nth-child(2) { grid-column:3; grid-row:1; }
+.pips-5 .pip:nth-child(3) { grid-column:2; grid-row:2; }
+.pips-5 .pip:nth-child(4) { grid-column:1; grid-row:3; }
+.pips-5 .pip:nth-child(5) { grid-column:3; grid-row:3; }
+.pips-6 { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); }
+
+/* Dice result display */
+.dice-result-card {
+  background: linear-gradient(135deg, var(--coral-light), var(--gold-light));
+  border: 1.5px solid rgba(255,92,53,0.15); border-radius: 16px;
+  padding: 14px 20px; text-align: center; margin-bottom: 12px;
+  display: none;
+}
+.dice-result-card.visible { display: block; animation: resultPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes resultPop { from { opacity:0; transform:scale(0.85) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.dice-result-total { font-family: 'Boogaloo', cursive; font-size: 42px; color: var(--coral); line-height: 1; }
+.dice-result-winner { font-size: 14px; font-weight: 700; color: var(--text-2); margin-top: 4px; }
+.dice-result-winner span { color: var(--coral); }
+
+.roll-btn {
+  width: 100%; padding: 16px; border-radius: 16px; border: none;
+  background: linear-gradient(135deg, #d43a18, #ff5c35);
+  color: white; font-family: 'Boogaloo', cursive; font-size: 22px; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.18s;
+  box-shadow: 0 4px 20px rgba(255,92,53,0.3);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.roll-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,92,53,0.4); }
+.roll-btn:active { transform: scale(0.97); }
+
+/* ── Wheel section ── */
+#wheelSection { margin: 0 16px 12px; display: none; }
+
+.wheel-wrap { position: relative; display: flex; justify-content: center; align-items: center; padding: 10px 0 0; }
+.wheel-pointer {
+  position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 28px solid var(--coral);
+  z-index: 10; filter: drop-shadow(0 3px 6px rgba(255,92,53,0.4));
+}
+canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px white, 0 0 0 8px rgba(255,92,53,0.2); }
+
+.wheel-result-card {
+  background: linear-gradient(135deg, var(--coral-light), var(--gold-light));
+  border: 1.5px solid rgba(255,92,53,0.15); border-radius: 16px;
+  padding: 14px 20px; text-align: center; margin-top: 14px; display: none;
+}
+.wheel-result-card.visible { display: block; animation: resultPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.wheel-winner { font-family: 'Boogaloo', cursive; font-size: 36px; color: var(--coral); line-height: 1; }
+.wheel-winner-sub { font-size: 13px; font-weight: 600; color: var(--text-3); margin-top: 3px; }
+
+.spin-btn {
+  width: 100%; padding: 16px; border-radius: 16px; border: none;
+  background: linear-gradient(135deg, #007a6a, #00b8a0);
+  color: white; font-family: 'Boogaloo', cursive; font-size: 22px; letter-spacing: 1px;
+  cursor: pointer; transition: all 0.18s; margin-top: 14px;
+  box-shadow: 0 4px 20px rgba(0,184,160,0.3);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.spin-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,184,160,0.4); }
+.spin-btn:active { transform: scale(0.97); }
+.spin-btn:disabled { opacity: 0.6; pointer-events: none; }
+
+/* ── History strip ── */
+.lucky-history { margin: 0 16px 14px; }
+.hist-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-3); margin-bottom: 8px; padding: 0 4px; }
+.hist-list { display: flex; flex-direction: column; gap: 6px; }
+.hist-entry {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow-sm); animation: slideIn 0.25s ease;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.hist-badge { font-size: 16px; flex-shrink: 0; }
+.hist-text { flex: 1; }
+.hist-winner { font-size: 14px; font-weight: 800; color: var(--text); }
+.hist-meta { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.hist-time { font-size: 11px; color: var(--text-3); flex-shrink: 0; }
+.hist-empty { text-align: center; padding: 20px; font-size: 13px; color: var(--text-3); font-style: italic; }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(10px); background: rgba(13,13,26,0.9); backdrop-filter: blur(20px); color: white; font-size: 13px; font-weight: 500; padding: 10px 20px; border-radius: 20px; pointer-events: none; opacity: 0; transition: opacity 0.2s, transform 0.2s; white-space: nowrap; z-index: 300; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── Footer / Cookie ── */
+.footer { text-align: center; padding: 8px 0 24px; font-size: 11px; color: var(--text-3); margin-top: auto; }
+.cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 200; }
+.cookie-banner p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.cookie-btn { flex-shrink: 0; background: var(--coral); color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Outfit', sans-serif; }
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TPNLYBBFTF');
+</script>
+</head>
+<body>
+<div class="shell">
+
+  <div class="statusbar">
+    <span class="time" id="clock">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity="0.3"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+  </div>
+
+  <div class="app-header">
+    <div class="app-icon">🎲</div>
+    <div class="app-header-text">
+      <h1>Lucky</h1>
+      <p>Dice roller & spin wheel — settle anything!</p>
+    </div>
+  </div>
+
+  <!-- Mode switcher -->
+  <div class="mode-bar">
+    <button class="mode-btn active" id="modeDice"  onclick="setMode('dice')">
+      <span class="mode-icon">🎲</span> Dice
+    </button>
+    <button class="mode-btn"        id="modeWheel" onclick="setMode('wheel')">
+      <span class="mode-icon">🎡</span> Spin Wheel
+    </button>
+  </div>
+
+  <!-- Entries -->
+  <div class="entries-card">
+    <div class="entries-label" id="entriesLabel">Names / Options (optional)</div>
+    <div class="entries-input-row">
+      <input class="entry-input" id="entryInput" placeholder="Add a name or option…" maxlength="30" onkeydown="if(event.key==='Enter')addEntry()" />
+      <button class="add-entry-btn" onclick="addEntry()">Add</button>
+    </div>
+    <div class="chips-wrap" id="chipsWrap">
+      <span class="chips-empty" id="chipsEmpty">No entries yet — add names or roll with numbers!</span>
+    </div>
+    <div class="entries-actions">
+      <button class="preset-btn" onclick="loadPreset('friends')">👥 Friends</button>
+      <button class="preset-btn" onclick="loadPreset('team')">🏆 Team</button>
+      <button class="preset-btn" onclick="loadPreset('days')">📅 Days</button>
+      <button class="preset-btn" onclick="loadPreset('yesno')">✅ Yes/No</button>
+      <button class="clear-entries-btn" onclick="clearEntries()">Clear all</button>
+    </div>
+  </div>
+
+  <!-- ── DICE MODE ── -->
+  <div id="diceSection">
+    <div class="dice-count-row">
+      <button class="dice-count-btn" onclick="changeDiceCount(-1)">−</button>
+      <div class="dice-count-label" id="diceCountLabel">🎲 1 Die</div>
+      <button class="dice-count-btn" onclick="changeDiceCount(1)">+</button>
+    </div>
+
+    <div class="dice-result-card" id="diceResultCard">
+      <div class="dice-result-total" id="diceResultTotal">—</div>
+      <div class="dice-result-winner" id="diceResultWinner"></div>
+    </div>
+
+    <div class="dice-arena" id="diceArena"></div>
+
+    <button class="roll-btn" id="rollBtn" onclick="rollDice()">
+      🎲 Roll!
+    </button>
+  </div>
+
+  <!-- ── WHEEL MODE ── -->
+  <div id="wheelSection">
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <canvas id="wheelCanvas" width="300" height="300"></canvas>
+    </div>
+    <div class="wheel-result-card" id="wheelResultCard">
+      <div class="wheel-winner-sub">🎉 The wheel chose…</div>
+      <div class="wheel-winner" id="wheelWinner">—</div>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spinWheel()">
+      🎡 Spin!
+    </button>
+  </div>
+
+  <!-- History -->
+  <div class="lucky-history" id="luckyHistory">
+    <div class="hist-title">Recent results</div>
+    <div class="hist-list" id="histList">
+      <div class="hist-empty">No results yet — roll the dice or spin the wheel!</div>
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Yoni Moreno</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="cookie-banner" id="cookieBanner">
+  <p>🍪 This website uses cookies to analyze traffic with Google Analytics.</p>
+  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+</div>
+
+<script>
+// ── Clock ──
+function updateClock(){ const n=new Date(); document.getElementById('clock').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0'); }
+updateClock(); setInterval(updateClock,10000);
+
+// ── Cookie ──
+if(localStorage.getItem('cookiesAccepted')) document.getElementById('cookieBanner').style.display='none';
+function acceptCookies(){ localStorage.setItem('cookiesAccepted','true'); const b=document.getElementById('cookieBanner'); b.style.transition='opacity 0.3s,transform 0.3s'; b.style.opacity='0'; b.style.transform='translateY(20px)'; setTimeout(()=>b.style.display='none',300); }
+
+// ── Toast ──
+let toastT;
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+
+// ── State ──
+const ENTRIES_KEY = 'guicks_lucky_entries_v1';
+const HIST_KEY    = 'guicks_lucky_history_v1';
+let entries = [];
+let diceCount = 1;
+let currentMode = 'dice';
+let luckyHistory = [];
+try { entries     = JSON.parse(localStorage.getItem(ENTRIES_KEY)) || []; } catch { entries=[]; }
+try { luckyHistory= JSON.parse(localStorage.getItem(HIST_KEY))    || []; } catch { luckyHistory=[]; }
+
+const CHIP_COLORS = [
+  ['#fff1ee','#ff5c35'],['#fff8ec','#f5a623'],['#e6faf7','#00b8a0'],
+  ['#ede8fd','#6c3fe0'],['#e8fff2','#12b76a'],['#fce8f3','#e040a0'],
+  ['#e8f3ff','#0a84ff'],['#fdf4e0','#d97706'],
+];
+
+// ── Entries ──
+function saveEntries(){ localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries)); }
+
+function addEntry(){
+  const val = document.getElementById('entryInput').value.trim();
+  if (!val){ showToast('Enter a name first'); return; }
+  if (entries.length >= 20){ showToast('Max 20 entries'); return; }
+  if (entries.includes(val)){ showToast('Already in the list!'); return; }
+  entries.push(val);
+  saveEntries();
+  document.getElementById('entryInput').value = '';
+  renderChips();
+  if (currentMode==='wheel') drawWheel();
+}
+
+function removeEntry(i){
+  entries.splice(i,1);
+  saveEntries();
+  renderChips();
+  if (currentMode==='wheel') drawWheel();
+}
+
+function clearEntries(){
+  entries=[];
+  saveEntries();
+  renderChips();
+  if (currentMode==='wheel') drawWheel();
+  showToast('Entries cleared');
+}
+
+function renderChips(){
+  const wrap = document.getElementById('chipsWrap');
+  const empty = document.getElementById('chipsEmpty');
+  if (!entries.length){
+    empty.style.display='';
+    wrap.innerHTML=''; wrap.appendChild(empty);
+    return;
+  }
+  empty.style.display='none';
+  wrap.innerHTML = entries.map((e,i)=>{
+    const [bg,fg] = CHIP_COLORS[i % CHIP_COLORS.length];
+    return `<span class="chip" style="background:${bg};color:${fg}">${esc(e)}<button class="chip-del" style="color:${fg}" onclick="removeEntry(${i})">✕</button></span>`;
+  }).join('');
+}
+
+const PRESETS = {
+  friends: ['Alice','Bob','Charlie','Diana','Eve'],
+  team:    ['Team A','Team B','Team C','Team D'],
+  days:    ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+  yesno:   ['Yes','No','Maybe'],
+};
+function loadPreset(key){
+  entries = [...PRESETS[key]];
+  saveEntries();
+  renderChips();
+  if (currentMode==='wheel') drawWheel();
+  showToast(`Loaded ${entries.length} entries!`);
+}
+
+// ── Mode ──
+function setMode(m){
+  currentMode = m;
+  document.getElementById('modeDice').classList.toggle('active', m==='dice');
+  document.getElementById('modeWheel').classList.toggle('active', m==='wheel');
+  document.getElementById('diceSection').style.display  = m==='dice'  ? 'block':'none';
+  document.getElementById('wheelSection').style.display = m==='wheel' ? 'block':'none';
+  document.getElementById('entriesLabel').textContent =
+    m==='dice' ? 'Names / Options (optional — assigns names to die faces)' : 'Names / Options (required for wheel)';
+  if (m==='wheel'){ drawWheel(); }
+}
+
+// ── History ──
+function saveHistory(){ localStorage.setItem(HIST_KEY, JSON.stringify(luckyHistory.slice(0,30))); }
+function addToHistory(type, winner, meta){
+  luckyHistory.unshift({ type, winner, meta, ts: Date.now() });
+  saveHistory();
+  renderHistory();
+}
+function renderHistory(){
+  const list = document.getElementById('histList');
+  if (!luckyHistory.length){ list.innerHTML='<div class="hist-empty">No results yet — roll the dice or spin the wheel!</div>'; return; }
+  list.innerHTML = luckyHistory.slice(0,10).map(h=>{
+    const time = new Date(h.ts);
+    const timeStr = time.getHours().toString().padStart(2,'0')+':'+time.getMinutes().toString().padStart(2,'0');
+    return `<div class="hist-entry">
+      <span class="hist-badge">${h.type==='dice'?'🎲':'🎡'}</span>
+      <div class="hist-text">
+        <div class="hist-winner">${esc(h.winner)}</div>
+        <div class="hist-meta">${esc(h.meta)}</div>
+      </div>
+      <span class="hist-time">${timeStr}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── DICE ──
+const FACE_TRANSFORMS = [
+  'rotateX(0deg) rotateY(0deg)',   // 1 front
+  'rotateX(-180deg) rotateY(0deg)',// 6 back
+  'rotateX(0deg) rotateY(90deg)',  // 4 right
+  'rotateX(0deg) rotateY(-90deg)', // 3 left
+  'rotateX(-90deg) rotateY(0deg)', // 5 top
+  'rotateX(90deg) rotateY(0deg)',  // 2 bottom
+];
+// Which face shows which number in our layout:
+// front=1, back=6, right=4, left=3, top=5, bottom=2
+const VALUE_TO_TRANSFORM = { 1:0, 6:1, 4:2, 3:3, 5:4, 2:5 };
+
+function makePips(n){
+  const divs = Array.from({length:n},()=>'<div class="pip"></div>').join('');
+  return `<div class="pips pips-${n}">${divs}</div>`;
+}
+
+function buildDie(id){
+  return `<div class="die-wrap"><div class="die" id="die-${id}">
+    <div class="die-face front">${makePips(1)}</div>
+    <div class="die-face back">${makePips(6)}</div>
+    <div class="die-face right">${makePips(4)}</div>
+    <div class="die-face left">${makePips(3)}</div>
+    <div class="die-face top">${makePips(5)}</div>
+    <div class="die-face bottom">${makePips(2)}</div>
+  </div></div>`;
+}
+
+function renderDice(){
+  const arena = document.getElementById('diceArena');
+  arena.innerHTML = Array.from({length:diceCount},(_,i)=>buildDie(i)).join('');
+}
+
+function changeDiceCount(delta){
+  diceCount = Math.min(3, Math.max(1, diceCount+delta));
+  document.getElementById('diceCountLabel').textContent = `🎲 ${diceCount} ${diceCount===1?'Die':'Dice'}`;
+  renderDice();
+  document.getElementById('diceResultCard').classList.remove('visible');
+}
+
+let isRolling = false;
+function rollDice(){
+  if (isRolling) return;
+  isRolling = true;
+  document.getElementById('diceResultCard').classList.remove('visible');
+
+  const values = Array.from({length:diceCount}, ()=>Math.floor(Math.random()*6)+1);
+
+  // Animate each die
+  values.forEach((val, i)=>{
+    const die = document.getElementById(`die-${i}`);
+    if (!die) return;
+    const endTransform = FACE_TRANSFORMS[VALUE_TO_TRANSFORM[val]];
+    // Random start spin
+    const startX = Math.floor(Math.random()*4)*90;
+    const startY = Math.floor(Math.random()*4)*90;
+    die.style.setProperty('--roll-start', `rotateX(${startX}deg) rotateY(${startY}deg)`);
+    die.style.setProperty('--roll-end', endTransform);
+    die.classList.remove('rolling');
+    void die.offsetWidth; // reflow
+    die.classList.add('rolling');
+    setTimeout(()=>{ die.classList.remove('rolling'); die.style.transform=endTransform; },750);
+  });
+
+  setTimeout(()=>{
+    const total = values.reduce((a,b)=>a+b,0);
+    let winner = '';
+    let meta = `Rolled ${values.join(' + ')}${diceCount>1?' = '+total:''}`;
+
+    if (entries.length >= 1){
+      // Map dice total to entries (wrapping)
+      const idx = (total - 1) % entries.length;
+      winner = entries[idx];
+    } else {
+      winner = diceCount===1 ? `Rolled a ${total}` : `Total: ${total}`;
+    }
+
+    document.getElementById('diceResultTotal').textContent = diceCount>1 ? total : values[0];
+    document.getElementById('diceResultWinner').innerHTML = entries.length
+      ? `🎉 Selected: <span>${esc(winner)}</span>`
+      : ``;
+    document.getElementById('diceResultCard').classList.add('visible');
+    addToHistory('dice', winner || `${total}`, meta);
+    isRolling = false;
+  },800);
+}
+
+// ── WHEEL ──
+const WHEEL_COLORS = [
+  '#ff5c35','#f5a623','#00b8a0','#6c3fe0','#12b76a',
+  '#e040a0','#0a84ff','#d97706','#ef4444','#8b5cf6',
+  '#059669','#f59e0b','#3b82f6','#ec4899','#10b981',
+];
+
+let wheelAngle = 0;
+let wheelSpinning = false;
+
+function getWheelItems(){
+  return entries.length >= 2 ? entries : ['Option 1','Option 2','Option 3','Option 4','Option 5','Option 6'];
+}
+
+function drawWheel(highlightIdx=-1){
+  const canvas = document.getElementById('wheelCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2, r = W/2 - 8;
+  const items = getWheelItems();
+  const n = items.length;
+  const arc = (2*Math.PI)/n;
+
+  ctx.clearRect(0,0,W,H);
+
+  items.forEach((item,i)=>{
+    const startAngle = wheelAngle + i*arc - Math.PI/2;
+    const endAngle   = startAngle + arc;
+    const color = WHEEL_COLORS[i % WHEEL_COLORS.length];
+    const isHighlight = i===highlightIdx;
+
+    // Slice
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startAngle,endAngle);
+    ctx.closePath();
+    ctx.fillStyle = isHighlight ? lighten(color) : color;
+    ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2; ctx.stroke();
+
+    // Text
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(startAngle + arc/2);
+    ctx.textAlign='right'; ctx.fillStyle='white';
+    ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=3;
+    const fontSize = Math.min(14, Math.max(8, 220/n));
+    ctx.font=`700 ${fontSize}px Outfit, sans-serif`;
+    const label = item.length>12 ? item.slice(0,11)+'…' : item;
+    ctx.fillText(label, r-10, fontSize/3);
+    ctx.restore();
+  });
+
+  // Center circle
+  ctx.beginPath(); ctx.arc(cx,cy,18,0,2*Math.PI);
+  ctx.fillStyle='white'; ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,0.1)'; ctx.lineWidth=2; ctx.stroke();
+}
+
+function lighten(hex){
+  // Just overlay white at 30%
+  return hex; // keep same color but CSS filter handles highlight
+}
+
+// Get which segment is under the pointer (top = -π/2)
+function getWinnerIdx(){
+  const items = getWheelItems();
+  const n = items.length;
+  const arc = (2*Math.PI)/n;
+  // Pointer is at top, which is -π/2. Normalize angle.
+  let angle = ((-wheelAngle) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  return Math.floor(angle/arc) % n;
+}
+
+let rafId = null;
+function spinWheel(){
+  if (wheelSpinning) return;
+  const items = getWheelItems();
+  if (entries.length === 1){ showToast('Add at least 2 entries!'); return; }
+
+  wheelSpinning = true;
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('wheelResultCard').classList.remove('visible');
+
+  // Physics: random speed, decelerate
+  const totalRotation = (Math.PI*2) * (5 + Math.random()*5) + Math.random()*Math.PI*2;
+  const duration = 4000 + Math.random()*2000;
+  const startAngle = wheelAngle;
+  const startTime = performance.now();
+
+  function easeOut(t){ return 1 - Math.pow(1-t, 4); }
+
+  function animate(now){
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed/duration, 1);
+    wheelAngle = startAngle + totalRotation * easeOut(progress);
+    drawWheel();
+
+    if (progress < 1){ rafId = requestAnimationFrame(animate); }
+    else {
+      wheelAngle = startAngle + totalRotation;
+      const winIdx = getWinnerIdx();
+      const winner = items[winIdx];
+      drawWheel(winIdx);
+      document.getElementById('wheelWinner').textContent = winner;
+      document.getElementById('wheelResultCard').classList.add('visible');
+      addToHistory('wheel', winner, `${items.length} options on wheel`);
+      wheelSpinning = false;
+      document.getElementById('spinBtn').disabled = false;
+      showToast(`🎉 ${winner} wins!`);
+    }
+  }
+  rafId = requestAnimationFrame(animate);
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Init ──
+renderChips();
+renderDice();
+renderHistory();
+// Load wheel (hidden, but draw once)
+setTimeout(()=>{ drawWheel(); }, 50);
+</script>
+</body>
+</html>
