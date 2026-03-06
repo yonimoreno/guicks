@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .back-btn{color:#333!important}
+html.guicks-light .back-btn svg{stroke:#333!important}
+html.guicks-light .app-title{color:#0d0d1a!important}
+html.guicks-light .input-wrap{background:#fff!important;border-color:rgba(0,0,0,.1)!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important}
+html.guicks-light .item-input{color:#0d0d1a!important}
+html.guicks-light .item-input::placeholder{color:rgba(0,0,0,.3)!important}
+html.guicks-light .section-picker{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .section-opt{color:rgba(0,0,0,.55)!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .section-opt:hover{background:rgba(0,0,0,.04)!important}
+html.guicks-light .section-opt.active{color:#fff!important}
+html.guicks-light .item-row{background:#fff!important;border-color:rgba(0,0,0,.07)!important}
+html.guicks-light .item-row:hover{background:#f7f8fc!important}
+html.guicks-light .item-name{color:#0d0d1a!important}
+html.guicks-light .item-section-tag{color:rgba(0,0,0,.4)!important}
+html.guicks-light .item-qty{color:rgba(0,0,0,.5)!important;border-color:rgba(0,0,0,.12)!important;background:rgba(0,0,0,.04)!important}
+html.guicks-light .empty-state{color:rgba(0,0,0,.3)!important}
+html.guicks-light .summary-bar{background:#fff!important;border-color:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.5)!important}
+html.guicks-light .clear-done-btn{color:rgba(0,0,0,.4)!important}
+html.guicks-light .clear-done-btn:hover{color:#ff3b30!important}
+html.guicks-light .filter-bar{background:#f0f2f7!important;border-color:rgba(0,0,0,.06)!important}
+html.guicks-light .filter-tag{background:#fff!important;border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.5)!important}
+html.guicks-light .filter-tag:hover{border-color:rgba(0,0,0,.2)!important;color:#0d0d1a!important}
+html.guicks-light .filter-tag.active{color:#fff!important}
+html.guicks-light .qty-btn{color:rgba(0,0,0,.4)!important}
+html.guicks-light .qty-btn:hover{color:#0d0d1a!important}
+html.guicks-light .section-group-label{color:rgba(0,0,0,.35)!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Shopping List — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:#07070d;
+  color:#f0f0f5;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 50% at 5% 0%,rgba(20,90,40,.4) 0%,transparent 65%),
+    radial-gradient(ellipse 45% 45% at 95% 100%,rgba(10,60,30,.3) 0%,transparent 65%);
+}
+
+.shell{
+  position:relative;z-index:1;
+  max-width:640px;margin:0 auto;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  padding-bottom:140px; /* space for filter bar */
+}
+
+/* ── Status bar ── */
+.statusbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 0;font-size:13px;font-weight:700;color:#f0f0f5;
+}
+.sb-time{font-size:16px;font-weight:800;}
+.sb-icons{display:flex;gap:5px;align-items:center;}
+.statusbar svg{width:16px;height:16px;fill:#f0f0f5;}
+
+/* ── Top nav ── */
+.topnav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 0;
+}
+.back-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  color:rgba(134,239,172,.9);font-size:15px;font-weight:700;
+  text-decoration:none;padding:6px 10px 6px 4px;
+  border-radius:10px;transition:background .15s;
+}
+.back-btn:hover{background:rgba(134,239,172,.1);}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.topnav-right{display:flex;gap:8px;align-items:center;}
+.icon-btn{
+  width:34px;height:34px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.5);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;
+}
+.icon-btn:hover{background:rgba(134,239,172,.15);border-color:rgba(134,239,172,.3);color:rgba(134,239,172,.9);}
+.icon-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ── App header ── */
+.app-header{
+  padding:8px 20px 14px;
+  display:flex;align-items:center;gap:14px;
+}
+.app-icon{
+  width:50px;height:50px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(145deg,#0d4a20,#1a8a40);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(26,138,64,.4),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.app-icon svg{width:26px;height:26px;}
+.app-title{font-size:22px;font-weight:800;letter-spacing:-.5px;}
+.app-sub{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px;}
+
+/* ── Add item input ── */
+.input-wrap{
+  margin:0 14px 10px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:16px;
+  padding:4px 4px 4px 16px;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+  transition:border-color .15s,box-shadow .15s;
+}
+.input-wrap:focus-within{
+  border-color:rgba(134,239,172,.4);
+  box-shadow:0 4px 20px rgba(0,0,0,.2),0 0 0 3px rgba(26,138,64,.12);
+}
+.item-input{
+  flex:1;background:none;border:none;outline:none;
+  font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;
+  color:#f0f0f5;padding:10px 0;
+}
+.item-input::placeholder{color:rgba(255,255,255,.25);}
+.add-btn{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,#0d6b2a,#1a8a40);
+  border:none;color:#fff;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:transform .12s,box-shadow .12s;
+  box-shadow:0 3px 10px rgba(26,138,64,.4);
+}
+.add-btn:hover{transform:scale(1.06);box-shadow:0 5px 14px rgba(26,138,64,.5);}
+.add-btn:active{transform:scale(.96);}
+
+/* ── Section picker (shown when typing) ── */
+.section-picker{
+  margin:0 14px 10px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:8px;
+  display:flex;flex-wrap:wrap;gap:6px;
+  display:none;
+}
+.section-picker.visible{display:flex;}
+.section-opt{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 11px;border-radius:20px;
+  border:1.5px solid rgba(255,255,255,.1);
+  background:none;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.5);cursor:pointer;
+  transition:all .15s;
+}
+.section-opt:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.9);}
+.section-opt.active{color:#fff;border-color:transparent;}
+.sect-icon{font-size:13px;}
+
+/* ── Summary bar ── */
+.summary-bar{
+  margin:0 14px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.4);
+}
+.summary-counts{display:flex;gap:14px;}
+.summary-count-item{display:flex;align-items:center;gap:5px;}
+.summary-dot{width:7px;height:7px;border-radius:50%;}
+.clear-done-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.3);
+  font-family:'Outfit',sans-serif;
+  transition:color .15s;
+  padding:2px 0;
+}
+.clear-done-btn:hover{color:#ff6b6b;}
+
+/* ── Items list ── */
+.items-wrap{padding:0 14px;flex:1;}
+
+.section-group-label{
+  font-size:10px;font-weight:800;
+  letter-spacing:.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.28);
+  padding:12px 4px 4px;
+}
+
+.item-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:all .15s;
+  user-select:none;
+}
+.item-row:hover{background:rgba(255,255,255,.08);}
+.item-row.done{opacity:.45;}
+.item-row.done .item-name{text-decoration:line-through;}
+
+.check-box{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid rgba(255,255,255,.2);
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;
+}
+.item-row.done .check-box{
+  background:#34c759;border-color:#34c759;
+}
+.check-box svg{
+  width:12px;height:12px;
+  fill:none;stroke:#fff;stroke-width:3;
+  stroke-linecap:round;stroke-linejoin:round;
+  opacity:0;transform:scale(.5);
+  transition:opacity .15s,transform .15s;
+}
+.item-row.done .check-box svg{opacity:1;transform:scale(1);}
+
+.item-info{flex:1;min-width:0;}
+.item-name{font-size:15px;font-weight:600;color:#f0f0f5;}
+.item-section-tag{font-size:11px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+.item-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.qty-wrap{display:flex;align-items:center;gap:4px;}
+.qty-btn{
+  width:24px;height:24px;border-radius:7px;
+  background:none;border:none;cursor:pointer;
+  font-size:15px;font-weight:700;
+  color:rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;
+  transition:color .12s;line-height:1;
+}
+.qty-btn:hover{color:#f0f0f5;}
+.item-qty{
+  font-size:13px;font-weight:700;
+  min-width:18px;text-align:center;
+  color:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:1px 6px;
+  background:rgba(255,255,255,.05);
+}
+.del-btn{
+  width:28px;height:28px;border-radius:8px;
+  background:none;border:none;cursor:pointer;
+  font-size:14px;opacity:.25;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .12s,background .12s;
+}
+.del-btn:hover{opacity:.8;background:rgba(255,59,48,.15);}
+
+/* ── Empty state ── */
+.empty-state{
+  text-align:center;padding:48px 24px;
+  color:rgba(255,255,255,.22);
+  font-size:14px;font-style:italic;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.empty-state .empty-icon{font-size:40px;opacity:.5;}
+
+/* ── Filter bar (fixed bottom) ── */
+.filter-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(7,7,13,.88);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:10px 14px 20px;
+}
+.filter-scroll{
+  display:flex;gap:7px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding-bottom:2px;
+}
+.filter-scroll::-webkit-scrollbar{display:none;}
+.filter-tag{
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;flex-shrink:0;
+  padding:7px 13px;border-radius:20px;
+  border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.5);
+  cursor:pointer;transition:all .15s;
+}
+.filter-tag:hover{
+  border-color:rgba(255,255,255,.22);
+  color:#f0f0f5;
+}
+.filter-tag.active{
+  color:#fff;border-color:transparent;
+  box-shadow:0 3px 10px rgba(0,0,0,.3);
+}
+.filter-tag .ft-icon{font-size:13px;}
+.filter-tag .ft-count{
+  font-size:10px;font-weight:800;
+  background:rgba(255,255,255,.2);
+  border-radius:20px;padding:1px 6px;
+  min-width:18px;text-align:center;
+}
+.filter-tag.active .ft-count{background:rgba(255,255,255,.25);}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(20,20,36,.95);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.1);color:#fff;
+  font-size:13px;font-weight:500;padding:10px 20px;
+  border-radius:20px;pointer-events:none;
+  opacity:0;transition:opacity .2s,transform .2s;
+  white-space:nowrap;z-index:9999;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<script src="./guicks-i18n.js"></script>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="sb-time" id="sb-time">9:41</span>
+    <div class="sb-icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity=".4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Top nav -->
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+    <div class="topnav-right">
+      <button class="icon-btn" onclick="clearAll()" title="Clear all">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- App header -->
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="white" stroke-width="1.8"/>
+        <path d="M3 6h18" stroke="white" stroke-width="1.8"/>
+        <path d="M16 10a4 4 0 01-8 0" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="app-title" data-i18n="shoppingTitle">Shopping List</div>
+      <div class="app-sub" id="app-sub">0 items</div>
+    </div>
+  </div>
+
+  <!-- Add input -->
+  <div class="input-wrap">
+    <input class="item-input" id="item-input" placeholder="Add item…" data-i18n-ph="shoppingPlaceholder" maxlength="60"
+      autocomplete="off" autocorrect="off" spellcheck="false"
+      oninput="onInputChange()" onkeydown="onInputKey(event)">
+    <button class="add-btn" onclick="addItem()">+</button>
+  </div>
+
+  <!-- Section picker -->
+  <div class="section-picker" id="section-picker"></div>
+
+  <!-- Summary bar -->
+  <div class="summary-bar" id="summary-bar" style="display:none">
+    <div class="summary-counts" id="summary-counts"></div>
+    <button class="clear-done-btn" onclick="clearDone()" data-i18n="shoppingClearDone">Clear done</button>
+  </div>
+
+  <!-- Items list -->
+  <div class="items-wrap" id="items-wrap"></div>
+
+</div><!-- /shell -->
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <div class="filter-scroll" id="filter-scroll"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   SECTIONS CONFIG
+═══════════════════════════════════════ */
+const SECTIONS = [
+  { id:'produce',   label:'Produce',    icon:'🥦', color:'#22c55e' },
+  { id:'dairy',     label:'Dairy',      icon:'🥛', color:'#60a5fa' },
+  { id:'meat',      label:'Meat',       icon:'🥩', color:'#f87171' },
+  { id:'bakery',    label:'Bakery',     icon:'🍞', color:'#fb923c' },
+  { id:'frozen',    label:'Frozen',     icon:'🧊', color:'#38bdf8' },
+  { id:'drinks',    label:'Drinks',     icon:'🥤', color:'#a78bfa' },
+  { id:'snacks',    label:'Snacks',     icon:'🍿', color:'#fbbf24' },
+  { id:'cleaning',  label:'Cleaning',   icon:'🧹', color:'#34d399' },
+  { id:'personal',  label:'Personal',   icon:'🧴', color:'#f472b6' },
+  { id:'pantry',    label:'Pantry',     icon:'🫙', color:'#d97706' },
+  { id:'other',     label:'Other',      icon:'🛒', color:'#94a3b8' },
+];
+
+const SECT_MAP = Object.fromEntries(SECTIONS.map(s=>[s.id, s]));
+
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+const KEY = 'guicks_shopping_v1';
+let items = [];
+let activeFilter = 'all'; // 'all' or section id
+let selectedSection = SECTIONS[0].id;
+
+function load(){ try{ items=JSON.parse(localStorage.getItem(KEY))||[]; }catch(e){ items=[]; } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(items)); }
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function render(){
+  renderSectionPicker();
+  renderFilterBar();
+  renderItems();
+  renderSummary();
+  updateSub();
+}
+
+function renderSectionPicker(){
+  const wrap = document.getElementById('section-picker');
+  wrap.innerHTML = SECTIONS.map(s=>`
+    <button class="section-opt${s.id===selectedSection?' active':''}"
+      style="${s.id===selectedSection?`background:${s.color};border-color:${s.color}`:'border-color:rgba(255,255,255,.1)'}"
+      onclick="pickSection('${s.id}')">
+      <span class="sect-icon">${s.icon}</span>${s.label}
+    </button>`).join('');
+}
+
+function renderFilterBar(){
+  const scroll = document.getElementById('filter-scroll');
+  const totalCount = items.length;
+  const doneCount  = items.filter(i=>i.done).length;
+
+  let tags = `<div class="filter-tag${activeFilter==='all'?' active':''}"
+    style="${activeFilter==='all'?'background:linear-gradient(135deg,#0d6b2a,#1a8a40)':''}"
+    onclick="setFilter('all')">
+    <span class="ft-icon">🛒</span> All
+    <span class="ft-count">${totalCount}</span>
+  </div>`;
+
+  SECTIONS.forEach(s=>{
+    const count = items.filter(i=>i.section===s.id).length;
+    if(count === 0) return;
+    const isActive = activeFilter===s.id;
+    tags += `<div class="filter-tag${isActive?' active':''}"
+      style="${isActive?`background:${s.color}`:'border-color:rgba(255,255,255,.1)'}"
+      onclick="setFilter('${s.id}')">
+      <span class="ft-icon">${s.icon}</span> #${s.label}
+      <span class="ft-count">${count}</span>
+    </div>`;
+  });
+
+  scroll.innerHTML = tags;
+}
+
+function renderItems(){
+  const wrap = document.getElementById('items-wrap');
+  let filtered = activeFilter==='all' ? items : items.filter(i=>i.section===activeFilter);
+
+  if(!filtered.length){
+    const msg = activeFilter==='all'
+      ? 'Your list is empty<br>Add items above'
+      : `No items in #${SECT_MAP[activeFilter]?.label || activeFilter}`;
+    wrap.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><div>${msg}</div></div>`;
+    return;
+  }
+
+  // Group by section
+  const groups = {};
+  filtered.forEach(item=>{
+    if(!groups[item.section]) groups[item.section]=[];
+    groups[item.section].push(item);
+  });
+
+  // Sort: pending first within each group
+  let html = '';
+  const sectionOrder = SECTIONS.map(s=>s.id).filter(id=>groups[id]);
+  sectionOrder.forEach(sid=>{
+    const s = SECT_MAP[sid];
+    const grpItems = groups[sid].sort((a,b)=>a.done-b.done);
+    if(activeFilter==='all'){
+      html+=`<div class="section-group-label">${s.icon} ${s.label}</div>`;
+    }
+    grpItems.forEach(item=>{
+      html += renderItemRow(item);
+    });
+  });
+
+  wrap.innerHTML = html;
+}
+
+function renderItemRow(item){
+  const s = SECT_MAP[item.section] || SECT_MAP['other'];
+  return `<div class="item-row${item.done?' done':''}" id="row-${item.id}">
+    <div class="check-box" onclick="toggleDone('${item.id}')">
+      <svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg>
+    </div>
+    <div class="item-info" onclick="toggleDone('${item.id}')">
+      <div class="item-name">${escHtml(item.name)}</div>
+      <div class="item-section-tag" style="color:${s.color}aa">${s.icon} #${s.label}</div>
+    </div>
+    <div class="item-right">
+      <div class="qty-wrap">
+        <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+        <div class="item-qty">${item.qty}</div>
+        <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+      </div>
+      <button class="del-btn" onclick="deleteItem('${item.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+function renderSummary(){
+  const bar = document.getElementById('summary-bar');
+  const total = items.length;
+  const done  = items.filter(i=>i.done).length;
+  if(!total){ bar.style.display='none'; return; }
+  bar.style.display='flex';
+  document.getElementById('summary-counts').innerHTML =
+    `<div class="summary-count-item"><div class="summary-dot" style="background:#34c759"></div>${done} done</div>
+     <div class="summary-count-item"><div class="summary-dot" style="background:#94a3b8"></div>${total-done} left</div>`;
+}
+
+function updateSub(){
+  document.getElementById('app-sub').textContent =
+    items.length === 0 ? 'Your list is empty' :
+    `${items.length} item${items.length!==1?'s':''}`;
+}
+
+/* ═══════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════ */
+function addItem(){
+  const input = document.getElementById('item-input');
+  const name  = input.value.trim();
+  if(!name) return;
+  items.unshift({
+    id: 'i'+Date.now(),
+    name,
+    section: selectedSection,
+    qty: 1,
+    done: false,
+  });
+  save();
+  input.value='';
+  hideSectionPicker();
+  render();
+}
+
+function toggleDone(id){
+  const item = items.find(i=>i.id===id);
+  if(item){ item.done=!item.done; save(); render(); }
+}
+
+function changeQty(id, delta){
+  const item = items.find(i=>i.id===id);
+  if(item){ item.qty=Math.max(1, item.qty+delta); save(); render(); }
+}
+
+function deleteItem(id){
+  items = items.filter(i=>i.id!==id);
+  save();
+  render();
+}
+
+function clearDone(){
+  const count = items.filter(i=>i.done).length;
+  if(!count){ showToast('No completed items'); return; }
+  items = items.filter(i=>!i.done);
+  save(); render();
+  showToast(`🗑 Cleared ${count} item${count!==1?'s':''}`);
+}
+
+function clearAll(){
+  if(!items.length){ showToast('List is already empty'); return; }
+  if(!confirm(`Clear all ${items.length} items?`)) return;
+  items=[];save();render();
+  showToast('🗑 List cleared');
+}
+
+function setFilter(f){
+  activeFilter=f;
+  render();
+}
+
+function pickSection(id){
+  selectedSection=id;
+  renderSectionPicker();
+}
+
+/* ═══════════════════════════════════════
+   INPUT HANDLING
+═══════════════════════════════════════ */
+function onInputChange(){
+  const val = document.getElementById('item-input').value.trim();
+  const picker = document.getElementById('section-picker');
+  if(val.length > 0){
+    picker.classList.add('visible');
+  } else {
+    picker.classList.remove('visible');
+  }
+}
+
+function hideSectionPicker(){
+  document.getElementById('section-picker').classList.remove('visible');
+}
+
+function onInputKey(e){
+  if(e.key==='Enter') addItem();
+  if(e.key==='Escape'){ document.getElementById('item-input').value=''; hideSectionPicker(); }
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+let _tt;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function tickSB(){
+  const n=new Date();
+  document.getElementById('sb-time').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+}
+tickSB(); setInterval(tickSB,10000);
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+load();
+render();
+document.getElementById('item-input').focus();
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();renderFilterBar();renderItems();});
+</script>
+</body>
+</html>

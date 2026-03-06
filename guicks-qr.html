@@ -11,6 +11,15 @@
   gtag('config', 'G-TPNLYBBFTF');
 </script>
 <meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important}
+html.guicks-light body::before,html.guicks-light body::after{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!important}
+html.guicks-light .back-btn svg{stroke:currentColor!important}
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Generator — Guicks</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -343,6 +352,7 @@
   }
   .cookie-btn:hover { opacity: 0.85; }
 </style>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 
@@ -383,7 +393,7 @@
         <rect x="19" y="19" width="2" height="2" fill="white"/>
       </svg>
     </div>
-    <h1>QR Generator</h1>
+    <h1 data-i18n="qrTitle">QR Generator</h1>
     <p>Links, WhatsApp, contacts, emails & more</p>
   </div>
 
@@ -689,6 +699,9 @@
       }
     });
   }
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

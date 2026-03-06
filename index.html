@@ -56,10 +56,11 @@
     /* ── Layout ── */
     .shell {
       position: relative; z-index: 1;
-      width: 100%; height: 100vh;
+      width: 100%; min-height: 100vh;
       display: flex; flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
+      padding-bottom: 160px;
     }
 
     /* ── Search trigger button ── */
@@ -234,8 +235,12 @@
 
     /* ── Dock ── */
     .dock-wrap {
+      position: sticky;
+      bottom: 0;
       width: 100%; max-width: 600px;
-      padding: 0 24px 28px;
+      padding: 12px 24px 28px;
+      background: transparent;
+      z-index: 50;
     }
     .dock {
       background: rgba(255,255,255,0.08);
@@ -374,15 +379,22 @@
       gap: 8px; cursor: pointer;
       animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
     }
-    .app:nth-child(1) { animation-delay: 0.05s; }
-    .app:nth-child(2) { animation-delay: 0.10s; }
-    .app:nth-child(3) { animation-delay: 0.15s; }
-    .app:nth-child(4) { animation-delay: 0.20s; }
-    .app:nth-child(5) { animation-delay: 0.25s; }
-    .app:nth-child(6) { animation-delay: 0.30s; }
-    .app:nth-child(7) { animation-delay: 0.35s; }
-    .app:nth-child(8) { animation-delay: 0.40s; }
-    .app:nth-child(9) { animation-delay: 0.45s; }
+    .app:nth-child(1)  { animation-delay: 0.05s; }
+    .app:nth-child(2)  { animation-delay: 0.10s; }
+    .app:nth-child(3)  { animation-delay: 0.15s; }
+    .app:nth-child(4)  { animation-delay: 0.20s; }
+    .app:nth-child(5)  { animation-delay: 0.25s; }
+    .app:nth-child(6)  { animation-delay: 0.30s; }
+    .app:nth-child(7)  { animation-delay: 0.35s; }
+    .app:nth-child(8)  { animation-delay: 0.40s; }
+    .app:nth-child(9)  { animation-delay: 0.45s; }
+    .app:nth-child(10) { animation-delay: 0.50s; }
+    .app:nth-child(11) { animation-delay: 0.55s; }
+    .app:nth-child(12) { animation-delay: 0.60s; }
+    .app:nth-child(13) { animation-delay: 0.65s; }
+    .app:nth-child(14) { animation-delay: 0.70s; }
+    .app:nth-child(15) { animation-delay: 0.75s; }
+    .app:nth-child(16) { animation-delay: 0.80s; }
 
     @keyframes popIn {
       from { opacity: 0; transform: scale(0.6); }
@@ -725,6 +737,7 @@
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 
@@ -760,7 +773,7 @@
   <!-- Logo -->
   <div class="header">
     <div class="logo">guicks</div>
-    <div class="tagline">Quick tools, zero friction</div>
+    <div class="tagline" data-i18n="homeTagline">Quick tools, zero friction</div>
   </div>
 
   <!-- App Grid -->
@@ -773,7 +786,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #3a1fa8, #6c3fe0);">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="5" width="3" height="3" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="16" y="5" width="3" height="3" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="16" width="3" height="3" fill="white"/><rect x="14" y="14" width="2" height="2" fill="white"/><rect x="18" y="14" width="3" height="3" rx=".5" fill="white"/><rect x="14" y="18" width="3" height="3" rx=".5" fill="white"/><rect x="19" y="19" width="2" height="2" fill="white"/></svg>
         </div>
-        <span class="app-name">QR Generator</span>
+        <span class="app-name" data-i18n="appNames.qr">QR Generator</span>
       </div>
 
       <!-- Currency Converter -->
@@ -781,7 +794,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #0d4a2e, #1a7a4a);">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-        <span class="app-name">Currency</span>
+        <span class="app-name" data-i18n="appNames.currency">Currency</span>
       </div>
 
       <!-- Favorites -->
@@ -789,7 +802,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #e8820a, #f5c842);">
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/></svg>
         </div>
-        <span class="app-name">Favorites</span>
+        <span class="app-name" data-i18n="appNames.favorites">Favorites</span>
       </div>
 
       <!-- Unit Converter -->
@@ -797,7 +810,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #005ecb, #0a84ff);">
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h10M4 17h6" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <span class="app-name">Converter</span>
+        <span class="app-name" data-i18n="appNames.converter">Converter</span>
       </div>
 
       <!-- Weather -->
@@ -805,7 +818,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #1a6dd4, #5ba5f5);">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="4" fill="white"/><path d="M6 18.5A3.5 3.5 0 009.5 22h7a3 3 0 000-6 3 3 0 00-5.6-1.5A3.5 3.5 0 006 18.5z" fill="rgba(255,255,255,0.7)"/><path d="M12 2v1.5M5.5 5.5l1 1M2 12h1.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-        <span class="app-name">Weather</span>
+        <span class="app-name" data-i18n="appNames.weather">Weather</span>
       </div>
 
       <!-- Lucky -->
@@ -813,7 +826,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #d43a18, #ff5c35);">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.6" fill="white"/><circle cx="15.5" cy="8.5" r="1.6" fill="white"/><circle cx="8.5" cy="15.5" r="1.6" fill="white"/><circle cx="15.5" cy="15.5" r="1.6" fill="white"/><circle cx="12" cy="12" r="1.6" fill="white"/></svg>
         </div>
-        <span class="app-name">Lucky</span>
+        <span class="app-name" data-i18n="appNames.lucky">Lucky</span>
       </div>
 
       <!-- Calculator -->
@@ -821,7 +834,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #4a1fb8, #6c3fe0);">
           <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="2" stroke="white" stroke-width="1.8"/><rect x="7" y="6" width="10" height="3.5" rx="1" fill="rgba(255,255,255,0.9)"/><circle cx="8" cy="14" r="1.2" fill="white"/><circle cx="12" cy="14" r="1.2" fill="white"/><circle cx="16" cy="14" r="1.2" fill="white"/><circle cx="8" cy="18.5" r="1.2" fill="white"/><circle cx="12" cy="18.5" r="1.2" fill="white"/></svg>
         </div>
-        <span class="app-name">Calculator</span>
+        <span class="app-name" data-i18n="appNames.calculator">Calculator</span>
       </div>
 
       <!-- Stocks -->
@@ -829,7 +842,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #0d0d1a, #1a1a2e);">
           <svg viewBox="0 0 24 24" fill="none"><polyline points="3,17 7,11 11,14 15,7 21,10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="20" x2="21" y2="20" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
-        <span class="app-name">Stocks</span>
+        <span class="app-name" data-i18n="appNames.stocks">Stocks</span>
       </div>
 
       <!-- Translate -->
@@ -837,7 +850,31 @@
         <div class="icon" style="background: linear-gradient(145deg, #1a2a00, #2e4a00); border: 1px solid rgba(200,240,96,0.2);">
           <svg viewBox="0 0 24 24" fill="none"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5s1 3 3 5c2-2 3-5 3-5" stroke="#c8f060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19c1.5-2 4.5-2 6 0" stroke="#c8f060" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-        <span class="app-name">Translate</span>
+        <span class="app-name" data-i18n="appNames.translate">Translate</span>
+      </div>
+
+      <!-- Notes -->
+      <div class="app" onclick="openTool('./guicks-notes.html', 'Notes')" draggable="true" data-tool-name="Notes" data-tool-url="./guicks-notes.html">
+        <div class="icon" style="background: linear-gradient(145deg, #3d3200, #8a7200);">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="white" stroke-width="1.8"/><polyline points="14 2 14 8 20 8" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="13" x2="16" y2="13" stroke="white" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <span class="app-name" data-i18n="appNames.notes">Notes</span>
+      </div>
+
+      <!-- Reminders -->
+      <div class="app" onclick="openTool('./guicks-reminders.html', 'Reminders')" draggable="true" data-tool-name="Reminders" data-tool-url="./guicks-reminders.html">
+        <div class="icon" style="background: linear-gradient(145deg, #2d1a6e, #6c3fe0);">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="app-name" data-i18n="appNames.reminders">Reminders</span>
+      </div>
+
+      <!-- Shopping List -->
+      <div class="app" onclick="openTool('./guicks-shopping.html', 'Shopping')" draggable="true" data-tool-name="Shopping" data-tool-url="./guicks-shopping.html">
+        <div class="icon" style="background: linear-gradient(145deg, #0d4a20, #1a8a40);">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="white" stroke-width="1.8"/><path d="M3 6h18" stroke="white" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <span class="app-name" data-i18n="appNames.shopping">Shopping</span>
       </div>
 
       <!-- Calendar -->
@@ -845,7 +882,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #2d1a6e, #5b3fb8);">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/><rect x="7" y="13" width="4" height="4" rx="1" fill="rgba(255,255,255,.75)"/></svg>
         </div>
-        <span class="app-name">Calendar</span>
+        <span class="app-name" data-i18n="appNames.calendar">Calendar</span>
       </div>
 
       <!-- Clock -->
@@ -853,7 +890,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #1c1c2e, #2d2d55);">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <span class="app-name">Clock</span>
+        <span class="app-name" data-i18n="appNames.clock">Clock</span>
       </div>
 
       <!-- Settings -->
@@ -861,7 +898,7 @@
         <div class="icon" style="background: linear-gradient(145deg, #3a3a4a, #6e6e80);">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </div>
-        <span class="app-name">Settings</span>
+        <span class="app-name" data-i18n="appNames.settings">Settings</span>
       </div>
 
     
@@ -901,12 +938,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       <span class="btn-text">
         <span class="btn-title">Load from file</span>
-        <span class="btn-sub">Restore a previously saved backup</span>
+        <span class="btn-sub"><span data-i18n="settingsLoadDesc">Restore a previously saved backup</span></span>
       </span>
     </button>
     <input type="file" id="loadFileInput" accept=".json" style="display:none" onchange="loadFromFile(event)" />
     <div style="margin-top:14px">
-      <button class="backup-close" onclick="closeBackup()">Cancel</button>
+      <button class="backup-close" onclick="closeBackup()"><span data-i18n="cancel">Cancel</span></button>
     </div>
   </div>
 </div>
@@ -916,7 +953,7 @@
   <div class="spotlight-box">
     <div class="spotlight-input-wrap">
       <svg fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg>
-      <input class="spotlight-input" id="spotlightInput" placeholder="Search tools…" oninput="filterTools(this.value)" autocomplete="off"/>
+      <input class="spotlight-input" id="spotlightInput" placeholder="Search tools…" data-i18n-ph="homeSearch" oninput="filterTools(this.value)" autocomplete="off"/>
       <button class="spotlight-clear" id="spotlightClear" onclick="clearSearch()">✕</button>
     </div>
     <div class="spotlight-results" id="spotlightResults"></div>
@@ -953,7 +990,7 @@
     a.href = url; a.download = `guicks-backup-${date}.json`;
     a.click(); URL.revokeObjectURL(url);
     closeBackup();
-    showToast('✅ Backup saved to file!');
+    showToast(GI.get('settingsSaved'));
   }
 
   function loadFromFile(e) {
@@ -975,7 +1012,7 @@
         showToast(`✅ Restored! Reloading…`);
         setTimeout(() => location.reload(), 1200);
       } catch(err) {
-        showToast('❌ Invalid backup file');
+        showToast(GI.get('settingsInvalidBackup'));
       }
     };
     reader.readAsText(file);
@@ -986,6 +1023,9 @@
   const TOOLS = [
     { name: 'QR Generator', desc: 'Create QR codes for links, contacts & more', url: './guicks-qr.html', iconBg: 'linear-gradient(145deg,#3a1fa8,#6c3fe0)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="5" width="3" height="3" fill="white"/><rect x="14" y="3" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="16" y="5" width="3" height="3" fill="white"/><rect x="3" y="14" width="7" height="7" rx="1.2" stroke="white" stroke-width="1.8"/><rect x="5" y="16" width="3" height="3" fill="white"/><rect x="14" y="14" width="2" height="2" fill="white"/><rect x="18" y="14" width="3" height="3" rx=".5" fill="white"/><rect x="14" y="18" width="3" height="3" rx=".5" fill="white"/><rect x="19" y="19" width="2" height="2" fill="white"/></svg>` },
     { name: 'Currency', desc: 'Live exchange rates for 170+ currencies', url: './guicks-currency.html', iconBg: 'linear-gradient(145deg,#0d4a2e,#1a7a4a)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
+    { name: 'Notes', desc: 'Notes with custom hashtags', url: './guicks-notes.html', iconBg: 'linear-gradient(145deg,#3d3200,#8a7200)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="white" stroke-width="1.8"/><line x1="8" y1="13" x2="16" y2="13" stroke="white" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
+    { name: 'Reminders', desc: 'Custom-tagged reminders list', url: './guicks-reminders.html', iconBg: 'linear-gradient(145deg,#2d1a6e,#6c3fe0)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
+    { name: 'Shopping', desc: 'Shopping list with supermarket sections', url: './guicks-shopping.html', iconBg: 'linear-gradient(145deg,#0d4a20,#1a8a40)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="white" stroke-width="1.8"/><path d="M3 6h18" stroke="white" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
     { name: 'Calendar', desc: 'Year, month, week & day views with events', url: './guicks-calendar.html', iconBg: 'linear-gradient(145deg,#2d1a6e,#5b3fb8)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="white" stroke-width="1.8"/><path d="M3 9h18" stroke="white" stroke-width="1.8"/><path d="M8 2v4M16 2v4" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>` },
     { name: 'Clock', desc: 'Analog clock, world time & alarms', url: './guicks-clock.html', iconBg: 'linear-gradient(145deg,#1c1c2e,#2d2d55)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` },
     { name: 'Favorites', desc: 'Your personal bookmarks, auto-categorized', url: './guicks-favorites.html', iconBg: 'linear-gradient(145deg,#e8820a,#f5c842)', iconSvg: `<svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/></svg>` },
@@ -1204,7 +1244,7 @@
       pressTimer = setTimeout(() => {
         enterDockEdit();
         app.setAttribute('draggable', 'true');
-        showToast('Drag to the dock!');
+        showToast(GI.get('settingsDragged'));
       }, 600);
     });
     app.addEventListener('pointerup', () => clearTimeout(pressTimer));
@@ -1249,6 +1289,8 @@
   function openSettings() {
     document.getElementById('settingsOverlay').classList.add('open');
     updateThemeButtons();
+    const sel = document.getElementById('langSelect');
+    if (sel) sel.value = GI.lang();
   }
   function closeSettings() {
     document.getElementById('settingsOverlay').classList.remove('open');
@@ -1314,7 +1356,7 @@
         closeSettings();
         showToast('✅ Data restored! Reloading…');
         setTimeout(() => location.reload(), 1200);
-      } catch { showToast('❌ Invalid backup file'); }
+      } catch { showToast(GI.get('settingsInvalidBackup')); }
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -1375,26 +1417,50 @@
   <div class="settings-sheet" id="settingsSheet">
     <div class="settings-handle"></div>
     <div class="settings-header">
-      <span class="settings-title">⚙️ Settings</span>
+      <span class="settings-title"><span data-i18n="settingsTitle">⚙️ Settings</span></span>
       <button class="settings-close" onclick="closeSettings()">✕</button>
     </div>
 
     <!-- Appearance -->
     <div class="settings-group">
-      <div class="settings-group-label">Appearance</div>
+      <div class="settings-group-label"><span data-i18n="settingsAppearance">Appearance</span></div>
       <div class="settings-rows">
         <div class="settings-row">
           <div class="settings-row-icon" style="background:rgba(255,200,0,0.15)">☀️</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Interface Theme</div>
-            <div class="settings-row-sub">Applied across all Guicks apps</div>
+            <div class="settings-row-label"><span data-i18n="settingsInterfaceTheme">Interface Theme</span></div>
+            <div class="settings-row-sub"><span data-i18n="settingsThemeDesc">Applied across all Guicks apps</span></div>
           </div>
           <div class="settings-row-action">
             <div class="theme-picker">
-              <button class="theme-opt" id="themeLight" onclick="setTheme('light')">☀️ Light</button>
-              <button class="theme-opt" id="themeDark"  onclick="setTheme('dark')">🌙 Dark</button>
-              <button class="theme-opt" id="themeAuto"  onclick="setTheme('auto')">🔄 Auto</button>
+              <button class="theme-opt" id="themeLight" onclick="setTheme('light')"><span data-i18n="settingsThemeLight">☀️ Light</span></button>
+              <button class="theme-opt" id="themeDark"  onclick="setTheme('dark')"><span data-i18n="settingsThemeDark">🌙 Dark</span></button>
+              <button class="theme-opt" id="themeAuto"  onclick="setTheme('auto')"><span data-i18n="settingsThemeAuto">🔄 Auto</span></button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Language -->
+    <div class="settings-group" id="lang-group" style="margin-top:16px">
+      <div class="settings-group-label" data-i18n="settingsLanguage">Language</div>
+      <div class="settings-rows">
+        <div class="settings-row">
+          <div class="settings-row-icon" style="background:rgba(100,200,100,0.15)">🌐</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label" data-i18n="settingsLanguage">Language</div>
+            <div class="settings-row-sub" data-i18n="settingsLanguageDesc">App interface language</div>
+          </div>
+          <div class="settings-row-action">
+            <select id="langSelect" onchange="GI.set(this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;font-weight:700;padding:6px 10px;border-radius:10px;cursor:pointer;outline:none;">
+              <option value="en">🇬🇧 English</option>
+              <option value="es">🇪🇸 Español</option>
+              <option value="fr">🇫🇷 Français</option>
+              <option value="he">🇮🇱 עברית</option>
+              <option value="ar">🇸🇦 العربية</option>
+            </select>
           </div>
         </div>
       </div>
@@ -1402,12 +1468,12 @@
 
     <!-- Data -->
     <div class="settings-group" style="margin-top:16px">
-      <div class="settings-group-label">Data</div>
+      <div class="settings-group-label"><span data-i18n="settingsData">Data</span></div>
       <div class="settings-rows">
         <div class="settings-row" style="cursor:pointer" onclick="openBackupFromSettings()">
           <div class="settings-row-icon" style="background:rgba(79,142,247,0.15)">💾</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Save Data to File</div>
+            <div class="settings-row-label"><span data-i18n="settingsSaveFile">Save Data to File</span></div>
             <div class="settings-row-sub">Export favorites, dock & preferences</div>
           </div>
           <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
@@ -1415,7 +1481,7 @@
         <div class="settings-row" style="cursor:pointer" onclick="loadFromSettings()">
           <div class="settings-row-icon" style="background:rgba(18,183,106,0.15)">📂</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Load Data from File</div>
+            <div class="settings-row-label"><span data-i18n="settingsLoadFile">Load Data from File</span></div>
             <div class="settings-row-sub">Restore a previously saved backup</div>
           </div>
           <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
@@ -1426,13 +1492,13 @@
 
     <!-- Reset -->
     <div class="settings-group" style="margin-top:16px">
-      <div class="settings-group-label">Reset</div>
+      <div class="settings-group-label"><span data-i18n="settingsReset">Reset</span></div>
       <div class="settings-rows">
         <div class="settings-row" style="cursor:pointer" onclick="confirmReset()">
           <div class="settings-row-icon" style="background:rgba(255,59,48,0.15)">🗑️</div>
           <div class="settings-row-text">
-            <div class="settings-row-label" style="color:#ff3b30">Clear All App Data</div>
-            <div class="settings-row-sub">Removes all saved data from this device</div>
+            <div class="settings-row-label" style="color:#ff3b30"><span data-i18n="settingsClearAll">Clear All App Data</span></div>
+            <div class="settings-row-sub"><span data-i18n="settingsClearDesc">Removes all saved data from this device</span></div>
           </div>
           <div class="settings-row-action"><span class="settings-row-chevron" style="color:rgba(255,59,48,0.5)">›</span></div>
         </div>
@@ -1441,12 +1507,12 @@
 
     <!-- About -->
     <div class="settings-group" style="margin-top:16px">
-      <div class="settings-group-label">About</div>
+      <div class="settings-group-label"><span data-i18n="settingsAbout">About</span></div>
       <div class="settings-rows">
         <div class="settings-row" style="cursor:pointer" onclick="openPrivacy()">
           <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">🔒</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Privacy Policy</div>
+            <div class="settings-row-label"><span data-i18n="settingsPrivacy">Privacy Policy</span></div>
             <div class="settings-row-sub">How your data is handled</div>
           </div>
           <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
@@ -1454,7 +1520,7 @@
         <div class="settings-row">
           <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">📱</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Version</div>
+            <div class="settings-row-label"><span data-i18n="settingsVersion">Version</span></div>
             <div class="settings-row-sub">guicks.com</div>
           </div>
           <div class="settings-row-action"><span class="settings-row-badge">v2.1.0</span></div>
@@ -1462,7 +1528,7 @@
         <div class="settings-row">
           <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">👤</div>
           <div class="settings-row-text">
-            <div class="settings-row-label">Developer</div>
+            <div class="settings-row-label"><span data-i18n="settingsDeveloper">Developer</span></div>
             <div class="settings-row-sub">Yoni Moreno · © 2026</div>
           </div>
         </div>
@@ -1471,7 +1537,7 @@
 
     <!-- Tools count -->
     <div class="settings-group" style="margin-top:16px">
-      <div class="settings-group-label">Installed Tools</div>
+      <div class="settings-group-label"><span data-i18n="settingsInstalledTools">Installed Tools</span></div>
       <div class="settings-rows">
         <div class="settings-row">
           <div class="settings-row-icon" style="background:rgba(79,142,247,0.15)">🧰</div>
@@ -1492,11 +1558,11 @@
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <div class="confirm-icon">⚠️</div>
-    <div class="confirm-title">Clear All Data?</div>
+    <div class="confirm-title"><span data-i18n="confirmClearTitle">Clear All Data?</span></div>
     <div class="confirm-msg">This will permanently delete all your saved data — favorites, bookmarks, dock layout, watchlist, calculator history, and all app preferences.<br><br>This action <strong style="color:#ff3b30">cannot be undone.</strong></div>
     <div class="confirm-btns">
       <button class="confirm-cancel" onclick="closeConfirm()">Cancel</button>
-      <button class="confirm-ok" onclick="executeReset()">Yes, Clear All</button>
+      <button class="confirm-ok" onclick="executeReset()"><span data-i18n="confirmClearYes">Yes, Clear All</span></button>
     </div>
   </div>
 </div>
@@ -1533,7 +1599,7 @@
 
       <p style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.25)">Last updated: March 2026</p>
     </div>
-    <button class="info-close" onclick="closePrivacy()">Close</button>
+    <button class="info-close" onclick="closePrivacy()"><span data-i18n="close">Close</span></button>
   </div>
 </div>
 
@@ -1558,5 +1624,17 @@
   }
 </script>
 
+<script>
+  // ── i18n: sync lang select when settings opens ──
+  const _origOpenSettings = typeof openSettings === 'function' ? openSettings : null;
+  function syncLangSelect() {
+    const sel = document.getElementById('langSelect');
+    if (sel) sel.value = GI.lang();
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    GI.apply();
+    syncLangSelect();
+  });
+</script>
 </body>
 </html>

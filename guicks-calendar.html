@@ -556,6 +556,7 @@ html.guicks-light body::before{display:none}
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -597,17 +598,17 @@ html.guicks-light body::before{display:none}
       </svg>
     </div>
     <div class="app-header-text">
-      <h1>Calendar</h1>
+      <h1 data-i18n="calTitle">Calendar</h1>
       <p id="header-sub">Your events, all in one place</p>
     </div>
   </div>
 
   <!-- View switcher -->
   <div class="view-bar">
-    <button class="vbtn active" id="vbtn-year"  onclick="setView('year')">Year</button>
-    <button class="vbtn"        id="vbtn-month" onclick="setView('month')">Month</button>
-    <button class="vbtn"        id="vbtn-week"  onclick="setView('week')">Week</button>
-    <button class="vbtn"        id="vbtn-day"   onclick="setView('day')">Day</button>
+    <button class="vbtn active" id="vbtn-year"  onclick="setView('year')" data-i18n="calYear">Year</button>
+    <button class="vbtn"        id="vbtn-month" onclick="setView('month')" data-i18n="calMonth">Month</button>
+    <button class="vbtn"        id="vbtn-week"  onclick="setView('week')" data-i18n="calWeek">Week</button>
+    <button class="vbtn"        id="vbtn-day"   onclick="setView('day')" data-i18n="calDay">Day</button>
   </div>
 
   <!-- Nav row -->
@@ -617,7 +618,7 @@ html.guicks-light body::before{display:none}
       <button class="arrow-btn" onclick="navigate(1)">›</button>
     </div>
     <div class="nav-title" id="nav-title">—</div>
-    <button class="today-btn" onclick="goToday()">Today</button>
+    <button class="today-btn" onclick="goToday()" data-i18n="calToday">Today</button>
   </div>
 
   <!-- View containers -->
@@ -643,7 +644,7 @@ html.guicks-light body::before{display:none}
     <div class="modal-title" id="modal-title">New Event</div>
     <div class="form-group">
       <div class="form-label">Title</div>
-      <input class="form-input" id="evt-title" placeholder="Event name…" maxlength="60" autocomplete="off">
+      <input class="form-input" id="evt-title" placeholder="Event name…" data-i18n-ph="calEventTitlePlaceholder" maxlength="60" autocomplete="off">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -672,7 +673,7 @@ html.guicks-light body::before{display:none}
     </div>
     <div class="form-group">
       <div class="form-label">Notes</div>
-      <input class="form-input" id="evt-notes" placeholder="Optional notes…" maxlength="200" autocomplete="off">
+      <input class="form-input" id="evt-notes" placeholder="Optional notes…" data-i18n-ph="calEventNotesPlaceholder" maxlength="200" autocomplete="off">
     </div>
     <div class="form-group">
       <div class="form-label">Category</div>
@@ -692,7 +693,7 @@ html.guicks-light body::before{display:none}
       <div class="form-label" style="margin-bottom:8px">New Category</div>
       <div class="color-swatches" id="new-cat-swatches"></div>
       <div class="new-cat-row">
-        <input class="form-input" id="new-cat-name" placeholder="Category name…" maxlength="24" style="flex:1" autocomplete="off">
+        <input class="form-input" id="new-cat-name" placeholder="Category name…" data-i18n-ph="calCategoryName" maxlength="24" style="flex:1" autocomplete="off">
         <button class="btn-save" style="flex:none;padding:12px 20px;font-size:14px" onclick="addCategory()">Add</button>
       </div>
     </div>
@@ -1239,6 +1240,17 @@ function showToast(msg){
 ═══════════════════════════════════════════ */
 loadData();
 setView('month'); // start on month view
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();
+  // patch calendar months/days from i18n
+  if(typeof MONTHS !== 'undefined'){
+    const _t = GI.t();
+    if(_t.months) for(let i=0;i<12;i++) MONTHS[i]=_t.months[i];
+    if(_t.days) for(let i=0;i<7;i++) DAYS_S[i]=_t.days[i];
+  }
+  render();
+});
 </script>
 </body>
 </html>

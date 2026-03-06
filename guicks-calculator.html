@@ -233,6 +233,7 @@ canvas#graphCanvas { display: block; width: 100%; }
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -260,16 +261,16 @@ canvas#graphCanvas { display: block; width: 100%; }
       </svg>
     </div>
     <div class="app-header-text">
-      <h1>Calculator</h1>
+      <h1 data-i18n="calcTitle">Calculator</h1>
       <p>Simple · Scientific · Advanced</p>
     </div>
   </div>
 
   <!-- Mode switcher -->
   <div class="mode-bar">
-    <button class="mode-btn active" id="modeSimple"    onclick="setMode('simple')">Simple</button>
-    <button class="mode-btn"        id="modeSci"       onclick="setMode('sci')">Scientific</button>
-    <button class="mode-btn"        id="modeAdv"       onclick="setMode('adv')">Advanced</button>
+    <button class="mode-btn active" id="modeSimple"    onclick="setMode('simple')" data-i18n="calcSimple">Simple</button>
+    <button class="mode-btn"        id="modeSci"       onclick="setMode('sci')" data-i18n="calcScientific">Scientific</button>
+    <button class="mode-btn"        id="modeAdv"       onclick="setMode('adv')" data-i18n="calcAdvanced">Advanced</button>
   </div>
 
   <!-- Display -->
@@ -372,7 +373,7 @@ canvas#graphCanvas { display: block; width: 100%; }
       <div id="advEq" class="eq-solver">
         <div class="eq-label">Solve equation for x</div>
         <div class="eq-input-row">
-          <input class="eq-input" id="eqInput" placeholder="e.g.  x^2 - 5*x + 6 = 0" onkeydown="if(event.key==='Enter')solveEq()"/>
+          <input class="eq-input" id="eqInput" placeholder="e.g.  x^2 - 5*x + 6 = 0" data-i18n-ph="calcEqPlaceholder" onkeydown="if(event.key==='Enter')solveEq()"/>
           <button class="eq-solve-btn" onclick="solveEq()">Solve</button>
         </div>
         <div class="eq-result" id="eqResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px">Enter an equation above and tap Solve</span></div>
@@ -1017,6 +1018,9 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 // Init
 updateDisplay();
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

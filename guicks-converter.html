@@ -300,6 +300,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 
@@ -724,6 +725,9 @@ renderAllUnits(null);
 
 // Refresh presets when from unit changes
 document.getElementById('fromUnit').addEventListener('change', renderPresets);
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

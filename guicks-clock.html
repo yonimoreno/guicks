@@ -264,6 +264,7 @@ body::before {
 }
 .ring-dismiss:hover { background: rgba(255,255,255,.15); }
 </style>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 
@@ -295,16 +296,16 @@ body::before {
       </svg>
     </div>
     <div class="app-header-text">
-      <h1>Clock</h1>
+      <h1 data-i18n="clockTitle">Clock</h1>
       <p>World time · Alarms</p>
     </div>
   </div>
 
   <!-- Tabs -->
   <div class="tab-bar">
-    <button class="tab-btn active" id="tab-clock" onclick="switchTab('clock')">🕐 Clock</button>
-    <button class="tab-btn" id="tab-world" onclick="switchTab('world')">🌍 World</button>
-    <button class="tab-btn" id="tab-alarms" onclick="switchTab('alarms')">⏰ Alarms</button>
+    <button class="tab-btn active" id="tab-clock" onclick="switchTab('clock')"><span data-i18n="clockTabClock">🕐 Clock</span></button>
+    <button class="tab-btn" id="tab-world" onclick="switchTab('world')"><span data-i18n="clockTabWorld">🌍 World</span></button>
+    <button class="tab-btn" id="tab-alarms" onclick="switchTab('alarms')"><span data-i18n="clockTabAlarms">⏰ Alarms</span></button>
   </div>
 
   <!-- Clock panel -->
@@ -331,7 +332,7 @@ body::before {
     <div class="note-bar">⚠️ Alarms ring only while this browser tab is open</div>
     <div class="add-row">
       <input type="time" id="alarm-time-input"/>
-      <input type="text" id="alarm-label-input" placeholder="Label (optional)" maxlength="30"/>
+      <input type="text" id="alarm-label-input" placeholder="Label (optional)" data-i18n-ph="clockAlarmLabel" maxlength="30"/>
       <button class="add-btn" onclick="addAlarm()">Set</button>
     </div>
     <div id="alarm-list"></div>
@@ -342,7 +343,7 @@ body::before {
 <div id="ring-overlay">
   <div class="ring-time" id="ring-time-text">00:00</div>
   <div class="ring-label" id="ring-label-text">Alarm</div>
-  <button class="ring-dismiss" onclick="dismissAlarm()">Dismiss</button>
+  <button class="ring-dismiss" onclick="dismissAlarm()" data-i18n="dismiss">Dismiss</button>
 </div>
 
 <script>
@@ -638,6 +639,9 @@ function tick() {
 // Initial render
 updateClockPanel();
 setInterval(tick, 1000);
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

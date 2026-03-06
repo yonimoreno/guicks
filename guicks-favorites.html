@@ -466,6 +466,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 
@@ -497,14 +498,14 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="white" stroke="white" stroke-width="0.5" stroke-linejoin="round"/>
       </svg>
     </div>
-    <h1>Favorites</h1>
+    <h1 data-i18n="favTitle">Favorites</h1>
     <p>Your personal bookmarks, always at hand</p>
   </div>
 
   <!-- Add URL -->
   <div class="add-card">
     <div class="add-row">
-      <input class="add-input" id="urlInput" type="url" placeholder="Paste a URL — https://example.com" autocomplete="off" oninput="onUrlInput(this.value)" onkeydown="if(event.key==='Enter')addBookmark()"/>
+      <input class="add-input" id="urlInput" type="url" placeholder="Paste a URL — https://example.com" data-i18n-ph="favAddUrl" autocomplete="off" oninput="onUrlInput(this.value)" onkeydown="if(event.key==='Enter')addBookmark()"/>
       <button class="add-btn" id="addBtn" onclick="addBookmark()">Add ＋</button>
     </div>
     <div class="cat-row" id="catRow">
@@ -515,7 +516,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   <!-- Search -->
   <div class="search-wrap">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg>
-    <input class="search-input" id="searchInput" placeholder="Search favorites…" oninput="renderAll()" />
+    <input class="search-input" id="searchInput" placeholder="Search favorites…" data-i18n-ph="favSearchPlaceholder" oninput="renderAll()" />
   </div>
 
   <!-- Filter tabs -->
@@ -1016,6 +1017,9 @@ function escHtml(str) {
 loadCustomCats();
 load();
 renderAll();
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

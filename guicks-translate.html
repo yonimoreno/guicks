@@ -344,6 +344,7 @@ body::before {
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -377,7 +378,7 @@ body::before {
       </svg>
     </div>
     <div class="app-header-text">
-      <h1>Translate</h1>
+      <h1 data-i18n="translateTitle">Translate</h1>
       <p>100+ languages · Powered by MyMemory</p>
     </div>
   </div>
@@ -403,7 +404,7 @@ body::before {
     <!-- Source -->
     <div class="panel-box">
       <div class="panel-label">Source</div>
-      <textarea class="source-textarea" id="sourceText" placeholder="Type or paste text here…" maxlength="500" oninput="onSourceInput()" onkeydown="onKeyDown(event)"></textarea>
+      <textarea class="source-textarea" id="sourceText" placeholder="Type or paste text here…" data-i18n-ph="translatePlaceholder" maxlength="500" oninput="onSourceInput()" onkeydown="onKeyDown(event)"></textarea>
       <div class="panel-actions">
         <button class="action-btn" onclick="clearSource()" title="Clear">
           <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
@@ -814,6 +815,9 @@ document.querySelector('.section-header')?.querySelector('.section-clear')?.addE
 loadData();
 populateLangs();
 renderList();
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

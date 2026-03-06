@@ -280,6 +280,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -333,7 +334,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
   <!-- Search -->
   <div class="search-wrap">
     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><line x1="15.5" y1="15.5" x2="20" y2="20"/></svg>
-    <input class="search-input" id="searchInput" placeholder="Search city — London, Tokyo, New York…" oninput="onSearch(this.value)" autocomplete="off" />
+    <input class="search-input" id="searchInput" placeholder="Search city — London, Tokyo, New York…" data-i18n-ph="weatherSearchPlaceholder" oninput="onSearch(this.value)" autocomplete="off" />
     <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
     <div class="search-results" id="searchResults"></div>
   </div>
@@ -363,7 +364,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
 
   <!-- Saved locations -->
   <div class="section-pad" id="locationsSection">
-    <div class="section-title">Saved locations</div>
+    <div class="section-title" data-i18n="weatherSavedLocations">Saved locations</div>
     <div class="locations-grid" id="locationsGrid"></div>
   </div>
 
@@ -759,6 +760,9 @@ if (savedLocations.length > 0) {
     loadWeather(DEFAULT_LOC);
   }
 }
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .back-btn{color:#333!important}
+html.guicks-light .back-btn svg{stroke:#333!important}
+html.guicks-light .app-title{color:#0d0d1a!important}
+html.guicks-light .app-sub{color:rgba(0,0,0,.4)!important}
+html.guicks-light .input-wrap{background:#fff!important;border-color:rgba(0,0,0,.1)!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important}
+html.guicks-light .item-input{color:#0d0d1a!important}
+html.guicks-light .item-input::placeholder{color:rgba(0,0,0,.3)!important}
+html.guicks-light .tag-picker{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .tag-opt{color:rgba(0,0,0,.55)!important;border-color:rgba(0,0,0,.1)!important}
+html.guicks-light .tag-opt:hover{background:rgba(0,0,0,.04)!important;border-color:rgba(0,0,0,.2)!important}
+html.guicks-light .tag-opt.active{color:#fff!important}
+html.guicks-light .new-tag-input{background:rgba(0,0,0,.04)!important;border-color:rgba(0,0,0,.1)!important;color:#0d0d1a!important}
+html.guicks-light .new-tag-input::placeholder{color:rgba(0,0,0,.3)!important}
+html.guicks-light .item-row{background:#fff!important;border-color:rgba(0,0,0,.07)!important}
+html.guicks-light .item-row:hover{background:#f7f8fc!important}
+html.guicks-light .item-name{color:#0d0d1a!important}
+html.guicks-light .item-note{color:rgba(0,0,0,.45)!important}
+html.guicks-light .item-tag-badge{color:#fff!important}
+html.guicks-light .empty-state{color:rgba(0,0,0,.28)!important}
+html.guicks-light .summary-bar{background:#fff!important;border-color:rgba(0,0,0,.08)!important;color:rgba(0,0,0,.45)!important}
+html.guicks-light .clear-done-btn{color:rgba(0,0,0,.35)!important}
+html.guicks-light .clear-done-btn:hover{color:#ff3b30!important}
+html.guicks-light .filter-bar{background:rgba(240,242,247,.92)!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .filter-tag{background:#fff!important;border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.5)!important}
+html.guicks-light .filter-tag:hover{border-color:rgba(0,0,0,.22)!important;color:#0d0d1a!important}
+html.guicks-light .filter-tag.active{color:#fff!important}
+html.guicks-light .del-tag-btn{color:rgba(0,0,0,.25)!important}
+html.guicks-light .del-tag-btn:hover{color:#ff3b30!important}
+html.guicks-light .color-row{border-color:rgba(0,0,0,.06)!important}
+html.guicks-light .section-label{color:rgba(0,0,0,.3)!important}
+html.guicks-light .manage-tags-btn{color:rgba(0,0,0,.35)!important;border-color:rgba(0,0,0,.1)!important}
+html.guicks-light .manage-tags-btn:hover{background:rgba(0,0,0,.04)!important;color:#0d0d1a!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Reminders — Guicks</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:#07070d;
+  color:#f0f0f5;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 50% at 8% 0%,rgba(79,62,180,.35) 0%,transparent 65%),
+    radial-gradient(ellipse 45% 45% at 92% 100%,rgba(30,20,80,.3) 0%,transparent 65%);
+}
+
+.shell{
+  position:relative;z-index:1;
+  max-width:640px;margin:0 auto;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  padding-bottom:150px;
+}
+
+/* ── Status bar ── */
+.statusbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 0;font-size:13px;font-weight:700;color:#f0f0f5;
+}
+.sb-time{font-size:16px;font-weight:800;}
+.sb-icons{display:flex;gap:5px;align-items:center;}
+.statusbar svg{width:16px;height:16px;fill:#f0f0f5;}
+
+/* ── Top nav ── */
+.topnav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px 0;
+}
+.back-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  color:rgba(167,139,250,.9);font-size:15px;font-weight:700;
+  text-decoration:none;padding:6px 10px 6px 4px;
+  border-radius:10px;transition:background .15s;
+}
+.back-btn:hover{background:rgba(167,139,250,.1);}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.topnav-right{display:flex;gap:8px;}
+.icon-btn{
+  width:34px;height:34px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;
+}
+.icon-btn:hover{background:rgba(167,139,250,.15);border-color:rgba(167,139,250,.3);color:rgba(167,139,250,.9);}
+.icon-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ── App header ── */
+.app-header{
+  padding:8px 20px 14px;
+  display:flex;align-items:center;gap:14px;
+}
+.app-icon{
+  width:50px;height:50px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(145deg,#2d1a6e,#6c3fe0);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(108,63,224,.4),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.app-icon svg{width:26px;height:26px;}
+.app-title{font-size:22px;font-weight:800;letter-spacing:-.5px;}
+.app-sub{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px;}
+
+/* ── Add input ── */
+.input-wrap{
+  margin:0 14px 10px;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:16px;
+  padding:4px 4px 4px 16px;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);
+  transition:border-color .15s,box-shadow .15s;
+}
+.input-wrap:focus-within{
+  border-color:rgba(167,139,250,.4);
+  box-shadow:0 4px 20px rgba(0,0,0,.2),0 0 0 3px rgba(108,63,224,.12);
+}
+.item-input{
+  flex:1;background:none;border:none;outline:none;
+  font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;
+  color:#f0f0f5;padding:10px 0;
+}
+.item-input::placeholder{color:rgba(255,255,255,.25);}
+.add-btn{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,#4a1fb8,#6c3fe0);
+  border:none;color:#fff;font-size:22px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:transform .12s,box-shadow .12s;
+  box-shadow:0 3px 10px rgba(108,63,224,.4);
+}
+.add-btn:hover{transform:scale(1.06);box-shadow:0 5px 14px rgba(108,63,224,.5);}
+.add-btn:active{transform:scale(.96);}
+
+/* ── Tag picker ── */
+.tag-picker{
+  margin:0 14px 10px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:10px;
+  display:none;
+  flex-direction:column;
+  gap:8px;
+}
+.tag-picker.visible{display:flex;}
+.tag-picker-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.tag-opt{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 11px;border-radius:20px;
+  border:1.5px solid rgba(255,255,255,.1);
+  background:none;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.5);cursor:pointer;
+  transition:all .15s;white-space:nowrap;
+}
+.tag-opt:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.9);}
+.tag-opt.active{color:#fff;border-color:transparent;}
+
+/* New tag inline */
+.new-tag-inline{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 0;
+}
+.new-tag-input{
+  flex:1;background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:6px 12px;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  color:#f0f0f5;outline:none;
+  transition:border-color .15s;
+  max-width:160px;
+}
+.new-tag-input::placeholder{color:rgba(255,255,255,.25);}
+.new-tag-input:focus{border-color:rgba(167,139,250,.5);}
+.new-tag-submit{
+  padding:6px 12px;border-radius:20px;
+  background:linear-gradient(135deg,#4a1fb8,#6c3fe0);
+  border:none;color:#fff;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  transition:opacity .15s;
+}
+.new-tag-submit:hover{opacity:.85;}
+
+/* Color row */
+.color-row{
+  display:flex;gap:5px;flex-wrap:wrap;
+  padding-top:6px;border-top:1px solid rgba(255,255,255,.06);
+}
+.color-swatch{
+  width:22px;height:22px;border-radius:7px;cursor:pointer;
+  border:2px solid transparent;transition:transform .12s,border-color .15s;
+}
+.color-swatch:hover{transform:scale(1.15);}
+.color-swatch.picked{border-color:#fff;transform:scale(1.15);}
+
+/* ── Summary bar ── */
+.summary-bar{
+  margin:0 14px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.4);
+}
+.summary-counts{display:flex;gap:14px;}
+.s-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;}
+.clear-done-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:12px;font-weight:700;color:rgba(255,255,255,.3);
+  font-family:'Outfit',sans-serif;transition:color .15s;
+}
+.clear-done-btn:hover{color:#ff6b6b;}
+
+/* ── Items ── */
+.items-wrap{padding:0 14px;flex:1;}
+
+.section-label{
+  font-size:10px;font-weight:800;letter-spacing:.8px;
+  text-transform:uppercase;color:rgba(255,255,255,.28);
+  padding:12px 4px 4px;
+}
+
+.item-row{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 14px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:13px;margin-bottom:6px;
+  cursor:pointer;transition:all .15s;
+}
+.item-row:hover{background:rgba(255,255,255,.08);}
+.item-row.done{opacity:.4;}
+.item-row.done .item-name{text-decoration:line-through;}
+
+.check-box{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid rgba(255,255,255,.2);
+  flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;
+}
+.item-row.done .check-box{background:#a78bfa;border-color:#a78bfa;}
+.check-box svg{
+  width:12px;height:12px;fill:none;stroke:#fff;stroke-width:3;
+  stroke-linecap:round;stroke-linejoin:round;
+  opacity:0;transform:scale(.5);transition:opacity .15s,transform .15s;
+}
+.item-row.done .check-box svg{opacity:1;transform:scale(1);}
+
+.item-info{flex:1;min-width:0;}
+.item-name{font-size:15px;font-weight:600;color:#f0f0f5;line-height:1.3;}
+.item-note{font-size:12px;color:rgba(255,255,255,.38);margin-top:3px;line-height:1.4;}
+.item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap;}
+.item-tag-badge{
+  font-size:10px;font-weight:800;
+  padding:2px 9px;border-radius:20px;
+  color:#fff;letter-spacing:.2px;
+}
+.item-date{font-size:10px;color:rgba(255,255,255,.3);}
+
+.del-btn{
+  width:28px;height:28px;border-radius:8px;
+  background:none;border:none;cursor:pointer;
+  font-size:14px;opacity:.22;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .12s,background .12s;
+}
+.del-btn:hover{opacity:.8;background:rgba(255,59,48,.15);}
+
+/* ── Empty ── */
+.empty-state{
+  text-align:center;padding:48px 24px;
+  color:rgba(255,255,255,.22);font-size:14px;font-style:italic;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.empty-icon{font-size:40px;opacity:.45;}
+
+/* ── Filter bar (fixed bottom) ── */
+.filter-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(7,7,13,.9);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:10px 14px 22px;
+}
+.filter-scroll{
+  display:flex;gap:7px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding-bottom:2px;
+}
+.filter-scroll::-webkit-scrollbar{display:none;}
+.filter-tag{
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;flex-shrink:0;
+  padding:7px 13px;border-radius:20px;
+  border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;
+}
+.filter-tag:hover{border-color:rgba(255,255,255,.22);color:#f0f0f5;}
+.filter-tag.active{color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(0,0,0,.3);}
+.ft-count{
+  font-size:10px;font-weight:800;
+  background:rgba(255,255,255,.2);
+  border-radius:20px;padding:1px 6px;
+  min-width:18px;text-align:center;
+}
+.filter-tag.active .ft-count{background:rgba(255,255,255,.25);}
+.del-tag-btn{
+  font-size:11px;opacity:.4;transition:opacity .12s;
+  background:none;border:none;cursor:pointer;color:inherit;
+  padding:0;line-height:1;margin-left:1px;
+}
+.del-tag-btn:hover{opacity:1;}
+
+/* manage tags link */
+.manage-tags-btn{
+  white-space:nowrap;flex-shrink:0;
+  padding:7px 13px;border-radius:20px;
+  border:1.5px dashed rgba(255,255,255,.15);
+  background:none;
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  color:rgba(255,255,255,.3);cursor:pointer;transition:all .15s;
+}
+.manage-tags-btn:hover{border-color:rgba(167,139,250,.4);color:rgba(167,139,250,.8);background:rgba(108,63,224,.08);}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(20,20,36,.95);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.1);color:#fff;
+  font-size:13px;font-weight:500;padding:10px 20px;
+  border-radius:20px;pointer-events:none;
+  opacity:0;transition:opacity .2s,transform .2s;
+  white-space:nowrap;z-index:9999;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<script src="./guicks-i18n.js"></script>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="sb-time" id="sb-time">9:41</span>
+    <div class="sb-icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="14" width="3" height="7" rx="1"/><rect x="6" y="10" width="3" height="11" rx="1"/><rect x="11" y="6" width="3" height="15" rx="1"/><rect x="16" y="2" width="3" height="19" rx="1" opacity=".4"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 18.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm-4.95-2.55a7 7 0 019.9 0l1.41-1.41a9 9 0 00-12.72 0l1.41 1.41zm-3.54-3.54a12 12 0 0116.98 0l1.41-1.41A14 14 0 003.1 10.99l1.41 1.42z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="1" y="7" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="8" width="14" height="8" rx="1.2" fill="currentColor"/><path d="M20 10v4a2 2 0 000-4z"/></svg>
+    </div>
+  </div>
+
+  <!-- Top nav -->
+  <div class="topnav">
+    <a class="back-btn" href="./index.html">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+    <div class="topnav-right">
+      <button class="icon-btn" onclick="clearAll()" title="Clear all">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- App header -->
+  <div class="app-header">
+    <div class="app-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 11l3 3L22 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="app-title" data-i18n="remTitle">Reminders</div>
+      <div class="app-sub" id="app-sub">0 reminders</div>
+    </div>
+  </div>
+
+  <!-- Add input -->
+  <div class="input-wrap">
+    <input class="item-input" id="item-input" placeholder="Add reminder…" data-i18n-ph="remPlaceholder" maxlength="80"
+      autocomplete="off" autocorrect="off"
+      oninput="onInputChange()" onkeydown="onInputKey(event)">
+    <button class="add-btn" onclick="addItem()">+</button>
+  </div>
+
+  <!-- Tag picker (shown while typing) -->
+  <div class="tag-picker" id="tag-picker">
+    <div class="tag-picker-row" id="tag-picker-row"></div>
+    <div class="color-row" id="color-row"></div>
+    <div class="new-tag-inline">
+      <input class="new-tag-input" id="new-tag-input" placeholder="New tag…" data-i18n-ph="remNewTag" maxlength="20"
+        autocomplete="off" onkeydown="newTagKey(event)">
+      <button class="new-tag-submit" onclick="createTag()" data-i18n="remCreateTag">+ Create</button>
+    </div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="summary-bar" id="summary-bar" style="display:none">
+    <div class="summary-counts" id="summary-counts"></div>
+    <button class="clear-done-btn" onclick="clearDone()" data-i18n="remClearDone">Clear done</button>
+  </div>
+
+  <!-- Items -->
+  <div class="items-wrap" id="items-wrap"></div>
+
+</div>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <div class="filter-scroll" id="filter-scroll"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════ */
+const ITEMS_KEY = 'guicks_reminders_v1';
+const TAGS_KEY  = 'guicks_reminder_tags_v1';
+
+const TAG_COLORS = [
+  '#a78bfa','#60a5fa','#34d399','#fb923c',
+  '#f472b6','#fbbf24','#f87171','#38bdf8',
+  '#4ade80','#e879f9','#94a3b8','#ff6b6b',
+];
+
+const DEFAULT_TAGS = [
+  { id:'personal', label:'Personal', color:'#a78bfa' },
+  { id:'work',     label:'Work',     color:'#60a5fa' },
+  { id:'urgent',   label:'Urgent',   color:'#f87171' },
+  { id:'ideas',    label:'Ideas',    color:'#fbbf24' },
+];
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let items        = [];
+let tags         = [];
+let activeFilter = 'all';
+let selectedTag  = null;      // tag id selected in picker
+let newTagColor  = TAG_COLORS[0];
+
+/* ═══════════════════════════════════════
+   PERSISTENCE
+═══════════════════════════════════════ */
+function load(){
+  try{ items=JSON.parse(localStorage.getItem(ITEMS_KEY))||[]; }catch(e){ items=[]; }
+  try{
+    const t=JSON.parse(localStorage.getItem(TAGS_KEY));
+    tags=(t&&t.length)?t:JSON.parse(JSON.stringify(DEFAULT_TAGS));
+  }catch(e){ tags=JSON.parse(JSON.stringify(DEFAULT_TAGS)); }
+  if(!selectedTag && tags.length) selectedTag=tags[0].id;
+}
+function saveItems(){ localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); }
+function saveTags() { localStorage.setItem(TAGS_KEY,  JSON.stringify(tags));  }
+function getTag(id){ return tags.find(t=>t.id===id)||{label:'Other',color:'#94a3b8'}; }
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function render(){
+  renderTagPickerRow();
+  renderColorRow();
+  renderFilterBar();
+  renderItems();
+  renderSummary();
+  updateSub();
+}
+
+/* Tag pills inside the picker */
+function renderTagPickerRow(){
+  const row = document.getElementById('tag-picker-row');
+  row.innerHTML = tags.map(t=>`
+    <button class="tag-opt${t.id===selectedTag?' active':''}"
+      style="${t.id===selectedTag?`background:${t.color};border-color:${t.color}`:''}"
+      onclick="pickTag('${t.id}')">
+      #${t.label}
+    </button>`).join('');
+}
+
+/* Color swatches for new tag */
+function renderColorRow(){
+  const row = document.getElementById('color-row');
+  row.innerHTML = TAG_COLORS.map(c=>`
+    <div class="color-swatch${c===newTagColor?' picked':''}"
+      style="background:${c}"
+      onclick="pickColor('${c}')"></div>`).join('');
+}
+
+/* Bottom filter bar */
+function renderFilterBar(){
+  const scroll = document.getElementById('filter-scroll');
+  const total  = items.length;
+
+  let html = `<div class="filter-tag${activeFilter==='all'?' active':''}"
+    style="${activeFilter==='all'?'background:linear-gradient(135deg,#4a1fb8,#6c3fe0)':''}"
+    onclick="setFilter('all')">
+    All <span class="ft-count">${total}</span>
+  </div>`;
+
+  tags.forEach(t=>{
+    const count = items.filter(i=>i.tag===t.id).length;
+    const isActive = activeFilter===t.id;
+    html += `<div class="filter-tag${isActive?' active':''}"
+      style="${isActive?`background:${t.color}`:''}"
+      onclick="setFilter('${t.id}')">
+      #${t.label}
+      <span class="ft-count">${count}</span>
+      <button class="del-tag-btn" onclick="event.stopPropagation();deleteTag('${t.id}')" title="Delete tag">✕</button>
+    </div>`;
+  });
+
+  html += `<button class="manage-tags-btn" onclick="showTagPicker()">+ tag</button>`;
+
+  scroll.innerHTML = html;
+}
+
+/* Items list */
+function renderItems(){
+  const wrap = document.getElementById('items-wrap');
+  const filtered = activeFilter==='all' ? items : items.filter(i=>i.tag===activeFilter);
+
+  if(!filtered.length){
+    const msg = activeFilter==='all'
+      ? 'No reminders yet<br>Add one above'
+      : `Nothing tagged #${getTag(activeFilter).label}`;
+    wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">🔔</div><div>${msg}</div></div>`;
+    return;
+  }
+
+  // Group by tag when showing all
+  if(activeFilter==='all'){
+    const groups={};
+    filtered.forEach(item=>{
+      if(!groups[item.tag]) groups[item.tag]=[];
+      groups[item.tag].push(item);
+    });
+    let html='';
+    // Order by tag definition order
+    const tagOrder=tags.map(t=>t.id).filter(id=>groups[id]);
+    tagOrder.forEach(tid=>{
+      const t=getTag(tid);
+      html+=`<div class="section-label" style="color:${t.color}88">#${t.label}</div>`;
+      groups[tid].sort((a,b)=>a.done-b.done).forEach(item=>{ html+=renderRow(item); });
+    });
+    wrap.innerHTML=html;
+  } else {
+    wrap.innerHTML=[...filtered].sort((a,b)=>a.done-b.done).map(renderRow).join('');
+  }
+}
+
+function renderRow(item){
+  const t = getTag(item.tag);
+  const date = new Date(item.created).toLocaleDateString([],{month:'short',day:'numeric'});
+  return `<div class="item-row${item.done?' done':''}" id="row-${item.id}">
+    <div class="check-box" onclick="toggleDone('${item.id}')">
+      <svg viewBox="0 0 12 10"><polyline points="1 5 4 8 11 1"/></svg>
+    </div>
+    <div class="item-info" onclick="toggleDone('${item.id}')">
+      <div class="item-name">${escHtml(item.name)}</div>
+      ${item.note?`<div class="item-note">${escHtml(item.note)}</div>`:''}
+      <div class="item-meta">
+        <span class="item-tag-badge" style="background:${t.color}">#${t.label}</span>
+        <span class="item-date">${date}</span>
+      </div>
+    </div>
+    <button class="del-btn" onclick="deleteItem('${item.id}')">✕</button>
+  </div>`;
+}
+
+function renderSummary(){
+  const bar=document.getElementById('summary-bar');
+  if(!items.length){bar.style.display='none';return;}
+  bar.style.display='flex';
+  const done=items.filter(i=>i.done).length;
+  document.getElementById('summary-counts').innerHTML=
+    `<span><span class="s-dot" style="background:#a78bfa"></span>${done} done</span>
+     <span><span class="s-dot" style="background:#94a3b8"></span>${items.length-done} left</span>`;
+}
+
+function updateSub(){
+  const n=items.length;
+  document.getElementById('app-sub').textContent=n===0?'Nothing here yet':`${n} reminder${n!==1?'s':''}`;
+}
+
+/* ═══════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════ */
+function addItem(){
+  const input=document.getElementById('item-input');
+  const name=input.value.trim();
+  if(!name){showToast('Write something first');return;}
+  items.unshift({
+    id:'r'+Date.now(),
+    name,
+    note:'',
+    tag:selectedTag||tags[0]?.id||'personal',
+    done:false,
+    created:Date.now(),
+  });
+  saveItems();
+  input.value='';
+  hidePicker();
+  render();
+}
+
+function toggleDone(id){
+  const item=items.find(i=>i.id===id);
+  if(item){item.done=!item.done;saveItems();render();}
+}
+
+function deleteItem(id){
+  items=items.filter(i=>i.id!==id);
+  saveItems();render();
+}
+
+function clearDone(){
+  const count=items.filter(i=>i.done).length;
+  if(!count){showToast('No completed reminders');return;}
+  items=items.filter(i=>!i.done);
+  saveItems();render();
+  showToast(`🗑 Cleared ${count} reminder${count!==1?'s':''}`);
+}
+
+function clearAll(){
+  if(!items.length){showToast('Already empty');return;}
+  if(!confirm(`Delete all ${items.length} reminders?`))return;
+  items=[];saveItems();render();
+  showToast('🗑 All cleared');
+}
+
+function setFilter(f){activeFilter=f;render();}
+
+function pickTag(id){selectedTag=id;renderTagPickerRow();}
+
+function pickColor(c){
+  newTagColor=c;
+  renderColorRow();
+}
+
+/* ═══════════════════════════════════════
+   TAG MANAGEMENT
+═══════════════════════════════════════ */
+function createTag(){
+  const input=document.getElementById('new-tag-input');
+  const label=input.value.trim().replace(/^#+/,'').replace(/\s+/g,'_');
+  if(!label){showToast('Enter a tag name');return;}
+  if(tags.find(t=>t.label.toLowerCase()===label.toLowerCase())){showToast('Tag already exists');return;}
+  const id='tag_'+Date.now();
+  tags.push({id,label,color:newTagColor});
+  saveTags();
+  selectedTag=id;
+  input.value='';
+  // pick next color
+  const idx=TAG_COLORS.indexOf(newTagColor);
+  newTagColor=TAG_COLORS[(idx+1)%TAG_COLORS.length];
+  render();
+  showToast(`✅ #${label} created`);
+}
+
+function deleteTag(id){
+  const usedBy=items.filter(i=>i.tag===id).length;
+  if(usedBy>0){showToast(`⚠️ ${usedBy} reminder${usedBy!==1?'s':''} use this tag`);return;}
+  tags=tags.filter(t=>t.id!==id);
+  saveTags();
+  if(activeFilter===id) activeFilter='all';
+  if(selectedTag===id) selectedTag=tags[0]?.id||null;
+  render();
+}
+
+function newTagKey(e){if(e.key==='Enter')createTag();}
+
+/* ═══════════════════════════════════════
+   INPUT / PICKER VISIBILITY
+═══════════════════════════════════════ */
+function onInputChange(){
+  const val=document.getElementById('item-input').value.trim();
+  const picker=document.getElementById('tag-picker');
+  if(val.length>0) picker.classList.add('visible');
+  else picker.classList.remove('visible');
+}
+
+function hidePicker(){
+  document.getElementById('tag-picker').classList.remove('visible');
+}
+
+function showTagPicker(){
+  // Focus input so picker shows, and scroll to it
+  document.getElementById('item-input').focus();
+  document.getElementById('item-input').value=' ';
+  onInputChange();
+  document.getElementById('new-tag-input').focus();
+}
+
+function onInputKey(e){
+  if(e.key==='Enter') addItem();
+  if(e.key==='Escape'){document.getElementById('item-input').value='';hidePicker();}
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+let _tt;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function tickSB(){
+  const n=new Date();
+  document.getElementById('sb-time').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+}
+tickSB();setInterval(tickSB,10000);
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+load();
+render();
+document.getElementById('item-input').focus();
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();render();});
+</script>
+</body>
+</html>

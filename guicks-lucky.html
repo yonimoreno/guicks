@@ -275,6 +275,7 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
   gtag('js', new Date());
   gtag('config', 'G-TPNLYBBFTF');
 </script>
+<script src="./guicks-i18n.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -298,7 +299,7 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
   <div class="app-header">
     <div class="app-icon">🎲</div>
     <div class="app-header-text">
-      <h1>Lucky</h1>
+      <h1 data-i18n="luckyTitle">Lucky</h1>
       <p>Dice roller & spin wheel — settle anything!</p>
     </div>
   </div>
@@ -317,7 +318,7 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
   <div class="entries-card">
     <div class="entries-label" id="entriesLabel">Names / Options (optional)</div>
     <div class="entries-input-row">
-      <input class="entry-input" id="entryInput" placeholder="Add a name or option…" maxlength="30" onkeydown="if(event.key==='Enter')addEntry()" />
+      <input class="entry-input" id="entryInput" placeholder="Add a name or option…" data-i18n-ph="luckyAddEntry" maxlength="30" onkeydown="if(event.key==='Enter')addEntry()" />
       <button class="add-entry-btn" onclick="addEntry()">Add</button>
     </div>
     <div class="chips-wrap" id="chipsWrap">
@@ -328,7 +329,7 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
       <button class="preset-btn" onclick="loadPreset('team')">🏆 Team</button>
       <button class="preset-btn" onclick="loadPreset('days')">📅 Days</button>
       <button class="preset-btn" onclick="loadPreset('yesno')">✅ Yes/No</button>
-      <button class="clear-entries-btn" onclick="clearEntries()">Clear all</button>
+      <button class="clear-entries-btn" onclick="clearEntries()" data-i18n="luckyClearAll">Clear all</button>
     </div>
   </div>
 
@@ -719,6 +720,9 @@ renderDice();
 renderHistory();
 // Load wheel (hidden, but draw once)
 setTimeout(()=>{ drawWheel(); }, 50);
+
+// ── i18n ──
+document.addEventListener("DOMContentLoaded",function(){GI.apply();});
 </script>
 </body>
 </html>
