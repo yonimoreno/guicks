@@ -919,7 +919,7 @@ loadData();
 render();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.apply();render();});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ render(); });});
 </script>
 </body>
 </html>

@@ -1242,7 +1242,7 @@ loadData();
 setView('month'); // start on month view
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.apply();
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });
   // patch calendar months/days from i18n
   if(typeof MONTHS !== 'undefined'){
     const _t = GI.t();

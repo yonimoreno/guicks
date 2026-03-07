@@ -670,7 +670,7 @@ render();
 document.getElementById('item-input').focus();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.apply();renderFilterBar();renderItems();});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ renderFilterBar();renderItems(); });});
 </script>
 </body>
 </html>
