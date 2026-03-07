@@ -1454,13 +1454,34 @@
             <div class="settings-row-sub" data-i18n="settingsLanguageDesc">App interface language</div>
           </div>
           <div class="settings-row-action">
-            <select id="langSelect" onchange="GI.set(this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;font-weight:700;padding:6px 10px;border-radius:10px;cursor:pointer;outline:none;">
-              <option value="en">🇬🇧 English</option>
-              <option value="es">🇪🇸 Español</option>
-              <option value="fr">🇫🇷 Français</option>
-              <option value="he">🇮🇱 עברית</option>
-              <option value="ar">🇸🇦 العربية</option>
+            <select id="langSelect" onchange="GI.set(this.value)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;font-weight:700;padding:6px 10px;border-radius:10px;cursor:pointer;outline:none;max-width:200px;">
             </select>
+            <script>
+            (function(){
+              const sel = document.getElementById('langSelect');
+              const meta = (window.GI && GI.meta) ? GI.meta : {
+                en:{name:'English',flag:'🇬🇧'},es:{name:'Español',flag:'🇪🇸'},fr:{name:'Français',flag:'🇫🇷'},
+                de:{name:'Deutsch',flag:'🇩🇪'},it:{name:'Italiano',flag:'🇮🇹'},pt:{name:'Português',flag:'🇵🇹'},
+                nl:{name:'Nederlands',flag:'🇳🇱'},pl:{name:'Polski',flag:'🇵🇱'},ru:{name:'Русский',flag:'🇷🇺'},
+                uk:{name:'Українська',flag:'🇺🇦'},sv:{name:'Svenska',flag:'🇸🇪'},da:{name:'Dansk',flag:'🇩🇰'},
+                fi:{name:'Suomi',flag:'🇫🇮'},cs:{name:'Čeština',flag:'🇨🇿'},sk:{name:'Slovenčina',flag:'🇸🇰'},
+                hu:{name:'Magyar',flag:'🇭🇺'},ro:{name:'Română',flag:'🇷🇴'},bg:{name:'Български',flag:'🇧🇬'},
+                hr:{name:'Hrvatski',flag:'🇭🇷'},sl:{name:'Slovenščina',flag:'🇸🇮'},el:{name:'Ελληνικά',flag:'🇬🇷'},
+                et:{name:'Eesti',flag:'🇪🇪'},lv:{name:'Latviešu',flag:'🇱🇻'},lt:{name:'Lietuvių',flag:'🇱🇹'},
+                ga:{name:'Gaeilge',flag:'🇮🇪'},mt:{name:'Malti',flag:'🇲🇹'},
+                he:{name:'עברית',flag:'🇮🇱'},ar:{name:'العربية',flag:'🇸🇦'},
+                zh:{name:'中文',flag:'🇨🇳'},ja:{name:'日本語',flag:'🇯🇵'},ko:{name:'한국어',flag:'🇰🇷'}
+              };
+              const cur = localStorage.getItem('guicks_lang_v1') || 'en';
+              Object.entries(meta).forEach(([code, m]) => {
+                const opt = document.createElement('option');
+                opt.value = code;
+                opt.textContent = m.flag + ' ' + m.name;
+                if (code === cur) opt.selected = true;
+                sel.appendChild(opt);
+              });
+            })();
+            </script>
           </div>
         </div>
       </div>
