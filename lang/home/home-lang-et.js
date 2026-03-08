@@ -66,4 +66,9 @@ confirmClearTitle:"Kustutada kõik andmed?",
 confirmClearMsg:"See kustutab kõik lemmikud, kategooriad, doki paigutuse ja seaded. Ei saa tagasi võtta.",
 confirmClearYes:"Jah, kustuta kõik",
 confirmClearCancel:"Tühista"
+,
+dockEditHint:"Puuduta ikooni eemaldamiseks · Puuduta mujale lõpetamiseks",
+dockEmptyHint:"Hoia rakendust all, et lohistada see doki",
+dockLongPressHint:"Hoia rakendust all, et muuta doki",
+dockAdded:"lisatud doki!"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"Tħassar id-data kollha?",
 confirmClearMsg:"Dan iħassar il-favoriti, il-kategoriji, il-layout tad-dock u s-settings kollha. Ma tistax tirtira.",
 confirmClearYes:"Iva, ħassar kollox",
 confirmClearCancel:"Ikkanċella"
+,
+dockEditHint:"Agħfas ikona biex tneħħiha · Agħfas x'imkien ieħor biex tispiċċa",
+dockEmptyHint:"Żomm app biex tiġbidha fid-dock",
+dockLongPressHint:"Żomm app biex teditja d-dock",
+dockAdded:"miżjud mad-dock!"
 };

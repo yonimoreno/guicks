@@ -66,4 +66,9 @@ confirmClearTitle:"Alle Daten löschen?",
 confirmClearMsg:"Alle Favoriten, Kategorien, Dock-Layout und Einstellungen werden gelöscht. Nicht rückgängig zu machen.",
 confirmClearYes:"Ja, alles löschen",
 confirmClearCancel:"Abbrechen"
+,
+dockEditHint:"Symbol antippen zum Entfernen · Anderswo tippen zum Beenden",
+dockEmptyHint:"App lange drücken zum Ziehen in das Dock",
+dockLongPressHint:"App lange drücken zum Bearbeiten des Docks",
+dockAdded:"zum Dock hinzugefügt!"
 };

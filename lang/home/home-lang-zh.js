@@ -66,4 +66,9 @@ confirmClearTitle:"清除所有数据？",
 confirmClearMsg:"这将删除所有收藏、分类、程序坞布局和设置。无法撤销。",
 confirmClearYes:"是，清除所有",
 confirmClearCancel:"取消"
+,
+dockEditHint:"点击图标移除 · 点击其他地方完成",
+dockEmptyHint:"长按应用以拖动到底栏",
+dockLongPressHint:"长按应用以编辑底栏",
+dockAdded:"已添加到底栏！"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"Tyhjentääkö kaikki tiedot?",
 confirmClearMsg:"Tämä poistaa kaikki suosikit, kategoriat, dock-asettelun ja asetukset. Ei voi peruuttaa.",
 confirmClearYes:"Kyllä, tyhjennä kaikki",
 confirmClearCancel:"Peruuta"
+,
+dockEditHint:"Napauta kuvaketta poistaaksesi · Napauta muualle lopettaaksesi",
+dockEmptyHint:"Pidä sovellusta painettuna vetääksesi sen dockiin",
+dockLongPressHint:"Pidä sovellusta painettuna muokataksesi dockia",
+dockAdded:"lisätty dockiin!"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"Notīrīt visus datus?",
 confirmClearMsg:"Tiks dzēsti visi favorīti, kategorijas, doka izkārtojums un iestatījumi. Nevar atsaukt.",
 confirmClearYes:"Jā, notīrīt visu",
 confirmClearCancel:"Atcelt"
+,
+dockEditHint:"Pieskarieties ikonai noņemšanai · Pieskarieties citur, lai pabeigtu",
+dockEmptyHint:"Turiet lietotni, lai to vilktu doka",
+dockLongPressHint:"Turiet lietotni, lai rediģētu doku",
+dockAdded:"pievienots dokam!"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"모든 데이터를 지우시겠습니까?",
 confirmClearMsg:"모든 즐겨찾기, 카테고리, 독 레이아웃, 설정이 삭제됩니다. 취소할 수 없습니다.",
 confirmClearYes:"예, 모두 지우기",
 confirmClearCancel:"취소"
+,
+dockEditHint:"아이콘을 탭하여 제거 · 다른 곳을 탭하여 완료",
+dockEmptyHint:"앱을 길게 눌러 독으로 드래그",
+dockLongPressHint:"앱을 길게 눌러 독 편집",
+dockAdded:"독에 추가됨!"
 };

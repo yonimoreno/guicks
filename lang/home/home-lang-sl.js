@@ -66,4 +66,9 @@ confirmClearTitle:"Izbrisati vse podatke?",
 confirmClearMsg:"S tem boste izbrisali vse priljubljene, kategorije, postavitev docka in nastavitve. Ne morete razveljaviti.",
 confirmClearYes:"Da, izbriši vse",
 confirmClearCancel:"Prekliči"
+,
+dockEditHint:"Dotaknite se ikone za odstranitev · Dotaknite se drugje za konec",
+dockEmptyHint:"Pridržite aplikacijo za vlečenje v dock",
+dockLongPressHint:"Pridržite aplikacijo za urejanje docka",
+dockAdded:"dodano v dock!"
 };

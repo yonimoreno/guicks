@@ -66,4 +66,9 @@ confirmClearTitle:"Ryd alle data?",
 confirmClearMsg:"Dette sletter alle favoritter, kategorier, dock-layout og indstillinger. Kan ikke fortrydes.",
 confirmClearYes:"Ja, ryd alt",
 confirmClearCancel:"Annuller"
+,
+dockEditHint:"Tryk på et ikon for at fjerne det · Tryk andetsteds for at afslutte",
+dockEmptyHint:"Hold en app nede for at trække den til docken",
+dockLongPressHint:"Hold en app nede for at redigere docken",
+dockAdded:"tilføjet til dock!"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"Alle gegevens wissen?",
 confirmClearMsg:"Dit verwijdert alle favorieten, categorieën, dock-indeling en instellingen. Kan niet ongedaan worden gemaakt.",
 confirmClearYes:"Ja, alles wissen",
 confirmClearCancel:"Annuleren"
+,
+dockEditHint:"Tik op een pictogram om het te verwijderen · Tik ergens anders om te stoppen",
+dockEmptyHint:"Houd een app ingedrukt om naar het dock te slepen",
+dockLongPressHint:"Houd een app ingedrukt om het dock te bewerken",
+dockAdded:"toegevoegd aan dock!"
 };

@@ -66,4 +66,9 @@ confirmClearTitle:"Ștergeți toate datele?",
 confirmClearMsg:"Aceasta va șterge toate favoritele, categoriile, aspectul dock-ului și setările. Nu poate fi anulat.",
 confirmClearYes:"Da, ștergeți tot",
 confirmClearCancel:"Anulați"
+,
+dockEditHint:"Atingeți o pictogramă pentru a o elimina · Atingeți în altă parte pentru a termina",
+dockEmptyHint:"Apăsați lung o aplicație pentru a o trage în dock",
+dockLongPressHint:"Apăsați lung o aplicație pentru a edita dock-ul",
+dockAdded:"adăugat în dock!"
 };

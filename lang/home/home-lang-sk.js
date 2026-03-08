@@ -66,4 +66,9 @@ confirmClearTitle:"Vymazať všetky dáta?",
 confirmClearMsg:"Tým sa odstránia všetky obľúbené, kategórie, rozloženie docku a nastavenia. Nedá sa vrátiť.",
 confirmClearYes:"Áno, vymazať všetko",
 confirmClearCancel:"Zrušiť"
+,
+dockEditHint:"Klepnite na ikonu na odstránenie · Klepnite inde pre ukončenie",
+dockEmptyHint:"Podržte aplikáciu pre pretiahnutie do docku",
+dockLongPressHint:"Podržte aplikáciu pre úpravu docku",
+dockAdded:"pridané do docku!"
 };

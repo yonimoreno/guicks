@@ -66,4 +66,9 @@ confirmClearTitle:"לנקות את כל הנתונים?",
 confirmClearMsg:"פעולה זו תמחק את כל המועדפים, הקטגוריות, פריסת העגן וההגדרות. לא ניתן לבטל.",
 confirmClearYes:"כן, נקה הכל",
 confirmClearCancel:"ביטול"
+,
+dockEditHint:"הקש על אייקון להסרה · הקש במקום אחר לסיום",
+dockEmptyHint:"לחץ לחיצה ארוכה על אפליקציה לגרירה לדוק",
+dockLongPressHint:"לחץ לחיצה ארוכה על אפליקציה לעריכת הדוק",
+dockAdded:"נוסף לדוק!"
 };

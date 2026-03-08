@@ -66,4 +66,9 @@ confirmClearTitle:"Cancellare tutti i dati?",
 confirmClearMsg:"Verranno eliminati favoriti, categorie, layout dock e impostazioni. Irreversibile.",
 confirmClearYes:"Sì, cancella tutto",
 confirmClearCancel:"Annulla"
+,
+dockEditHint:"Tocca un'icona per rimuoverla · Tocca altrove per finire",
+dockEmptyHint:"Tieni premuta un'app per trascinarla nel dock",
+dockLongPressHint:"Tieni premuta un'app per modificare il dock",
+dockAdded:"aggiunta al dock!"
 };

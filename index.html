@@ -299,6 +299,7 @@
       cursor: pointer;
     }
     .dock-editing .icon { animation: wiggle 0.5s ease infinite alternate; }
+    .grid-editing .app.draggable-app:not(.drag-source) .icon { animation: wiggle 0.45s ease infinite alternate; }
     @keyframes wiggle {
       from { transform: rotate(-2deg); }
       to   { transform: rotate(2deg); }
@@ -314,7 +315,27 @@
     }
     .dock-hint.editing { color: rgba(79,142,247,0.8); }
 
-    /* Dragging state on grid apps */
+    /* ── iOS grid edit mode ── */
+    .grid-editing .app.drag-source { opacity: 0 !important; animation: none !important; }
+
+    /* Ghost icon that follows finger */
+    #dragGhost {
+      position: fixed; z-index: 9999; pointer-events: none;
+      display: none; flex-direction: column; align-items: center; gap: 6px;
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: drop-shadow(0 14px 30px rgba(0,0,0,0.65));
+    }
+    #dragGhost .icon {
+      width: 68px; height: 68px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #dragGhost .icon svg { width: 36px; height: 36px; }
+    #dragGhost .ghost-name {
+      font-size: 11px; color: #fff; font-weight: 500;
+      text-shadow: 0 1px 6px rgba(0,0,0,1);
+    }
+
+    /* Old HTML5 dragging state (dock only) */
     .app.dragging { opacity: 0.4; transform: scale(0.9); }
     .app[draggable="true"] { cursor: grab; }
 
@@ -894,7 +915,7 @@
       </div>
 
       <!-- Settings -->
-      <div class="app" onclick="openSettings()">
+      <div class="app settings-only" onclick="openSettings()">
         <div class="icon" style="background: linear-gradient(145deg, #3a3a4a, #6e6e80);">
           <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         </div>
@@ -905,6 +926,12 @@
   </div>
 
   <!-- Dock -->
+  <!-- iOS drag ghost -->
+  <div id="dragGhost">
+    <div class="icon" id="ghostIcon"></div>
+    <span class="ghost-name" id="ghostName"></span>
+  </div>
+
   <div class="dock-wrap">
     <div class="dock-hint" id="dockHint">Hold an app to drag it into the dock</div>
     <div class="dock" id="dock">
@@ -1175,13 +1202,13 @@
   function updateDockHint() {
     const hint = document.getElementById('dockHint');
     if (dockEditing) {
-      hint.textContent = 'Tap an icon to remove it · Tap elsewhere to finish';
+      hint.textContent = GI.get('dockEditHint');
       hint.classList.add('editing');
     } else if (dockItems.every(x => x === null)) {
-      hint.textContent = 'Long press an app to drag it into the dock';
+      hint.textContent = GI.get('dockEmptyHint');
       hint.classList.remove('editing');
     } else {
-      hint.textContent = 'Long press an app to edit dock';
+      hint.textContent = GI.get('dockLongPressHint');
       hint.classList.remove('editing');
     }
   }
@@ -1219,16 +1246,188 @@
     }
   });
 
-  // Drag from grid
+  // ── iOS-style grid reorder ──────────────────────────────────────────────
+  const GRID_ORDER_KEY = 'guicks_grid_order_v1';
+  let gridEditing = false;
+  let gridDragSrc = null;       // the .app being dragged
+  let gridDragOver = null;      // the .app being hovered
+  let gridLongPressTimer = null;
+  let gridPointerMoved = false;
+  const ghost = document.getElementById('dragGhost');
+
+  // Save/load grid order (array of data-tool-url values, null for settings)
+  function saveGridOrder() {
+    const order = [...document.querySelectorAll('#mainGrid .app')]
+      .map(a => a.dataset.toolUrl || '__settings__');
+    localStorage.setItem(GRID_ORDER_KEY, JSON.stringify(order));
+  }
+
+  function loadGridOrder() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(GRID_ORDER_KEY));
+      if (!saved || !Array.isArray(saved)) return;
+      const grid = document.getElementById('mainGrid');
+      const apps = [...grid.querySelectorAll('.app')];
+      const map = {};
+      apps.forEach(a => { map[a.dataset.toolUrl || '__settings__'] = a; });
+      saved.forEach(url => {
+        const el = map[url];
+        if (el) grid.appendChild(el);
+      });
+    } catch(e) {}
+  }
+
+  function enterGridEdit() {
+    if (gridEditing) return;
+    gridEditing = true;
+    document.getElementById('mainGrid').classList.add('grid-editing');
+    document.querySelectorAll('#mainGrid .app:not(.settings-only)').forEach(a => {
+      a.classList.add('draggable-app');
+    });
+    // Vibrate on mobile
+    if (navigator.vibrate) navigator.vibrate(30);
+  }
+
+  function exitGridEdit() {
+    if (!gridEditing) return;
+    gridEditing = false;
+    document.getElementById('mainGrid').classList.remove('grid-editing');
+    document.querySelectorAll('#mainGrid .app').forEach(a => {
+      a.classList.remove('draggable-app', 'drag-source', 'drag-over-target');
+    });
+    ghost.style.display = 'none';
+    gridDragSrc = null;
+    gridDragOver = null;
+  }
+
+  // Start drag
+  function gridStartDrag(app, clientX, clientY) {
+    gridDragSrc = app;
+    app.classList.add('drag-source');
+    draggingTool = app.dataset.toolName || app.querySelector('.app-name')?.textContent?.trim();
+    const iconEl = app.querySelector('.icon');
+    document.getElementById('ghostIcon').innerHTML = iconEl.innerHTML;
+    document.getElementById('ghostIcon').style.cssText = iconEl.style.cssText;
+    document.getElementById('ghostName').textContent = app.querySelector('.app-name')?.textContent || '';
+    ghost.style.display = 'flex';
+    ghost.style.left = clientX + 'px';
+    ghost.style.top  = clientY + 'px';
+  }
+
+  // Move ghost
+  function gridMoveDrag(clientX, clientY) {
+    ghost.style.left = clientX + 'px';
+    ghost.style.top  = clientY + 'px';
+
+    // Find which app slot we're over
+    ghost.style.display = 'none'; // hide briefly to hit-test
+    const el = document.elementFromPoint(clientX, clientY);
+    ghost.style.display = 'flex';
+
+    const target = el?.closest('#mainGrid .app');
+    if (target && target !== gridDragSrc) {
+      if (target !== gridDragOver) {
+        if (gridDragOver) gridDragOver.classList.remove('drag-over-target');
+        gridDragOver = target;
+        target.classList.add('drag-over-target');
+
+        // Swap in DOM (live reorder like iOS)
+        const grid = document.getElementById('mainGrid');
+        const apps = [...grid.querySelectorAll('.app')];
+        const srcIdx = apps.indexOf(gridDragSrc);
+        const tgtIdx = apps.indexOf(target);
+        if (srcIdx < tgtIdx) {
+          grid.insertBefore(gridDragSrc, target.nextSibling);
+        } else {
+          grid.insertBefore(gridDragSrc, target);
+        }
+      }
+    } else if (!target && gridDragOver) {
+      gridDragOver.classList.remove('drag-over-target');
+      gridDragOver = null;
+    }
+  }
+
+  // End drag
+  function gridEndDrag() {
+    ghost.style.display = 'none';
+    if (gridDragSrc) gridDragSrc.classList.remove('drag-source');
+    if (gridDragOver) gridDragOver.classList.remove('drag-over-target');
+    gridDragSrc = null;
+    gridDragOver = null;
+    draggingTool = null;
+    saveGridOrder();
+  }
+
+  // ── Pointer events on grid ──────────────────────────────────────────────
+  document.getElementById('mainGrid').addEventListener('pointerdown', (e) => {
+    const app = e.target.closest('#mainGrid .app');
+    if (!app || app.classList.contains('settings-only')) return;
+
+    gridPointerMoved = false;
+
+    if (gridEditing) {
+      // Already in edit mode — start drag immediately on press
+      e.preventDefault();
+      app.setPointerCapture(e.pointerId);
+      gridStartDrag(app, e.clientX, e.clientY);
+      return;
+    }
+
+    // Long press to enter edit mode
+    gridLongPressTimer = setTimeout(() => {
+      enterGridEdit();
+      gridStartDrag(app, e.clientX, e.clientY);
+      app.setPointerCapture(e.pointerId);
+    }, 500);
+  }, { passive: false });
+
+  document.getElementById('mainGrid').addEventListener('pointermove', (e) => {
+    if (Math.abs(e.movementX) > 3 || Math.abs(e.movementY) > 3) {
+      gridPointerMoved = true;
+      clearTimeout(gridLongPressTimer);
+    }
+    if (gridDragSrc) {
+      e.preventDefault();
+      gridMoveDrag(e.clientX, e.clientY);
+    }
+  }, { passive: false });
+
+  document.getElementById('mainGrid').addEventListener('pointerup', (e) => {
+    clearTimeout(gridLongPressTimer);
+    if (gridDragSrc) gridEndDrag();
+  });
+
+  document.getElementById('mainGrid').addEventListener('pointercancel', () => {
+    clearTimeout(gridLongPressTimer);
+    if (gridDragSrc) gridEndDrag();
+  });
+
+  // Tap outside grid to exit edit mode
+  document.addEventListener('pointerdown', (e) => {
+    if (gridEditing &&
+        !document.getElementById('mainGrid').contains(e.target) &&
+        !ghost.contains(e.target)) {
+      exitGridEdit();
+    }
+  });
+
+  // Block click after a drag so the app doesn't open
+  document.getElementById('mainGrid').addEventListener('click', (e) => {
+    if (gridPointerMoved && gridEditing) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }, true);
+
+  // Also support HTML5 drag from grid → dock (desktop browsers)
   document.getElementById('mainGrid').addEventListener('dragstart', (e) => {
     const app = e.target.closest('.app');
     if (!app) return;
-    const name = app.querySelector('.app-name')?.textContent?.trim();
-    draggingTool = name;
-    app.classList.add('dragging');
+    draggingTool = app.dataset.toolName || app.querySelector('.app-name')?.textContent?.trim();
     e.dataTransfer.effectAllowed = 'copy';
-    e.dataTransfer.setData('text/plain', name);
-    enterDockEdit();
+    e.dataTransfer.setData('text/plain', draggingTool);
+    if (!gridEditing) enterDockEdit();
   });
 
   document.getElementById('mainGrid').addEventListener('dragend', (e) => {
@@ -1237,19 +1436,8 @@
     draggingTool = null;
   });
 
-  // Also support long-press on grid apps (mobile)
-  document.querySelectorAll('.app:not(.coming-soon)').forEach(app => {
-    let pressTimer;
-    app.addEventListener('pointerdown', () => {
-      pressTimer = setTimeout(() => {
-        enterDockEdit();
-        app.setAttribute('draggable', 'true');
-        showToast(GI.get('settingsDragged'));
-      }, 600);
-    });
-    app.addEventListener('pointerup', () => clearTimeout(pressTimer));
-    app.addEventListener('pointermove', () => clearTimeout(pressTimer));
-  });
+  // Load saved order on startup
+  loadGridOrder();
 
   function dockDragOver(e, slotIndex) {
     e.preventDefault();
@@ -1279,7 +1467,7 @@
     saveDock();
     renderDock();
     exitDockEdit();
-    showToast(`${name} added to dock!`);
+    showToast(`${name} ${GI.get('dockAdded')}`);
   }
 
   // ── Settings ──

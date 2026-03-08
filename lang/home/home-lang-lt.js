@@ -66,4 +66,9 @@ confirmClearTitle:"Išvalyti visus duomenis?",
 confirmClearMsg:"Bus ištrinti visi mėgstami, kategorijos, doko išdėstymas ir nustatymai. Negalima atšaukti.",
 confirmClearYes:"Taip, išvalyti viską",
 confirmClearCancel:"Atšaukti"
+,
+dockEditHint:"Palieskite piktogramą norėdami pašalinti · Palieskite kitur norėdami baigti",
+dockEmptyHint:"Laikykite programą, kad ją vilktumėte į doką",
+dockLongPressHint:"Laikykite programą, kad redaguotumėte doką",
+dockAdded:"pridėta į doką!"
 };

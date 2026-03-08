@@ -66,4 +66,9 @@ confirmClearTitle:"Clear All Data?",
 confirmClearMsg:"This will delete all favorites, categories, dock layout and settings. Cannot be undone.",
 confirmClearYes:"Yes, Clear All",
 confirmClearCancel:"Cancel"
+,
+dockEditHint:"Tap an icon to remove it · Tap elsewhere to finish",
+dockEmptyHint:"Long press an app to drag it into the dock",
+dockLongPressHint:"Long press an app to edit dock",
+dockAdded:"added to dock!"
 };

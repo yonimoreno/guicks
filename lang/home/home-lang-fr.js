@@ -66,4 +66,9 @@ confirmClearTitle:"Effacer toutes les données ?",
 confirmClearMsg:"Cela supprimera tous les favoris, catégories, dock et paramètres. Irréversible.",
 confirmClearYes:"Oui, tout effacer",
 confirmClearCancel:"Annuler"
+,
+dockEditHint:"Appuyez sur une icône pour la retirer · Appuyez ailleurs pour terminer",
+dockEmptyHint:"Appui long sur une app pour la glisser dans le dock",
+dockLongPressHint:"Appui long sur une app pour modifier le dock",
+dockAdded:"ajoutée au dock !"
 };

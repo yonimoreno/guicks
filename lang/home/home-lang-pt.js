@@ -66,4 +66,9 @@ confirmClearTitle:"Limpar todos os dados?",
 confirmClearMsg:"Isso excluirá todos os favoritos, categorias, layout do dock e configurações. Não pode ser desfeito.",
 confirmClearYes:"Sim, limpar tudo",
 confirmClearCancel:"Cancelar"
+,
+dockEditHint:"Toque num ícone para removê-lo · Toque fora para terminar",
+dockEmptyHint:"Pressione um app para arrastá-lo para o dock",
+dockLongPressHint:"Pressione um app para editar o dock",
+dockAdded:"adicionado ao dock!"
 };

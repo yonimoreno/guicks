@@ -66,4 +66,9 @@ confirmClearTitle:"すべてのデータを削除しますか？",
 confirmClearMsg:"すべてのお気に入り、カテゴリ、ドックレイアウト、設定が削除されます。元に戻せません。",
 confirmClearYes:"はい、すべて削除",
 confirmClearCancel:"キャンセル"
+,
+dockEditHint:"アイコンをタップして削除 · 他の場所をタップして終了",
+dockEmptyHint:"アプリを長押しでドックにドラッグ",
+dockLongPressHint:"アプリを長押しでドックを編集",
+dockAdded:"ドックに追加しました！"
 };

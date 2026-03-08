@@ -66,4 +66,9 @@ confirmClearTitle:"Törli az összes adatot?",
 confirmClearMsg:"Ez törli az összes kedvencet, kategóriát, dock-elrendezést és beállítást. Nem vonható vissza.",
 confirmClearYes:"Igen, töröljön mindent",
 confirmClearCancel:"Mégse"
+,
+dockEditHint:"Érintsen meg egy ikont az eltávolításhoz · Máshol érintsen a befejezéshez",
+dockEmptyHint:"Tartsa lenyomva az appot a dockba húzáshoz",
+dockLongPressHint:"Tartsa lenyomva az appot a dock szerkesztéséhez",
+dockAdded:"hozzáadva a dockhoz!"
 };

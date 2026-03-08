@@ -66,4 +66,9 @@ confirmClearTitle:"Glan gach sonraí?",
 confirmClearMsg:"Scriosfaidh sé seo gach ceann, catagóirí, leagan amach dock agus socruithe. Ní féidir é a chur ar ceal.",
 confirmClearYes:"Sea, glan gach rud",
 confirmClearCancel:"Cealaigh"
+,
+dockEditHint:"Buail cnaipe chun é a bhaint · Buail áit eile chun críochnú",
+dockEmptyHint:"Brúigh fada ar aip chun í a tharraingt isteach sa dock",
+dockLongPressHint:"Brúigh fada ar aip chun an dock a chur in eagar",
+dockAdded:"curtha leis an dock!"
 };

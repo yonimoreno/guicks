@@ -66,4 +66,9 @@ confirmClearTitle:"Rensa all data?",
 confirmClearMsg:"Detta tar bort alla favoriter, kategorier, docklayout och inställningar. Kan inte ångras.",
 confirmClearYes:"Ja, rensa allt",
 confirmClearCancel:"Avbryt"
+,
+dockEditHint:"Tryck på en ikon för att ta bort · Tryck någon annanstans för att avsluta",
+dockEmptyHint:"Håll in en app för att dra den till dockan",
+dockLongPressHint:"Håll in en app för att redigera dockan",
+dockAdded:"tillagd i dockan!"
 };

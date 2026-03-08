@@ -66,4 +66,9 @@ confirmClearTitle:"¿Borrar todos los datos?",
 confirmClearMsg:"Se eliminarán todos los favoritos, categorías, dock y ajustes. No se puede deshacer.",
 confirmClearYes:"Sí, borrar todo",
 confirmClearCancel:"Cancelar"
+,
+dockEditHint:"Toca un icono para quitarlo · Toca fuera para terminar",
+dockEmptyHint:"Mantén pulsada una app para arrastrarla al dock",
+dockLongPressHint:"Mantén pulsada una app para editar el dock",
+dockAdded:"añadida al dock!"
 };

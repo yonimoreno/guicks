@@ -66,4 +66,9 @@ confirmClearTitle:"Obrisati sve podatke?",
 confirmClearMsg:"Ovo će izbrisati sve favorite, kategorije, raspored docka i postavke. Ne može se poništiti.",
 confirmClearYes:"Da, obriši sve",
 confirmClearCancel:"Odustani"
+,
+dockEditHint:"Dodirnite ikonu za uklanjanje · Dodirnite drugdje za završetak",
+dockEmptyHint:"Dugo pritisnite aplikaciju za povlačenje u dock",
+dockLongPressHint:"Dugo pritisnite aplikaciju za uređivanje docka",
+dockAdded:"dodano u dock!"
 };

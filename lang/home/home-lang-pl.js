@@ -66,4 +66,9 @@ confirmClearTitle:"Wyczyścić wszystkie dane?",
 confirmClearMsg:"Spowoduje to usunięcie wszystkich ulubionych, kategorii, układu docka i ustawień. Nie można cofnąć.",
 confirmClearYes:"Tak, wyczyść wszystko",
 confirmClearCancel:"Anuluj"
+,
+dockEditHint:"Stuknij ikonę, aby ją usunąć · Stuknij poza, aby zakończyć",
+dockEmptyHint:"Przytrzymaj aplikację, aby przeciągnąć ją do docka",
+dockLongPressHint:"Przytrzymaj aplikację, aby edytować dock",
+dockAdded:"dodano do docka!"
 };
