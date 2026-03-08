@@ -125,8 +125,12 @@ window.GI = {
     const merged={};
 
     // ── Per-app merged file: lang/slug/XX.js ──────────────────────
+    console.log('[GI] load slug='+slug+' code='+code+' base='+base);
     if(slug){
-      const appOk=await this._loadScript(base+'lang/'+slug+'/'+code+'.js');
+      const url=base+'lang/'+slug+'/'+code+'.js';
+      console.log('[GI] loading '+url);
+      const appOk=await this._loadScript(url);
+      console.log('[GI] appOk='+appOk+' chunk='+(!!window.__GI_CHUNK__));
       if(appOk){ this._flush(merged); window.__GI_CACHE__[cacheKey]=merged; this._t=merged; if(cb)cb(); return; }
       // Fallback to English if requested language file missing
       if(code!=='en'){
