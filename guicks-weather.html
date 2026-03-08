@@ -324,7 +324,7 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
 
   <!-- Unit toggle -->
   <div class="unit-row">
-    <span class="unit-label">Units</span>
+    <span class="unit-label" data-i18n="weatherUnits">Units</span>
     <div class="unit-toggle">
       <button class="unit-btn active" id="unitC" onclick="setUnit('C')">°C</button>
       <button class="unit-btn" id="unitF" onclick="setUnit('F')">°F</button>
@@ -344,21 +344,21 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
     <button class="gps-btn" onclick="useLocation()">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/></svg>
       <div>
-        <div>Use my location</div>
-        <div class="gps-sub">Detect weather at your current position</div>
+        <div data-i18n="weatherUseLocation">Use my location</div>
+        <div class="gps-sub" data-i18n="weatherUseLocationSub">Detect weather at your current position</div>
       </div>
     </button>
   </div>
 
   <!-- Hourly -->
   <div class="section-pad" id="hourlySection" style="display:none">
-    <div class="section-title">Hourly forecast</div>
+    <div class="section-title" data-i18n="weatherHourly">Hourly forecast</div>
     <div class="hourly-scroll"><div class="hourly-track" id="hourlyTrack"></div></div>
   </div>
 
   <!-- 7-day -->
   <div class="section-pad" id="dailySection" style="display:none">
-    <div class="section-title">7-day forecast</div>
+    <div class="section-title" data-i18n="weatherDaily">7-day forecast</div>
     <div class="forecast-list" id="dailyList"></div>
   </div>
 
@@ -526,11 +526,7 @@ async function loadWeather(loc) {
       <div class="hero-temp">${temp}<sup>${unitSuffix()}</sup></div>
       <div class="hero-desc">${wx.icon} ${wx.desc}</div>
       <div class="hero-stats">
-        <div class="hero-stat"><span class="hero-stat-icon">🌡️</span><span class="hero-stat-val">${feel}°</span><span class="hero-stat-label">Feels like</span></div>
-        <div class="hero-stat"><span class="hero-stat-icon">💧</span><span class="hero-stat-val">${c.relative_humidity_2m}%</span><span class="hero-stat-label">Humidity</span></div>
-        <div class="hero-stat"><span class="hero-stat-icon">💨</span><span class="hero-stat-val">${Math.round(c.wind_speed_10m)} km/h</span><span class="hero-stat-label">Wind</span></div>
-        <div class="hero-stat"><span class="hero-stat-icon">🌂</span><span class="hero-stat-val">${c.precipitation_probability ?? 0}%</span><span class="hero-stat-label">Rain</span></div>
-      </div>`;
+        <div class="hero-stat"><span class="hero-stat-icon">🌡️</span><span class="hero-stat-val">${feel}°</span><span class="hero-stat-label">${GI.get('weatherFeelsLike')}</span></div>\n        <div class="hero-stat"><span class="hero-stat-icon">💧</span><span class="hero-stat-val">${c.relative_humidity_2m}%</span><span class="hero-stat-label">${GI.get('weatherHumidity')}</span></div>\n        <div class="hero-stat"><span class="hero-stat-icon">💨</span><span class="hero-stat-val">${Math.round(c.wind_speed_10m)} km/h</span><span class="hero-stat-label">${GI.get('weatherWind')}</span></div>\n        <div class="hero-stat"><span class="hero-stat-icon">🌂</span><span class="hero-stat-val">${c.precipitation_probability ?? 0}%</span><span class="hero-stat-label">${GI.get('weatherRain')}</span></div>\n      </div>`;
 
     // Hourly (next 24h)
     const now = new Date();
@@ -540,7 +536,7 @@ async function loadWeather(loc) {
       const isNow = i === data.hourly.time.findIndex(t2 => new Date(t2) >= now);
       const hwx = getWx(data.hourly.weather_code[i]);
       return `<div class="hour-card${isNow?' now':''}">
-        <div class="hour-time">${isNow ? 'Now' : dt.getHours().toString().padStart(2,'0')+':00'}</div>
+        <div class="hour-time">${isNow ? GI.get('weatherNow') : dt.getHours().toString().padStart(2,'0')+':00'}</div>
         <div class="hour-icon">${hwx.icon}</div>
         <div class="hour-temp">${toUnit(data.hourly.temperature_2m[i])}°</div>
         <div class="hour-rain">${data.hourly.precipitation_probability[i]}%</div>
@@ -550,13 +546,12 @@ async function loadWeather(loc) {
     document.getElementById('hourlySection').style.display = 'block';
 
     // Daily
-    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const dailyHtml = data.daily.time.map((t, i) => {
       const dt = new Date(t + 'T12:00:00');
       const dwx = getWx(data.daily.weather_code[i]);
       const rain = data.daily.precipitation_probability_max[i] || 0;
       return `<div class="day-card">
-        <div class="day-name">${i===0?'Today':days[dt.getDay()]}</div>
+        <div class="day-name">${i===0?GI.get('weatherToday'):GI.get('days')[dt.getDay()]}</div>
         <div class="day-icon">${dwx.icon}</div>
         <div class="day-rain-bar"><div class="day-rain-fill" style="width:${rain}%"></div></div>
         <div class="day-desc">${dwx.desc}</div>
@@ -575,7 +570,7 @@ async function loadWeather(loc) {
     loc._wxDesc = wx.desc;
 
   } catch(e) {
-    document.getElementById('heroContent').innerHTML = `<div style="padding:24px;color:white;text-align:center;"><div style="font-size:32px;margin-bottom:8px">⚠️</div><div style="font-weight:700">Failed to load weather</div><div style="opacity:0.7;font-size:13px;margin-top:4px">Check your connection and try again</div></div>`;
+    document.getElementById('heroContent').innerHTML = `<div style="padding:24px;color:white;text-align:center;"><div style="font-size:32px;margin-bottom:8px">⚠️</div><div style="font-weight:700">${GI.get('weatherLoadFailed')}</div><div style="opacity:0.7;font-size:13px;margin-top:4px">${GI.get('weatherLoadFailedSub')}</div></div>`;
   }
 }
 
@@ -583,19 +578,19 @@ async function loadWeather(loc) {
 async function renderSavedLocations() {
   const grid = document.getElementById('locationsGrid');
   if (!savedLocations.length) {
-    grid.innerHTML = `<div class="add-location-btn" onclick="document.getElementById('searchInput').focus()"><div class="plus">+</div><div>Add a location</div></div>`;
+    grid.innerHTML = `<div class="add-location-btn" onclick="document.getElementById('searchInput').focus()"><div class="plus">+</div><div>${GI.get('weatherAddLocationFirst')}</div></div>`;
     return;
   }
 
   grid.innerHTML = savedLocations.map((loc, i) => `
     <div class="loc-card" onclick="loadWeather(savedLocations[${i}])">
-      <button class="loc-card-del" onclick="event.stopPropagation();removeLocation(${i})" title="Remove">✕</button>
+      <button class="loc-card-del" onclick="event.stopPropagation();removeLocation(${i})" title="${GI.get('weatherRemoveTitle')}">✕</button>
       <div class="loc-card-name">${esc(loc.name)}</div>
       <div class="loc-card-country">${esc(loc.country)}</div>
       <div class="loc-card-temp">${loc._temp != null ? loc._temp + (unit==='F'?'°F':'°C') : '—'}</div>
-      <div class="loc-card-desc">${loc._wxIcon||'🌤️'} ${esc(loc._wxDesc||'Loading…')}</div>
+      <div class="loc-card-desc">${loc._wxIcon||'🌤️'} ${esc(loc._wxDesc||GI.get('weatherLoading'))}</div>
     </div>`).join('') +
-    `<div class="add-location-btn" onclick="document.getElementById('searchInput').focus()"><div class="plus">+</div><div>Add location</div></div>`;
+    `<div class="add-location-btn" onclick="document.getElementById('searchInput').focus()"><div class="plus">+</div><div>${GI.get('weatherAddLocation')}</div></div>`;
 
   // Refresh temps in background
   savedLocations.forEach(async (loc, i) => {
@@ -614,12 +609,12 @@ async function renderSavedLocations() {
 
 function addLocation(loc) {
   if (savedLocations.find(l => l.lat === loc.lat && l.lon === loc.lon)) {
-    showToast(`${loc.name} already saved`); return;
+    showToast(GI.get('weatherAlreadySaved').replace('{city}', loc.name)); return;
   }
   savedLocations.push(loc);
   saveLocations();
   renderSavedLocations();
-  showToast(`📍 ${loc.name} saved!`);
+  showToast('📍 ' + GI.get('weatherSaved').replace('{city}', loc.name));
 }
 
 function removeLocation(i) {
@@ -627,7 +622,7 @@ function removeLocation(i) {
   savedLocations.splice(i, 1);
   saveLocations();
   renderSavedLocations();
-  showToast(`Removed ${name}`);
+  showToast(GI.get('weatherRemoved').replace('{city}', name));
 }
 
 // ── Search ──
@@ -636,7 +631,7 @@ function onSearch(val) {
   document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
   clearTimeout(searchTimer);
   if (!val.trim()) { document.getElementById('searchResults').classList.remove('open'); return; }
-  document.getElementById('searchResults').innerHTML = '<div class="search-msg">Searching…</div>';
+  document.getElementById('searchResults').innerHTML = '<div class="search-msg">' + GI.get('weatherSearching') + '</div>';
   document.getElementById('searchResults').classList.add('open');
   searchTimer = setTimeout(() => doSearch(val), 400);
 }
@@ -646,7 +641,7 @@ async function doSearch(q) {
     const data = await fetchGeocode(q);
     const results = data.results || [];
     if (!results.length) {
-      document.getElementById('searchResults').innerHTML = '<div class="search-msg">No cities found</div>';
+      document.getElementById('searchResults').innerHTML = '<div class="search-msg">' + GI.get('weatherNoCities') + '</div>';
       return;
     }
     document.getElementById('searchResults').innerHTML = results.map((r, i) => {
@@ -663,7 +658,7 @@ async function doSearch(q) {
     // Store results for selection
     window._searchResults = results;
   } catch {
-    document.getElementById('searchResults').innerHTML = '<div class="search-msg">Search failed. Try again.</div>';
+    document.getElementById('searchResults').innerHTML = '<div class="search-msg">' + GI.get('weatherSearchFailed') + '</div>';
   }
 }
 
@@ -696,8 +691,8 @@ document.addEventListener('click', e => {
 
 // ── GPS location ──
 function useLocation() {
-  if (!navigator.geolocation) { showToast('Geolocation not supported'); return; }
-  showToast('📍 Detecting location…');
+  if (!navigator.geolocation) { showToast(GI.get('weatherGeoUnsupported')); return; }
+  showToast('📍 ' + GI.get('weatherDetecting'));
   navigator.geolocation.getCurrentPosition(async pos => {
     const lat = pos.coords.latitude.toFixed(4);
     const lon = pos.coords.longitude.toFixed(4);
@@ -714,7 +709,7 @@ function useLocation() {
       const loc = { name: 'My Location', country: '', lat: parseFloat(lat), lon: parseFloat(lon) };
       loadWeather(loc);
     }
-  }, () => showToast('Location access denied'));
+  }, () => showToast(GI.get('weatherAccessDenied')));
 }
 
 // ── Escape HTML ──
@@ -732,7 +727,7 @@ if (savedLocations.length > 0) {
 } else {
   // First visit — request location permission immediately
   if (navigator.geolocation) {
-    showToast('📍 Detecting your location…');
+    showToast('📍 ' + GI.get('weatherDetectingYour'));
     navigator.geolocation.getCurrentPosition(
       async pos => {
         const lat = pos.coords.latitude.toFixed(4);
@@ -762,7 +757,7 @@ if (savedLocations.length > 0) {
 }
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); });});
 </script>
 </body>
 </html>

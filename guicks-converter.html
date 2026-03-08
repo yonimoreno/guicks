@@ -333,8 +333,8 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
         <path d="M17 14l3 3-3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-    <h1>Unit Converter</h1>
-    <p>Length, weight, temperature, area & more</p>
+    <h1 data-i18n="convTitle">Unit Converter</h1>
+    <p data-i18n="convSub">Length, weight, temperature, area & more</p>
   </div>
 
   <!-- Category tabs -->
@@ -345,7 +345,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   <!-- Main converter -->
   <div class="conv-card">
     <div class="unit-block">
-      <div class="unit-label">From</div>
+      <div class="unit-label" data-i18n="convFrom">From</div>
       <div class="unit-row">
         <select class="unit-select" id="fromUnit" onchange="convert()"></select>
         <input class="unit-input" id="fromVal" type="number" placeholder="0" oninput="convert()" />
@@ -353,13 +353,13 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     </div>
 
     <div class="swap-wrap">
-      <button class="swap-btn" id="swapBtn" onclick="swapUnits()" title="Swap">
+      <button class="swap-btn" id="swapBtn" onclick="swapUnits()" data-i18n-title="convSwap" title="Swap">
         <svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
       </button>
     </div>
 
     <div class="unit-block">
-      <div class="unit-label">To</div>
+      <div class="unit-label" data-i18n="convTo">To</div>
       <div class="unit-row">
         <select class="unit-select" id="toUnit" onchange="convert()"></select>
         <input class="unit-input" id="toVal" type="number" placeholder="—" readonly />
@@ -369,13 +369,13 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
 
   <!-- Quick presets -->
   <div class="presets-card" id="presetsCard">
-    <div class="presets-label">Quick values</div>
+    <div class="presets-label" data-i18n="convQuickValues">Quick values</div>
     <div class="presets-wrap" id="presetsWrap"></div>
   </div>
 
   <!-- All units reference -->
   <div class="all-units-card" id="allUnitsCard">
-    <div class="all-units-header" id="allUnitsHeader">All units</div>
+    <div class="all-units-header" id="allUnitsHeader" data-i18n="convAllUnits">All units</div>
     <div class="all-units-grid" id="allUnitsGrid"></div>
   </div>
 
@@ -689,7 +689,7 @@ function setPreset(val) {
 function renderAllUnits(baseValue, activeFromId) {
   const header = document.getElementById('allUnitsHeader');
   const grid   = document.getElementById('allUnitsGrid');
-  header.textContent = `All ${activeCat.label} Units`;
+  header.textContent = `${GI.get('convAllUnits')} — ${activeCat.label}`;
 
   if (baseValue === null || isNaN(baseValue)) {
     grid.innerHTML = activeCat.units.map(u => `
@@ -714,7 +714,7 @@ function renderAllUnits(baseValue, activeFromId) {
 function setToUnit(id) {
   document.getElementById('toUnit').value = id;
   convert();
-  showToast(`Converted to ${activeCat.units.find(u => u.id === id)?.label}`);
+  showToast(`${GI.get('convConverted')} ${activeCat.units.find(u => u.id === id)?.label}`);
 }
 
 // ── Init ──
@@ -727,7 +727,7 @@ renderAllUnits(null);
 document.getElementById('fromUnit').addEventListener('change', renderPresets);
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); renderAllUnits(null); });});
 </script>
 </body>
 </html>

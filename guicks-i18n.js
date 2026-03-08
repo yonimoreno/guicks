@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════
    guicks-i18n.js  — Lazy language loader for Guicks
-   Language files live in ./lang/guicks-lang-XX.js
+   Language files live in ./lang/APPSLUG/XX.js (merged core + app keys)
    Each file sets window.__GI_LANG__ = { ... }
 ═══════════════════════════════════════════════════════ */
 const LANG_KEY = 'guicks_lang_v1';
@@ -71,6 +71,10 @@ window.GI = {
       const v=this.get(el.getAttribute('data-i18n-ph'));
       if(v&&v!==el.getAttribute('data-i18n-ph')) el.placeholder=v;
     });
+    document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+      const v=this.get(el.getAttribute('data-i18n-title'));
+      if(v&&v!==el.getAttribute('data-i18n-title')) el.title=v;
+    });
   },
 
   _applyDir(){
@@ -84,30 +88,53 @@ window.GI = {
     return s?s.src.replace('guicks-i18n.js',''):'./';
   },
 
-  load(cb){
+  // Detect app slug from page URL: "guicks-clock.html" → "clock", "index.html" → "home"
+  _appSlug(){
+    if(/index\.html$|\/\s*$/.test(location.pathname)) return 'home';
+    const m=location.pathname.match(/guicks-([a-z]+)\.html/);
+    return m?m[1]:null;
+  },
+
+  // Load a script, returns a Promise<boolean>
+  _loadScript(src){
+    return new Promise(resolve=>{
+      const s=document.createElement('script');
+      s.src=src;
+      s.onload=()=>resolve(true);
+      s.onerror=()=>resolve(false);
+      document.head.appendChild(s);
+    });
+  },
+
+  // Pull window.__GI_CHUNK__ into target object
+  _flush(obj){
+    if(window.__GI_CHUNK__){ Object.assign(obj,window.__GI_CHUNK__); window.__GI_CHUNK__=null; }
+  },
+
+  async load(cb){
     const code=this.lang();
-    if(window.__GI_CACHE__[code]){
-      this._t=window.__GI_CACHE__[code]; if(cb)cb(); return;
+    const base=this._base();
+    const slug=this._appSlug();
+    const cacheKey=code+(slug?':'+slug:'');
+
+    // Return from cache if available
+    if(window.__GI_CACHE__[cacheKey]){
+      this._t=window.__GI_CACHE__[cacheKey]; if(cb)cb(); return;
     }
-    const s=document.createElement('script');
-    s.src=this._base()+'lang/guicks-lang-'+code+'.js';
-    s.onload=()=>{
-      if(window.__GI_LANG__){
-        window.__GI_CACHE__[code]=window.__GI_LANG__;
-        this._t=window.__GI_LANG__;
-        window.__GI_LANG__=null;
-      }
-      if(cb)cb();
-    };
-    s.onerror=()=>{
+
+    const merged={};
+
+    // ── Per-app merged file: lang/slug/XX.js ──────────────────────
+    if(slug){
+      const appOk=await this._loadScript(base+'lang/'+slug+'/'+code+'.js');
+      if(appOk){ this._flush(merged); window.__GI_CACHE__[cacheKey]=merged; this._t=merged; if(cb)cb(); return; }
+      // Fallback to English if requested language file missing
       if(code!=='en'){
-        const fb=document.createElement('script');
-        fb.src=this._base()+'lang/guicks-lang-en.js';
-        fb.onload=()=>{ if(window.__GI_LANG__){this._t=window.__GI_LANG__;window.__GI_LANG__=null;} if(cb)cb(); };
-        document.head.appendChild(fb);
-      } else if(cb)cb();
-    };
-    document.head.appendChild(s);
+        const enOk=await this._loadScript(base+'lang/'+slug+'/en.js');
+        if(enOk){ this._flush(merged); window.__GI_CACHE__[cacheKey]=merged; this._t=merged; if(cb)cb(); return; }
+      }
+    }
+    if(cb)cb();
   },
 
   init(extraFn){

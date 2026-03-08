@@ -340,8 +340,8 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
         <path d="M12 6v1.5M12 16.5V18M9.5 9.5C9.5 8.4 10.6 7.5 12 7.5s2.5.9 2.5 2c0 1-.7 1.6-1.5 2l-1.5.8c-.8.4-1.5 1-1.5 2 0 1.1 1.1 2 2.5 2s2.5-.9 2.5-2" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
     </div>
-    <h1>Currency Converter</h1>
-    <p>Live exchange rates for 170+ currencies</p>
+    <h1 data-i18n="currTitle">Currency Converter</h1>
+    <p data-i18n="currSub">Live exchange rates for 170+ currencies</p>
   </div>
 
   <!-- Step 1: Amount -->
@@ -349,7 +349,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <div class="section-label">
         <div class="section-num">1</div>
-        <span class="section-title">Enter Amount</span>
+        <span class="section-title" data-i18n="currEnterAmount">Enter Amount</span>
       </div>
       <div class="field">
         <div class="amount-wrap">
@@ -373,18 +373,18 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <div class="section-label">
         <div class="section-num">2</div>
-        <span class="section-title">Select Currencies</span>
+        <span class="section-title" data-i18n="currSelectCurrencies">Select Currencies</span>
       </div>
       <div class="currency-row">
         <div class="field" style="margin-bottom:0">
-          <label>From</label>
+          <label data-i18n="currFrom">From</label>
           <select id="from-currency" onchange="updatePrefix()"></select>
         </div>
-        <button class="swap-btn" onclick="swapCurrencies()" id="swap-btn" title="Swap">
+        <button class="swap-btn" onclick="swapCurrencies()" id="swap-btn" title="" data-i18n-title="currSwap">
           <svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="field" style="margin-bottom:0">
-          <label>To</label>
+          <label data-i18n="currTo">To</label>
           <select id="to-currency"></select>
         </div>
       </div>
@@ -396,7 +396,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <button class="convert-btn" onclick="convertCurrency()" id="convert-btn">
         <svg viewBox="0 0 24 24"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm.5 16.5v1.2h-1v-1.2c-1.8-.3-3-1.4-3-2.8h1.5c0 .9.8 1.5 2 1.5s1.8-.5 1.8-1.3c0-.7-.5-1.1-1.8-1.4-1.8-.4-3.2-1-3.2-2.6 0-1.3 1-2.3 2.7-2.6V7.3h1v1.1c1.7.3 2.7 1.4 2.7 2.7h-1.5c0-.9-.7-1.4-1.8-1.4s-1.7.5-1.7 1.2c0 .7.5 1 1.9 1.4 1.8.4 3.1 1.1 3.1 2.7 0 1.3-1 2.3-2.7 2.5z"/></svg>
-        Convert
+        <span data-i18n="currConvert">Convert</span>
       </button>
     </div>
   </div>
@@ -408,7 +408,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
         <div class="result-placeholder-icon">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round"/></svg>
         </div>
-        <p>Enter an amount above and tap<br><strong style="color:var(--text-2)">Convert</strong></p>
+        <p data-i18n="currPlaceholder">Enter an amount above and tap<br><strong style="color:var(--text-2)">Convert</strong></p>
       </div>
       <div id="result-output">
         <div class="result-from" id="result-from-text"></div>
@@ -421,18 +421,18 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="rate-info-section" id="rate-info-section" style="display:none">
       <div class="rate-grid">
         <div class="rate-cell">
-          <div class="rate-cell-label">Inverse Rate</div>
+          <div class="rate-cell-label" data-i18n="currInverseRate">Inverse Rate</div>
           <div class="rate-cell-value" id="inverse-rate">—</div>
         </div>
         <div class="rate-cell">
-          <div class="rate-cell-label">Mid-market</div>
+          <div class="rate-cell-label" data-i18n="currMidMarket">Mid-market</div>
           <div class="rate-cell-value" id="mid-rate">—</div>
         </div>
       </div>
     </div>
 
     <div class="pairs-section">
-      <div class="pairs-label">Popular Pairs</div>
+      <div class="pairs-label" data-i18n="currPopularPairs">Popular Pairs</div>
       <div class="pairs-list">
         <div class="pair-row" onclick="setPair('EUR','USD')"><span class="pair-code">EUR → USD</span><span class="pair-rate loading" id="pair-EUR-USD">—</span></div>
         <div class="pair-row" onclick="setPair('GBP','USD')"><span class="pair-code">GBP → USD</span><span class="pair-rate loading" id="pair-GBP-USD">—</span></div>
@@ -444,7 +444,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
 
     <div class="update-notice">
       <div class="update-dot"></div>
-      Rates via Open Exchange Rates · Updated live
+      <span data-i18n="currRatesNotice">Rates via Open Exchange Rates · Updated live</span>
     </div>
   </div>
 
@@ -556,13 +556,13 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
 
     if (isNaN(amount) || amount < 0) {
       btn.style.background = 'linear-gradient(135deg,#c0392b,#e74c3c)';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Enter a valid amount`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> ${GI.get('currInvalidAmount')}`;
       setTimeout(() => { btn.style.background = ''; btn.innerHTML = convertBtnHTML(); }, 2200);
       return;
     }
 
     btn.classList.add('loading');
-    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;animation:spin2 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Fetching rates…`;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;animation:spin2 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> ${GI.get('currFetching')}`;
 
     try {
       if (!ratesCache || ratesBase !== from) {
@@ -589,20 +589,20 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       loadPairRates();
       btn.classList.remove('loading');
       btn.style.background = 'linear-gradient(135deg,#145c38,#2a9e62)';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M9 12l2 2 4-4M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/></svg> Converted!`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M9 12l2 2 4-4M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/></svg> ${GI.get('currConverted')}`;
       setTimeout(() => { btn.style.background = ''; btn.innerHTML = convertBtnHTML(); }, 2200);
       setTimeout(() => out.scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
 
     } catch(e) {
       btn.classList.remove('loading');
       btn.style.background = 'linear-gradient(135deg,#c0392b,#e74c3c)';
-      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Failed to fetch rates`;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> ${GI.get('currFetchFailed')}`;
       setTimeout(() => { btn.style.background = ''; btn.innerHTML = convertBtnHTML(); }, 2200);
     }
   }
 
   function convertBtnHTML() {
-    return `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm.5 16.5v1.2h-1v-1.2c-1.8-.3-3-1.4-3-2.8h1.5c0 .9.8 1.5 2 1.5s1.8-.5 1.8-1.3c0-.7-.5-1.1-1.8-1.4-1.8-.4-3.2-1-3.2-2.6 0-1.3 1-2.3 2.7-2.6V7.3h1v1.1c1.7.3 2.7 1.4 2.7 2.7h-1.5c0-.9-.7-1.4-1.8-1.4s-1.7.5-1.7 1.2c0 .7.5 1 1.9 1.4 1.8.4 3.1 1.1 3.1 2.7 0 1.3-1 2.3-2.7 2.5z"/></svg> Convert`;
+    return `<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm.5 16.5v1.2h-1v-1.2c-1.8-.3-3-1.4-3-2.8h1.5c0 .9.8 1.5 2 1.5s1.8-.5 1.8-1.3c0-.7-.5-1.1-1.8-1.4-1.8-.4-3.2-1-3.2-2.6 0-1.3 1-2.3 2.7-2.6V7.3h1v1.1c1.7.3 2.7 1.4 2.7 2.7h-1.5c0-.9-.7-1.4-1.8-1.4s-1.7.5-1.7 1.2c0 .7.5 1 1.9 1.4 1.8.4 3.1 1.1 3.1 2.7 0 1.3-1 2.3-2.7 2.5z"/></svg> ${GI.get('currConvert')}`;
   }
 
   async function loadPairRates() {
@@ -637,7 +637,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   loadPairRates();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); });});
 </script>
 </body>
 </html>

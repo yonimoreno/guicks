@@ -400,7 +400,7 @@ body::before {
     </div>
     <div class="app-header-text">
       <h1 data-i18n="stocksTitle">Stocks</h1>
-      <p>Real-time market data via Finnhub</p>
+      <p data-i18n="stocksSub">Real-time market data via Finnhub</p>
     </div>
     <div class="market-status" id="marketStatus">Loading…</div>
   </div>
@@ -432,15 +432,15 @@ body::before {
 
     <!-- Watchlist -->
     <div class="section-header">
-      <span class="section-title">📋 Watchlist</span>
-      <button class="section-action" onclick="addPopular()">+ Popular</button>
+      <span class="section-title">📋 <span data-i18n="stocksWatchlist">Watchlist</span></span>
+      <button class="section-action" onclick="addPopular()" data-i18n="stocksPopularBtn">+ Popular</button>
     </div>
     <div class="watchlist" id="watchlist"></div>
 
     <!-- Refresh bar -->
     <div class="refresh-bar">
       <div class="refresh-dot"></div>
-      <span id="lastRefresh">Live data · Auto-refreshes every 60s</span>
+      <span id="lastRefresh" data-i18n="stocksLiveData">Live data · Auto-refreshes every 60s</span>
     </div>
 
     <div class="footer">© Copyright 2026 Yoni Moreno · Powered by Finnhub</div>
@@ -449,24 +449,24 @@ body::before {
   <!-- Setup screen -->
   <div id="setupScreen" class="setup-screen">
     <div class="setup-icon">🔑</div>
-    <div class="setup-title">Connect to Finnhub</div>
-    <div class="setup-sub">Guicks Stocks uses Finnhub's free API for real-time market data. Get your free key in under a minute — no credit card needed.</div>
+    <div class="setup-title" data-i18n="stocksSetupTitle">Connect to Finnhub</div>
+    <div class="setup-sub" data-i18n="stocksSetupSub">Guicks Stocks uses Finnhub's free API for real-time market data. Get your free key in under a minute — no credit card needed.</div>
     <div class="setup-steps">
       <div class="setup-step">
         <div class="step-num">1</div>
-        <div class="step-text">Go to <a href="https://finnhub.io" target="_blank">finnhub.io</a> and click <strong>Get free API key</strong></div>
+        <div class="step-text" data-i18n="stocksStep1">Go to <a href="https://finnhub.io" target="_blank">finnhub.io</a> and click <strong>Get free API key</strong></div>
       </div>
       <div class="setup-step">
         <div class="step-num">2</div>
-        <div class="step-text">Sign up with your email (it's instant and free)</div>
+        <div class="step-text" data-i18n="stocksStep2">Sign up with your email (it's instant and free)</div>
       </div>
       <div class="setup-step">
         <div class="step-num">3</div>
-        <div class="step-text">Copy your API key from the dashboard and paste it below</div>
+        <div class="step-text" data-i18n="stocksStep3">Copy your API key from the dashboard and paste it below</div>
       </div>
     </div>
-    <input class="setup-input" id="apiKeyInput" placeholder="Paste your Finnhub API key here…" type="text" autocomplete="off" />
-    <button class="setup-btn" onclick="saveApiKey()">Connect & Start Trading 🚀</button>
+    <input class="setup-input" id="apiKeyInput" placeholder="Paste your Finnhub API key here…" data-i18n-ph="stocksApiKeyPh" type="text" autocomplete="off" />
+    <button class="setup-btn" onclick="saveApiKey()" data-i18n="stocksConnectBtn">Connect & Start Trading 🚀</button>
   </div>
 
 </div>
@@ -484,12 +484,12 @@ body::before {
   <div class="modal">
     <div class="modal-handle"></div>
     <div style="padding:20px 24px 32px">
-      <div style="font-size:18px;font-weight:800;margin-bottom:6px">🔑 API Key</div>
-      <div style="font-size:13px;color:var(--text-3);margin-bottom:20px">Your key is stored only in your browser. <a href="https://finnhub.io" target="_blank" style="color:var(--blue);font-weight:600">Get a free key at finnhub.io</a></div>
-      <input class="setup-input" id="apiKeyEdit" placeholder="Paste your Finnhub API key…" style="margin-bottom:12px" />
+      <div style="font-size:18px;font-weight:800;margin-bottom:6px" data-i18n="stocksApiKeyTitle">🔑 API Key</div>
+      <div style="font-size:13px;color:var(--text-3);margin-bottom:20px" data-i18n="stocksApiKeySub">Your key is stored only in your browser. <a href="https://finnhub.io" target="_blank" style="color:var(--blue);font-weight:600">Get a free key at finnhub.io</a></div>
+      <input class="setup-input" id="apiKeyEdit" placeholder="Paste your Finnhub API key…" data-i18n-ph="stocksApiKeyPh" style="margin-bottom:12px" />
       <div style="display:flex;gap:10px">
-        <button class="setup-btn" style="flex:1" onclick="updateApiKey()">Save Key</button>
-        <button onclick="closeApiSetup()" style="flex:1;padding:15px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text-2);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">Cancel</button>
+        <button class="setup-btn" style="flex:1" onclick="updateApiKey()" data-i18n="stocksSaveKey">Save Key</button>
+        <button onclick="closeApiSetup()" style="flex:1;padding:15px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text-2);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;" data-i18n="cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -583,7 +583,7 @@ async function fetchMarketStatus() {
   try {
     const data = await finnhub('stock/market-status?exchange=US');
     const el = document.getElementById('marketStatus');
-    el.textContent = data.isOpen ? '● Open' : '● Closed';
+    el.textContent = data.isOpen ? '● ' + GI.get('stocksMarketOpen') : '● ' + GI.get('stocksMarketClosed');
     el.className = 'market-status ' + (data.isOpen ? 'open' : 'closed');
   } catch {}
 }
@@ -641,7 +641,7 @@ function drawModalChart(canvas, prices, labels) {
 async function renderWatchlist() {
   const container = document.getElementById('watchlist');
   if (watchlist.length === 0) {
-    container.innerHTML = `<div class="watchlist-empty"><div class="empty-icon">📭</div><p>Your watchlist is empty.<br>Search for a stock above to add one!</p></div>`;
+    container.innerHTML = `<div class="watchlist-empty"><div class="empty-icon">📭</div><p>${GI.get('stocksWatchlistEmpty')}</p></div>`;
     return;
   }
 
@@ -677,7 +677,7 @@ async function renderWatchlist() {
       }
     } catch(e) {
       const badge = document.getElementById(`badge-${s.symbol}`);
-      if (badge) { badge.textContent = 'Error'; badge.className = 'stock-badge flat'; }
+      if (badge) { badge.textContent = GI.get('stocksError'); badge.className = 'stock-badge flat'; }
     }
   });
   await Promise.allSettled(promises);
@@ -726,7 +726,7 @@ function onSearch(val) {
   document.getElementById('searchClear').classList.toggle('visible', val.length > 0);
   clearTimeout(searchTimer);
   if (!val.trim()) { document.getElementById('searchResults').classList.remove('open'); return; }
-  document.getElementById('searchResults').innerHTML = '<div class="search-loading">Searching…</div>';
+  document.getElementById('searchResults').innerHTML = '<div class="search-loading">' + GI.get('stocksSearching') + '</div>';
   document.getElementById('searchResults').classList.add('open');
   searchTimer = setTimeout(()=>doSearch(val), 400);
 }
@@ -736,7 +736,7 @@ async function doSearch(q) {
     const data = await fetchSearch(q);
     const results = (data.result || []).filter(r => r.type === 'Common Stock').slice(0,8);
     if (!results.length) {
-      document.getElementById('searchResults').innerHTML = '<div class="search-empty">No results found</div>';
+      document.getElementById('searchResults').innerHTML = '<div class="search-empty">' + GI.get('stocksNoResults') + '</div>';
       return;
     }
     document.getElementById('searchResults').innerHTML = results.map(r => `
@@ -748,7 +748,7 @@ async function doSearch(q) {
         <div class="sri-type">${escHtml(r.type)}</div>
       </div>`).join('');
   } catch {
-    document.getElementById('searchResults').innerHTML = '<div class="search-empty">Search failed. Check your API key.</div>';
+    document.getElementById('searchResults').innerHTML = '<div class="search-empty">' + GI.get('stocksSearchFailed') + '</div>';
   }
 }
 
@@ -770,18 +770,18 @@ document.addEventListener('click', e => {
 function isInWatchlist(symbol) { return watchlist.some(s => s.symbol === symbol); }
 
 function addToWatchlist(symbol, name) {
-  if (isInWatchlist(symbol)) { showToast(`${symbol} is already in watchlist`); return; }
+  if (isInWatchlist(symbol)) { showToast(`${symbol} ${GI.get('stocksAlreadyIn')}`); return; }
   watchlist.push({symbol, name});
   saveWatchlist();
   renderWatchlist();
-  showToast(`✅ ${symbol} added to watchlist!`);
+  showToast(`✅ ${symbol} ${GI.get('stocksAdded')}`);
 }
 
 function removeFromWatchlist(symbol) {
   watchlist = watchlist.filter(s => s.symbol !== symbol);
   saveWatchlist();
   renderWatchlist();
-  showToast(`Removed ${symbol}`);
+  showToast(`${GI.get('stocksRemoved')} ${symbol}`);
 }
 
 function addPopular() {
@@ -792,8 +792,8 @@ function addPopular() {
       added++;
     }
   });
-  if (added) { saveWatchlist(); renderWatchlist(); showToast(`Added ${added} popular stocks!`); }
-  else showToast('All popular stocks already in watchlist');
+  if (added) { saveWatchlist(); renderWatchlist(); showToast(GI.get('stocksPopularAdded',{n:added})); }
+  else showToast(GI.get('stocksPopularAll'));
 }
 
 // ── Detail modal ──
@@ -805,7 +805,7 @@ async function openDetail(symbol, name) {
   body.innerHTML = `
     <div class="modal-header">
       <div><div class="modal-sym">${escHtml(symbol)}</div><div class="modal-name">${escHtml(name)}</div></div>
-      <div class="modal-price-wrap"><div class="modal-price" id="mp">Loading…</div><div class="modal-change" id="mc"></div></div>
+      <div class="modal-price-wrap"><div class="modal-price" id="mp">${GI.get('loading')}</div><div class="modal-change" id="mc"></div></div>
     </div>
     <div class="chart-range">
       <button class="range-btn active" onclick="loadModalChart('${symbol}','W',this)">1W</button>
@@ -815,14 +815,14 @@ async function openDetail(symbol, name) {
     </div>
     <div class="modal-chart-wrap"><canvas id="modalChart" width="600" height="180"></canvas></div>
     <div class="modal-stats" id="modalStats">
-      <div class="stat-cell"><div class="stat-label">Open</div><div class="stat-val" id="so">—</div></div>
-      <div class="stat-cell"><div class="stat-label">Prev Close</div><div class="stat-val" id="spc">—</div></div>
-      <div class="stat-cell"><div class="stat-label">Day High</div><div class="stat-val" id="sh">—</div></div>
-      <div class="stat-cell"><div class="stat-label">Day Low</div><div class="stat-val" id="sl">—</div></div>
+      <div class="stat-cell"><div class="stat-label">${GI.get('stocksOpen')}</div><div class="stat-val" id="so">—</div></div>
+      <div class="stat-cell"><div class="stat-label">${GI.get('stocksPrevClose')}</div><div class="stat-val" id="spc">—</div></div>
+      <div class="stat-cell"><div class="stat-label">${GI.get('stocksDayHigh')}</div><div class="stat-val" id="sh">—</div></div>
+      <div class="stat-cell"><div class="stat-label">${GI.get('stocksDayLow')}</div><div class="stat-val" id="sl">—</div></div>
     </div>
     <button class="modal-add-btn ${isInWatchlist(symbol)?'in-watchlist':''}" id="modalWlBtn"
       onclick="${isInWatchlist(symbol)?`removeFromWatchlist('${symbol}');closeModal()`:`addToWatchlist('${symbol}','${escHtml(name)}');closeModal()`}">
-      ${isInWatchlist(symbol)?'✕ Remove from Watchlist':'+ Add to Watchlist'}
+      ${isInWatchlist(symbol)?'✕ ' + GI.get('stocksRemoveWatchlist'):'+ ' + GI.get('stocksAddWatchlist')}
     </button>`;
 
   overlay.classList.add('open');
@@ -878,23 +878,23 @@ function closeApiModalOnBg(e) { if (e.target === document.getElementById('apiMod
 
 function saveApiKey() {
   const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) { showToast('Please paste your API key'); return; }
+  if (!key) { showToast(GI.get('stocksPasteKey')); return; }
   apiKey = key;
   localStorage.setItem(KEY_STORE, key);
   document.getElementById('setupScreen').style.display = 'none';
   document.getElementById('mainContent').style.display = 'flex';
   init();
-  showToast('✅ Connected to Finnhub!');
+  showToast('✅ ' + GI.get('stocksConnected'));
 }
 
 function updateApiKey() {
   const key = document.getElementById('apiKeyEdit').value.trim();
-  if (!key) { showToast('Please paste your API key'); return; }
+  if (!key) { showToast(GI.get('stocksPasteKey')); return; }
   apiKey = key;
   localStorage.setItem(KEY_STORE, key);
   closeApiSetup();
   init();
-  showToast('✅ API key updated!');
+  showToast('✅ ' + GI.get('stocksKeyUpdated'));
 }
 
 // ── Refresh all ──
@@ -906,7 +906,7 @@ async function refreshAll() {
   ]);
   const now = new Date();
   document.getElementById('lastRefresh').textContent =
-    `Last updated at ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+    GI.get('stocksLastUpdated') + ' ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
 }
 
 // ── Init ──
@@ -932,7 +932,7 @@ if (apiKey) {
 }
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); });});
 </script>
 </body>
 </html>

@@ -449,7 +449,7 @@ body::before{
       guicks
     </a>
     <div class="topnav-right">
-      <button class="icon-btn" id="tags-btn" onclick="toggleTagPanel()" title="Manage tags">
+      <button class="icon-btn" id="tags-btn" onclick="toggleTagPanel()" data-i18n-title="notesManageTags" title="Manage tags">
         <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7" stroke-width="3" stroke-linecap="round"/></svg>
       </button>
     </div>
@@ -462,7 +462,7 @@ body::before{
     <div class="color-swatches" id="list-color-swatches" style="margin-top:10px"></div>
     <div class="new-tag-row">
       <input class="new-tag-field" id="list-new-tag" placeholder="New tag name…" data-i18n-ph="notesNewTagPlaceholder" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter')addTag()">
-      <button class="new-tag-add-btn" onclick="addTag()">+ Add</button>
+      <button class="new-tag-add-btn" onclick="addTag()" data-i18n="notesAddTagBtn">+ Add</button>
     </div>
   </div>
 
@@ -504,13 +504,13 @@ body::before{
   <div class="editor-topbar">
     <button class="editor-back-btn" onclick="closeEditor()">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      Notes
+      <span data-i18n="notesTitle">Notes</span>
     </button>
     <div class="editor-topbar-right">
-      <button class="toolbar-btn" onclick="copyNote()" title="Copy">
+      <button class="toolbar-btn" onclick="copyNote()" data-i18n-title="notesCopy" title="Copy">
         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       </button>
-      <button class="toolbar-btn" onclick="deleteCurrentNote()" title="Delete" style="color:rgba(255,100,100,.5)">
+      <button class="toolbar-btn" onclick="deleteCurrentNote()" data-i18n-title="notesDelete" title="Delete" style="color:rgba(255,100,100,.5)">
         <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>
     </div>
@@ -534,12 +534,12 @@ body::before{
 
   <!-- Tag panel inside editor -->
   <div class="tag-panel" id="editor-tag-panel" style="bottom:0;top:auto;position:fixed;margin:0 16px;max-height:50vh;">
-    <div class="tag-panel-title">Tags</div>
+    <div class="tag-panel-title" data-i18n="notesManageTagsTitle">Manage Tags</div>
     <div id="editor-tag-rows"></div>
     <div class="color-swatches" id="editor-color-swatches" style="margin-top:10px"></div>
     <div class="new-tag-row">
-      <input class="new-tag-field" id="editor-new-tag" placeholder="New tag name…" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter')addTagFromEditor()">
-      <button class="new-tag-add-btn" onclick="addTagFromEditor()">+ Add</button>
+      <input class="new-tag-field" id="editor-new-tag" placeholder="New tag name…" data-i18n-ph="notesNewTagPlaceholder" maxlength="20" autocomplete="off" onkeydown="if(event.key==='Enter')addTagFromEditor()">
+      <button class="new-tag-add-btn" onclick="addTagFromEditor()" data-i18n="notesAddTagBtn">+ Add</button>
     </div>
   </div>
 </div>
@@ -601,7 +601,7 @@ function renderFilterBar(){
   let html=`<div class="filter-tag${activeFilter==='all'?' active':''}"
     style="${activeFilter==='all'?'background:linear-gradient(135deg,#5a4800,#a88200)':''}"
     onclick="setFilter('all')">
-    All <span class="ft-count">${notes.length}</span>
+    ${GI.get('notesAll')} <span class="ft-count">${notes.length}</span>
   </div>`;
   tags.forEach(t=>{
     const count=notes.filter(n=>n.tags&&n.tags.includes(t.id)).length;
@@ -624,7 +624,7 @@ function renderGrid(){
   if(q) visible=visible.filter(n=>(n.title+n.body).toLowerCase().includes(q));
 
   if(!visible.length){
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📝</div><div>${activeFilter==='all'&&!q?'No notes yet<br>Tap + to create one':'No matching notes'}</div></div>`;
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📝</div><div>${activeFilter==='all'&&!q?GI.get('notesEmpty'):GI.get('notesNoMatch')}</div></div>`;
     return;
   }
   grid.innerHTML=visible.map(n=>{
@@ -637,10 +637,10 @@ function renderGrid(){
     const date=new Date(n.updated).toLocaleDateString([],{month:'short',day:'numeric'});
     const preview=n.body.replace(/\n+/g,' ').trim();
     return `<div class="note-card" style="--tag-color:${tagColor}" onclick="openEditor('${n.id}')">
-      <div class="note-title">${escHtml(n.title||'Untitled')}</div>
+      <div class="note-title">${escHtml(n.title||GI.get('notesUntitled'))}</div>
       ${preview?`<div class="note-preview">${escHtml(preview)}</div>`:''}
       <div class="note-meta">
-        <span>${tagDots||'No tags'}</span>
+        <span>${tagDots||GI.get('notesNoTags')}</span>
         <span>${date}</span>
       </div>
     </div>`;
@@ -649,7 +649,7 @@ function renderGrid(){
 
 function updateSub(){
   const n=notes.length;
-  document.getElementById('app-sub').textContent=n===0?'No notes yet':`${n} note${n!==1?'s':''}`;
+  document.getElementById('app-sub').textContent=n===0?GI.get('notesNone'):`${n} ${n!==1?GI.get('notesCountPlural'):GI.get('notesCountSingular')}`;
 }
 
 function setFilter(f){ activeFilter=f; render(); }
@@ -668,7 +668,7 @@ function openEditor(id){
 
   const dateStr=note
     ?new Date(note.updated).toLocaleString([],{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
-    :'New note';
+    :GI.get('notesNewNote');
   document.getElementById('editor-date').textContent=dateStr;
 
   renderEditorTags(note?note.tags:[]);
@@ -756,24 +756,24 @@ function flushSave(){
 
 function deleteCurrentNote(){
   if(!currentNoteId){closeEditor();return;}
-  if(!confirm('Delete this note?'))return;
+  if(!confirm(GI.get('notesConfirmDelete')))return;
   notes=notes.filter(n=>n.id!==currentNoteId);
   saveNotes();
   closeEditor();
-  showToast('🗑 Note deleted');
+  showToast('🗑 ' + GI.get('notesDeleted'));
 }
 
 function copyNote(){
   const title=document.getElementById('editor-title').value;
   const body=document.getElementById('editor-body').value;
   navigator.clipboard?.writeText((title?title+'\n\n':'')+body)
-    .then(()=>showToast('📋 Copied to clipboard'))
-    .catch(()=>showToast('Copy not available'));
+    .then(()=>showToast('📋 ' + GI.get('notesCopied')))
+    .catch(()=>showToast(GI.get('notesCopyFail')));
 }
 
 function updateCharCount(){
   const n=(document.getElementById('editor-body').value||'').length;
-  document.getElementById('char-count').textContent=n>0?`${n} chars`:'';
+  document.getElementById('char-count').textContent=n>0?`${n} ${GI.get('notesChars')}`:''; 
 }
 
 function titleKeydown(e){
@@ -818,14 +818,14 @@ function renderEditorTagPanel(){
 ═══════════════════════════════════════ */
 function renderTagRows(containerId, context){
   const el=document.getElementById(containerId);
-  if(!tags.length){el.innerHTML='<div style="font-size:12px;color:rgba(240,237,224,.3);padding:4px 0">No tags yet</div>';return;}
+  if(!tags.length){el.innerHTML='<div style="font-size:12px;color:rgba(240,237,224,.3);padding:4px 0">'+GI.get('notesNoTagsYet')+'</div>';return;}
   el.innerHTML=tags.map(t=>{
     const count=notes.filter(n=>n.tags&&n.tags.includes(t.id)).length;
     return `<div class="tag-row">
       <div class="tag-color-dot" style="background:${t.color}"></div>
       <div class="tag-row-name">#${t.label}</div>
-      <div class="tag-row-count">${count} note${count!==1?'s':''}</div>
-      <button class="tag-row-del" onclick="deleteTag('${t.id}','${context}')" title="Delete">✕</button>
+      <div class="tag-row-count">${count} ${count!==1?GI.get('notesCountPlural'):GI.get('notesCountSingular')}</div>
+      <button class="tag-row-del" onclick="deleteTag('${t.id}','${context}')" data-i18n-title="notesDelete" title="Delete">✕</button>
     </div>`;
   }).join('');
 }
@@ -855,8 +855,8 @@ function addTagFromEditor(){
 
 function createTagFromInput(input, context){
   const label=input.value.trim().replace(/^#+/,'').replace(/\s+/g,'_');
-  if(!label){showToast('Enter a tag name');return;}
-  if(tags.find(t=>t.label.toLowerCase()===label.toLowerCase())){showToast('Tag already exists');return;}
+  if(!label){showToast(GI.get('notesEnterTag'));return;}
+  if(tags.find(t=>t.label.toLowerCase()===label.toLowerCase())){showToast(GI.get('notesTagExists'));return;}
   const id='tag_'+Date.now();
   tags.push({id,label,color:newTagColor});
   saveTags();
@@ -866,12 +866,12 @@ function createTagFromInput(input, context){
   if(context==='list'){renderListTagPanel();}
   else{renderEditorTagPanel(); renderEditorTags(getCurrentNote().tags||[]);}
   render();
-  showToast(`✅ #${label} created`);
+  showToast(`✅ #${label} ` + GI.get('notesTagCreated'));
 }
 
 function deleteTag(id, context){
   const usedBy=notes.filter(n=>n.tags&&n.tags.includes(id)).length;
-  if(usedBy>0){showToast(`⚠️ ${usedBy} note${usedBy!==1?'s':''} use this tag`);return;}
+  if(usedBy>0){showToast(`⚠️ ${usedBy} ${usedBy!==1?GI.get('notesCountPlural'):GI.get('notesCountSingular')} ` + GI.get('notesTagInUse'));return;}
   tags=tags.filter(t=>t.id!==id);
   saveTags();
   if(activeFilter===id) activeFilter='all';
@@ -919,7 +919,7 @@ loadData();
 render();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ render(); });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); render(); });});
 </script>
 </body>
 </html>

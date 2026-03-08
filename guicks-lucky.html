@@ -300,35 +300,35 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
     <div class="app-icon">🎲</div>
     <div class="app-header-text">
       <h1 data-i18n="luckyTitle">Lucky</h1>
-      <p>Dice roller & spin wheel — settle anything!</p>
+      <p data-i18n="luckySub">Dice roller & spin wheel — settle anything!</p>
     </div>
   </div>
 
   <!-- Mode switcher -->
   <div class="mode-bar">
     <button class="mode-btn active" id="modeDice"  onclick="setMode('dice')">
-      <span class="mode-icon">🎲</span> Dice
+      <span class="mode-icon">🎲</span> <span data-i18n="luckyModeDice">Dice</span>
     </button>
     <button class="mode-btn"        id="modeWheel" onclick="setMode('wheel')">
-      <span class="mode-icon">🎡</span> Spin Wheel
+      <span class="mode-icon">🎡</span> <span data-i18n="luckyModeWheel">Spin Wheel</span>
     </button>
   </div>
 
   <!-- Entries -->
   <div class="entries-card">
-    <div class="entries-label" id="entriesLabel">Names / Options (optional)</div>
+    <div class="entries-label" id="entriesLabel" data-i18n="luckyEntriesOptional">Names / Options (optional)</div>
     <div class="entries-input-row">
       <input class="entry-input" id="entryInput" placeholder="Add a name or option…" data-i18n-ph="luckyAddEntry" maxlength="30" onkeydown="if(event.key==='Enter')addEntry()" />
       <button class="add-entry-btn" onclick="addEntry()">Add</button>
     </div>
     <div class="chips-wrap" id="chipsWrap">
-      <span class="chips-empty" id="chipsEmpty">No entries yet — add names or roll with numbers!</span>
+      <span class="chips-empty" id="chipsEmpty" data-i18n="luckyNoEntries">No entries yet — add names or roll with numbers!</span>
     </div>
     <div class="entries-actions">
-      <button class="preset-btn" onclick="loadPreset('friends')">👥 Friends</button>
-      <button class="preset-btn" onclick="loadPreset('team')">🏆 Team</button>
-      <button class="preset-btn" onclick="loadPreset('days')">📅 Days</button>
-      <button class="preset-btn" onclick="loadPreset('yesno')">✅ Yes/No</button>
+      <button class="preset-btn" onclick="loadPreset('friends')">👥 <span data-i18n="luckyPresetFriends">Friends</span></button>
+      <button class="preset-btn" onclick="loadPreset('team')">🏆 <span data-i18n="luckyPresetTeam">Team</span></button>
+      <button class="preset-btn" onclick="loadPreset('days')">📅 <span data-i18n="luckyPresetDays">Days</span></button>
+      <button class="preset-btn" onclick="loadPreset('yesno')">✅ <span data-i18n="luckyPresetYesNo">Yes/No</span></button>
       <button class="clear-entries-btn" onclick="clearEntries()" data-i18n="luckyClearAll">Clear all</button>
     </div>
   </div>
@@ -349,7 +349,7 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
     <div class="dice-arena" id="diceArena"></div>
 
     <button class="roll-btn" id="rollBtn" onclick="rollDice()">
-      🎲 Roll!
+      🎲 <span data-i18n="luckyRoll">Roll!</span>
     </button>
   </div>
 
@@ -360,19 +360,19 @@ canvas#wheelCanvas { border-radius: 50%; box-shadow: var(--shadow-lg), 0 0 0 6px
       <canvas id="wheelCanvas" width="300" height="300"></canvas>
     </div>
     <div class="wheel-result-card" id="wheelResultCard">
-      <div class="wheel-winner-sub">🎉 The wheel chose…</div>
+      <div class="wheel-winner-sub" data-i18n="luckyWheelChose">🎉 The wheel chose…</div>
       <div class="wheel-winner" id="wheelWinner">—</div>
     </div>
     <button class="spin-btn" id="spinBtn" onclick="spinWheel()">
-      🎡 Spin!
+      🎡 <span data-i18n="luckySpin">Spin!</span>
     </button>
   </div>
 
   <!-- History -->
   <div class="lucky-history" id="luckyHistory">
-    <div class="hist-title">Recent results</div>
+    <div class="hist-title" data-i18n="luckyHistTitle">Recent results</div>
     <div class="hist-list" id="histList">
-      <div class="hist-empty">No results yet — roll the dice or spin the wheel!</div>
+      <div class="hist-empty" data-i18n="luckyHistEmpty">No results yet — roll the dice or spin the wheel!</div>
     </div>
   </div>
 
@@ -419,9 +419,9 @@ function saveEntries(){ localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries
 
 function addEntry(){
   const val = document.getElementById('entryInput').value.trim();
-  if (!val){ showToast('Enter a name first'); return; }
-  if (entries.length >= 20){ showToast('Max 20 entries'); return; }
-  if (entries.includes(val)){ showToast('Already in the list!'); return; }
+  if (!val){ showToast(GI.get('luckyEnterName')); return; }
+  if (entries.length >= 20){ showToast(GI.get('luckyMaxEntries')); return; }
+  if (entries.includes(val)){ showToast(GI.get('luckyAlreadyIn')); return; }
   entries.push(val);
   saveEntries();
   document.getElementById('entryInput').value = '';
@@ -441,7 +441,7 @@ function clearEntries(){
   saveEntries();
   renderChips();
   if (currentMode==='wheel') drawWheel();
-  showToast('Entries cleared');
+  showToast(GI.get('luckyCleared'));
 }
 
 function renderChips(){
@@ -470,7 +470,7 @@ function loadPreset(key){
   saveEntries();
   renderChips();
   if (currentMode==='wheel') drawWheel();
-  showToast(`Loaded ${entries.length} entries!`);
+  showToast(GI.get('luckyLoaded').replace('{n}', entries.length));
 }
 
 // ── Mode ──
@@ -481,7 +481,7 @@ function setMode(m){
   document.getElementById('diceSection').style.display  = m==='dice'  ? 'block':'none';
   document.getElementById('wheelSection').style.display = m==='wheel' ? 'block':'none';
   document.getElementById('entriesLabel').textContent =
-    m==='dice' ? 'Names / Options (optional — assigns names to die faces)' : 'Names / Options (required for wheel)';
+    m==='dice' ? GI.get('luckyEntriesOptional') : GI.get('luckyEntriesRequired');
   if (m==='wheel'){ drawWheel(); }
 }
 
@@ -494,7 +494,7 @@ function addToHistory(type, winner, meta){
 }
 function renderHistory(){
   const list = document.getElementById('histList');
-  if (!luckyHistory.length){ list.innerHTML='<div class="hist-empty">No results yet — roll the dice or spin the wheel!</div>'; return; }
+  if (!luckyHistory.length){ list.innerHTML='<div class="hist-empty">'+GI.get('luckyHistEmpty')+'</div>'; return; }
   list.innerHTML = luckyHistory.slice(0,10).map(h=>{
     const time = new Date(h.ts);
     const timeStr = time.getHours().toString().padStart(2,'0')+':'+time.getMinutes().toString().padStart(2,'0');
@@ -545,7 +545,7 @@ function renderDice(){
 
 function changeDiceCount(delta){
   diceCount = Math.min(3, Math.max(1, diceCount+delta));
-  document.getElementById('diceCountLabel').textContent = `🎲 ${diceCount} ${diceCount===1?'Die':'Dice'}`;
+  document.getElementById('diceCountLabel').textContent = `🎲 ${diceCount} ${diceCount===1?GI.get('luckyDie'):GI.get('luckyDice')}`;
   renderDice();
   document.getElementById('diceResultCard').classList.remove('visible');
 }
@@ -577,19 +577,19 @@ function rollDice(){
   setTimeout(()=>{
     const total = values.reduce((a,b)=>a+b,0);
     let winner = '';
-    let meta = `Rolled ${values.join(' + ')}${diceCount>1?' = '+total:''}`;
+    let meta = GI.get('luckyRolledMeta').replace('{dice}', values.join(' + ')).replace('{total}', diceCount>1?' = '+total:'');
 
     if (entries.length >= 1){
       // Map dice total to entries (wrapping)
       const idx = (total - 1) % entries.length;
       winner = entries[idx];
     } else {
-      winner = diceCount===1 ? `Rolled a ${total}` : `Total: ${total}`;
+      winner = diceCount===1 ? GI.get('luckyRolledA').replace('{n}',total) : GI.get('luckyTotal').replace('{n}',total);
     }
 
     document.getElementById('diceResultTotal').textContent = diceCount>1 ? total : values[0];
     document.getElementById('diceResultWinner').innerHTML = entries.length
-      ? `🎉 Selected: <span>${esc(winner)}</span>`
+      ? `🎉 ${GI.get('luckySelected')} <span>${esc(winner)}</span>`
       : ``;
     document.getElementById('diceResultCard').classList.add('visible');
     addToHistory('dice', winner || `${total}`, meta);
@@ -608,7 +608,7 @@ let wheelAngle = 0;
 let wheelSpinning = false;
 
 function getWheelItems(){
-  return entries.length >= 2 ? entries : ['Option 1','Option 2','Option 3','Option 4','Option 5','Option 6'];
+  return entries.length >= 2 ? entries : [GI.get('luckyOption')+' 1',GI.get('luckyOption')+' 2',GI.get('luckyOption')+' 3',GI.get('luckyOption')+' 4',GI.get('luckyOption')+' 5',GI.get('luckyOption')+' 6'];
 }
 
 function drawWheel(highlightIdx=-1){
@@ -675,7 +675,7 @@ let rafId = null;
 function spinWheel(){
   if (wheelSpinning) return;
   const items = getWheelItems();
-  if (entries.length === 1){ showToast('Add at least 2 entries!'); return; }
+  if (entries.length === 1){ showToast(GI.get('luckyNeedTwo')); return; }
 
   wheelSpinning = true;
   document.getElementById('spinBtn').disabled = true;
@@ -706,7 +706,7 @@ function spinWheel(){
       addToHistory('wheel', winner, `${items.length} options on wheel`);
       wheelSpinning = false;
       document.getElementById('spinBtn').disabled = false;
-      showToast(`🎉 ${winner} wins!`);
+      showToast(`🎉 ${GI.get('luckyWins').replace('{winner}', winner)}`);
     }
   }
   rafId = requestAnimationFrame(animate);
@@ -722,7 +722,7 @@ renderHistory();
 setTimeout(()=>{ drawWheel(); }, 50);
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); });});
 </script>
 </body>
 </html>

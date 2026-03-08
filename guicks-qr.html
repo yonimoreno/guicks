@@ -394,7 +394,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       </svg>
     </div>
     <h1 data-i18n="qrTitle">QR Generator</h1>
-    <p>Links, WhatsApp, contacts, emails & more</p>
+    <p data-i18n="qrSub">Links, WhatsApp, contacts, emails & more</p>
   </div>
 
   <!-- Step 1: Content type -->
@@ -402,60 +402,60 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <div class="section-label">
         <div class="section-num">1</div>
-        <span class="section-title">Choose Content Type</span>
+        <span class="section-title" data-i18n="qrStep1">Choose Content Type</span>
       </div>
       <div class="tabs">
         <button class="tab active" onclick="switchType('url',this)">🔗 URL</button>
         <button class="tab" onclick="switchType('whatsapp',this)">💬 WhatsApp</button>
-        <button class="tab" onclick="switchType('text',this)">📝 Text</button>
+        <button class="tab" onclick="switchType('text',this)" data-i18n="qrTabText">📝 Text</button>
         <button class="tab" onclick="switchType('vcard',this)">👤 vCard</button>
-        <button class="tab" onclick="switchType('email',this)">✉️ Email</button>
+        <button class="tab" onclick="switchType('email',this)" data-i18n="qrTabEmail">✉️ Email</button>
       </div>
 
       <div class="type-section active" id="type-url">
         <div class="field">
-          <label>Website URL</label>
+          <label data-i18n="qrLabelUrl">Website URL</label>
           <input type="url" id="url-input" placeholder="https://example.com" />
         </div>
       </div>
 
       <div class="type-section" id="type-whatsapp">
         <div class="field">
-          <label>Phone Number <span class="opt">(with country code)</span></label>
+          <label data-i18n="qrLabelPhone">Phone Number <span class="opt">(with country code)</span></label>
           <input type="tel" id="wa-phone" placeholder="+1 555 000 0000" />
         </div>
         <div class="field">
-          <label>Pre-filled Message <span class="opt">(optional)</span></label>
-          <textarea id="wa-msg" placeholder="Hello! I saw your QR code..."></textarea>
+          <label data-i18n="qrLabelWaMsg">Pre-filled Message <span class="opt">(optional)</span></label>
+          <textarea id="wa-msg" data-i18n-ph="qrPhWaMsg" placeholder="Hello! I saw your QR code..."></textarea>
         </div>
       </div>
 
       <div class="type-section" id="type-text">
         <div class="field">
-          <label>Plain Text</label>
-          <textarea id="text-input" placeholder="Coupon code, WiFi password, address..." style="height:110px"></textarea>
+          <label data-i18n="qrLabelText">Plain Text</label>
+          <textarea id="text-input" data-i18n-ph="qrPhText" placeholder="Coupon code, WiFi password, address..." style="height:110px"></textarea>
         </div>
       </div>
 
       <div class="type-section" id="type-vcard">
         <div class="field">
-          <label>Full Name</label>
-          <input type="text" id="vc-name" placeholder="Jane Doe" />
+          <label data-i18n="qrLabelName">Full Name</label>
+          <input type="text" id="vc-name" data-i18n-ph="qrPhName" placeholder="Jane Doe" />
         </div>
         <div class="field-row">
-          <div class="field"><label>Phone</label><input type="tel" id="vc-phone" placeholder="+1 555 000 0000" /></div>
-          <div class="field"><label>Email</label><input type="email" id="vc-email" placeholder="jane@example.com" /></div>
+          <div class="field"><label data-i18n="qrLabelVcPhone">Phone</label><input type="tel" id="vc-phone" placeholder="+1 555 000 0000" /></div>
+          <div class="field"><label data-i18n="qrLabelVcEmail">Email</label><input type="email" id="vc-email" data-i18n-ph="qrPhEmail" placeholder="jane@example.com" /></div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Organization</label><input type="text" id="vc-org" placeholder="Company Name" /></div>
-          <div class="field"><label>Website</label><input type="url" id="vc-url" placeholder="https://janedoe.com" /></div>
+          <div class="field"><label data-i18n="qrLabelOrg">Organization</label><input type="text" id="vc-org" data-i18n-ph="qrPhOrg" placeholder="Company Name" /></div>
+          <div class="field"><label data-i18n="qrLabelWebsite">Website</label><input type="url" id="vc-url" placeholder="https://janedoe.com" /></div>
         </div>
       </div>
 
       <div class="type-section" id="type-email">
-        <div class="field"><label>Recipient Email</label><input type="email" id="email-to" placeholder="hello@example.com" /></div>
-        <div class="field"><label>Subject <span class="opt">(optional)</span></label><input type="text" id="email-subject" placeholder="Hello there!" /></div>
-        <div class="field"><label>Body <span class="opt">(optional)</span></label><textarea id="email-body" placeholder="Your message..."></textarea></div>
+        <div class="field"><label data-i18n="qrLabelEmailTo">Recipient Email</label><input type="email" id="email-to" data-i18n-ph="qrPhEmailTo" placeholder="hello@example.com" /></div>
+        <div class="field"><label data-i18n="qrLabelSubject">Subject <span class="opt">(optional)</span></label><input type="text" id="email-subject" data-i18n-ph="qrPhSubject" placeholder="Hello there!" /></div>
+        <div class="field"><label data-i18n="qrLabelBody">Body <span class="opt">(optional)</span></label><textarea id="email-body" data-i18n-ph="qrPhBody" placeholder="Your message..."></textarea></div>
       </div>
     </div>
   </div>
@@ -465,20 +465,20 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <div class="section-label">
         <div class="section-num">2</div>
-        <span class="section-title">Customise Appearance</span>
+        <span class="section-title" data-i18n="qrStep2">Customise Appearance</span>
       </div>
       <div class="field">
-        <label>Colors</label>
+        <label data-i18n="qrLabelColors">Colors</label>
         <div class="color-row">
           <div class="color-picker">
-            <div class="color-sub">Foreground</div>
+            <div class="color-sub" data-i18n="qrForeground">Foreground</div>
             <div class="color-input-wrap">
               <input type="color" id="qr-dark" value="#0d0d1a" oninput="syncHex('qr-dark','hex-dark')">
               <input class="hex-input" type="text" id="hex-dark" value="#0d0d1a" oninput="syncColor('hex-dark','qr-dark')" maxlength="7">
             </div>
           </div>
           <div class="color-picker">
-            <div class="color-sub">Background</div>
+            <div class="color-sub" data-i18n="qrBackground">Background</div>
             <div class="color-input-wrap">
               <input type="color" id="qr-light" value="#ffffff" oninput="syncHex('qr-light','hex-light')">
               <input class="hex-input" type="text" id="hex-light" value="#ffffff" oninput="syncColor('hex-light','qr-light')" maxlength="7">
@@ -488,21 +488,21 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       </div>
       <div class="field-row">
         <div class="field">
-          <label>Output Size</label>
+          <label data-i18n="qrLabelSize">Output Size</label>
           <select id="qr-size">
-            <option value="200">Small — 200px</option>
-            <option value="300" selected>Medium — 300px</option>
-            <option value="400">Large — 400px</option>
-            <option value="600">XL — 600px</option>
+            <option value="200" data-i18n="qrSizeSmall">Small — 200px</option>
+            <option value="300" selected data-i18n="qrSizeMed">Medium — 300px</option>
+            <option value="400" data-i18n="qrSizeLarge">Large — 400px</option>
+            <option value="600" data-i18n="qrSizeXL">XL — 600px</option>
           </select>
         </div>
         <div class="field">
-          <label>Error Correction</label>
+          <label data-i18n="qrLabelEC">Error Correction</label>
           <select id="qr-ec">
-            <option value="L">Low (7%)</option>
-            <option value="M" selected>Medium (15%)</option>
-            <option value="Q">Quartile (25%)</option>
-            <option value="H">High — logo-ready</option>
+            <option value="L" data-i18n="qrECLow">Low (7%)</option>
+            <option value="M" selected data-i18n="qrECMed">Medium (15%)</option>
+            <option value="Q" data-i18n="qrECQuartile">Quartile (25%)</option>
+            <option value="H" data-i18n="qrECHigh">High — logo-ready</option>
           </select>
         </div>
       </div>
@@ -514,7 +514,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     <div class="card-section">
       <button class="generate-btn" onclick="generateQR()" id="gen-btn">
         <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h3v3h-3zm4 0h3v3h-3zm-4 4h3v3h-3zm4 0h3v3h-3z"/></svg>
-        Generate QR Code
+        <span data-i18n="qrGenerate">Generate QR Code</span>
       </button>
     </div>
   </div>
@@ -526,7 +526,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
         <div class="qr-placeholder-icon">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="5" y="5" width="4" height="4"/><rect x="15" y="5" width="4" height="4"/><rect x="5" y="15" width="4" height="4"/><rect x="13" y="13" width="4" height="4"/><rect x="17" y="17" width="4" height="4"/></svg>
         </div>
-        <p>Fill in the form above and tap<br><strong style="color:var(--text-2)">Generate QR Code</strong></p>
+        <p data-i18n="qrHint">Fill in the form above and tap<br><strong style="color:var(--text-2)">Generate QR Code</strong></p>
       </div>
       <div id="qr-output">
         <div class="qr-frame"><div id="qrcode"></div></div>
@@ -534,11 +534,11 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       </div>
     </div>
     <div class="dl-section" id="dl-section">
-      <div class="dl-label">Download</div>
+      <div class="dl-label" data-i18n="qrDownload">Download</div>
       <div class="dl-grid">
         <button class="dl-btn png" onclick="downloadPNG()"><span class="dl-icon">⬇</span>PNG</button>
         <button class="dl-btn svg" onclick="downloadSVG()"><span class="dl-icon">⬇</span>SVG</button>
-        <button class="dl-btn copy" onclick="copyToClipboard()" id="copy-btn"><span class="dl-icon">⎘</span>Copy</button>
+        <button class="dl-btn copy" onclick="copyToClipboard()" id="copy-btn"><span class="dl-icon">⎘</span><span data-i18n="copy">Copy</span></button>
       </div>
       <div class="size-note" id="size-info"></div>
     </div>
@@ -634,10 +634,10 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     const btn = document.getElementById('gen-btn');
     if (!content) {
       btn.style.background = 'linear-gradient(135deg,#c0392b,#e74c3c)';
-      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> Please fill in required fields';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> ' + GI.get('qrFillRequired');
       setTimeout(() => {
         btn.style.background = '';
-        btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h3v3h-3zm4 0h3v3h-3zm-4 4h3v3h-3zm4 0h3v3h-3z"/></svg> Generate QR Code';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;flex-shrink:0"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h3v3h-3zm4 0h3v3h-3zm-4 4h3v3h-3zm4 0h3v3h-3z"/></svg> ' + GI.get('qrGenerate');
       }, 2200);
       return;
     }
@@ -661,7 +661,7 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
 
     document.getElementById('qr-meta').textContent = content.length > 55 ? content.slice(0,52)+'…' : content;
     document.getElementById('dl-section').style.display = 'block';
-    document.getElementById('size-info').textContent = `${size} × ${size} px · PNG & SVG available`;
+    document.getElementById('size-info').textContent = `${size} × ${size} px · ` + GI.get('qrSizeInfo');
 
     // Scroll to output
     setTimeout(() => document.getElementById('qr-output').scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
@@ -691,11 +691,11 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       try {
         navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
         const btn = document.getElementById('copy-btn');
-        btn.innerHTML = '<span class="dl-icon">✓</span>Copied!';
+        btn.innerHTML = '<span class="dl-icon">✓</span>' + GI.get('qrCopied');
         btn.style.cssText = 'border-color:var(--purple);color:var(--purple);background:var(--purple-light)';
-        setTimeout(() => { btn.innerHTML = '<span class="dl-icon">⎘</span>Copy'; btn.style.cssText = ''; }, 2000);
+        setTimeout(() => { btn.innerHTML = '<span class="dl-icon">⎘</span>' + GI.get('copy'); btn.style.cssText = ''; }, 2000);
       } catch(e) {
-        alert('Clipboard copy not supported in this browser. Please use the PNG download instead.');
+        alert(GI.get('qrClipboardError'));
       }
     });
   }

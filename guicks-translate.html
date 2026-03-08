@@ -379,7 +379,7 @@ body::before {
     </div>
     <div class="app-header-text">
       <h1 data-i18n="translateTitle">Translate</h1>
-      <p>100+ languages · Powered by MyMemory</p>
+      <p data-i18n="translateSub">100+ languages · Powered by MyMemory</p>
     </div>
   </div>
 
@@ -389,7 +389,7 @@ body::before {
       <select class="lang-select" id="fromLang"></select>
     </div>
     <div class="lang-divider"></div>
-    <button class="swap-btn" onclick="swapLangs()" title="Swap languages">
+    <button class="swap-btn" onclick="swapLangs()" data-i18n-title="translateSwap" title="Swap languages">
       <svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
     </button>
     <div class="lang-divider"></div>
@@ -403,20 +403,20 @@ body::before {
 
     <!-- Source -->
     <div class="panel-box">
-      <div class="panel-label">Source</div>
+      <div class="panel-label" data-i18n="translateSource">Source</div>
       <textarea class="source-textarea" id="sourceText" placeholder="Type or paste text here…" data-i18n-ph="translatePlaceholder" maxlength="500" oninput="onSourceInput()" onkeydown="onKeyDown(event)"></textarea>
       <div class="panel-actions">
-        <button class="action-btn" onclick="clearSource()" title="Clear">
+        <button class="action-btn" onclick="clearSource()" data-i18n-title="translateClear" title="Clear">
           <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-          Clear
+          <span data-i18n="translateClear">Clear</span>
         </button>
-        <button class="action-btn" onclick="pasteClipboard()" title="Paste">
+        <button class="action-btn" onclick="pasteClipboard()" data-i18n-title="translatePaste" title="Paste">
           <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
-          Paste
+          <span data-i18n="translatePaste">Paste</span>
         </button>
-        <button class="action-btn accent" onclick="speakText('source')" title="Listen">
+        <button class="action-btn accent" onclick="speakText('source')" data-i18n-title="translateListen" title="Listen">
           <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
-          Listen
+          <span data-i18n="translateListen">Listen</span>
         </button>
         <span class="char-count" id="charCount">0 / 500</span>
       </div>
@@ -424,20 +424,20 @@ body::before {
 
     <!-- Output -->
     <div class="panel-box">
-      <div class="panel-label">Translation</div>
-      <div class="output-text empty" id="outputText">Translation will appear here…</div>
+      <div class="panel-label" data-i18n="translateOutput">Translation</div>
+      <div class="output-text empty" id="outputText" data-i18n="translateOutputPlaceholder">Translation will appear here…</div>
       <div class="panel-actions">
-        <button class="action-btn accent" onclick="copyOutput()" title="Copy">
+        <button class="action-btn accent" onclick="copyOutput()" data-i18n-title="translateCopy" title="Copy">
           <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy
+          <span data-i18n="translateCopy">Copy</span>
         </button>
-        <button class="action-btn accent" onclick="speakText('output')" title="Listen">
+        <button class="action-btn accent" onclick="speakText('output')" data-i18n-title="translateListen" title="Listen">
           <svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
-          Listen
+          <span data-i18n="translateListen">Listen</span>
         </button>
-        <button class="action-btn accent" id="favBtn" onclick="toggleFavoriteCurrent()" title="Save as favorite">
+        <button class="action-btn accent" id="favBtn" onclick="toggleFavoriteCurrent()" data-i18n-title="translateSave" title="Save as favorite">
           <svg viewBox="0 0 24 24" id="favBtnIcon"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          Save
+          <span data-i18n="translateSave">Save</span>
         </button>
       </div>
     </div>
@@ -446,13 +446,13 @@ body::before {
   <!-- Translate button -->
   <button class="translate-btn" id="translateBtn" onclick="doTranslate()">
     <svg viewBox="0 0 24 24"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5M15 5s1 3 3 5c2-2 3-5 3-5M13 19c1.5-2 4.5-2 6 0"/></svg>
-    Translate
+    <span data-i18n="translateBtn">Translate</span>
   </button>
 
   <!-- Tabs -->
   <div class="tabs-wrap" style="margin-top:16px">
-    <button class="tab-btn active" id="tabHistory" onclick="switchTab('history')">🕐 History</button>
-    <button class="tab-btn" id="tabFavorites" onclick="switchTab('favorites')">⭐ Favorites</button>
+    <button class="tab-btn active" id="tabHistory" onclick="switchTab('history')">🕐 <span data-i18n="translateHistory">History</span></button>
+    <button class="tab-btn" id="tabFavorites" onclick="switchTab('favorites')">⭐ <span data-i18n="translateFavorites">Favorites</span></button>
   </div>
 
   <!-- List -->
@@ -588,7 +588,7 @@ function onKeyDown(e) {
 }
 function clearSource() {
   document.getElementById('sourceText').value = '';
-  setOutput('empty', 'Translation will appear here…');
+  setOutput('empty', GI.get('translateOutputPlaceholder'));
   updateCharCount();
   lastTranslation = null;
   updateFavBtn();
@@ -598,8 +598,8 @@ async function pasteClipboard() {
     const text = await navigator.clipboard.readText();
     document.getElementById('sourceText').value = text.slice(0,500);
     updateCharCount();
-    showToast('📋 Pasted from clipboard');
-  } catch { showToast('Clipboard access denied'); }
+    showToast('📋 ' + GI.get('translatePasted'));
+  } catch { showToast(GI.get('translateClipboardDenied')); }
 }
 
 function setOutput(state, text) {
@@ -611,7 +611,7 @@ function setOutput(state, text) {
 // ── Translate ──
 async function doTranslate() {
   const text = document.getElementById('sourceText').value.trim();
-  if (!text) { showToast('Please enter some text first'); return; }
+  if (!text) { showToast(GI.get('translateEnterText')); return; }
 
   const fromCode = document.getElementById('fromLang').value;
   const toCode = document.getElementById('toLang').value;
@@ -619,8 +619,8 @@ async function doTranslate() {
 
   const btn = document.getElementById('translateBtn');
   btn.disabled = true;
-  btn.innerHTML = `<svg class="btn-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Translating…`;
-  setOutput('loading', 'Translating…');
+  btn.innerHTML = `<svg class="btn-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> ${GI.get('translateTranslating')}`;
+  setOutput('loading', GI.get('translateTranslating'));
 
   try {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`;
@@ -650,31 +650,31 @@ async function doTranslate() {
       }
       renderList();
     } else {
-      setOutput('empty', 'Translation failed — try again');
-      showToast('❌ Translation error');
+      setOutput('empty', GI.get('translateFailed'));
+      showToast('❌ ' + GI.get('translateError'));
     }
   } catch {
-    setOutput('empty', 'Network error — check connection');
-    showToast('❌ Network error');
+    setOutput('empty', GI.get('translateNetworkError'));
+    showToast('❌ ' + GI.get('translateNetworkToast'));
   }
 
   btn.disabled = false;
-  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5M15 5s1 3 3 5c2-2 3-5 3-5M13 19c1.5-2 4.5-2 6 0"/></svg> Translate`;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h6M8 5v3M3 16l4-8 4 8M4.5 13.5h5M15 5s1 3 3 5c2-2 3-5 3-5M13 19c1.5-2 4.5-2 6 0"/></svg> ${GI.get('translateBtn')}`;
 }
 
 // ── Copy / Speak ──
 function copyOutput() {
   const text = document.getElementById('outputText').textContent;
-  if (!text || document.getElementById('outputText').classList.contains('empty')) { showToast('Nothing to copy yet'); return; }
-  navigator.clipboard.writeText(text).then(() => showToast('✅ Copied!')).catch(() => showToast('Copy failed'));
+  if (!text || document.getElementById('outputText').classList.contains('empty')) { showToast(GI.get('translateNothingToCopy')); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('✅ ' + GI.get('translateCopied'))).catch(() => showToast(GI.get('translateCopyFail')));
 }
 
 function speakText(which) {
-  if (!window.speechSynthesis) { showToast('Speech not supported in this browser'); return; }
+  if (!window.speechSynthesis) { showToast(GI.get('translateSpeechUnsupported')); return; }
   const text = which === 'source'
     ? document.getElementById('sourceText').value
     : document.getElementById('outputText').textContent;
-  if (!text || document.getElementById('outputText').classList.contains('empty') && which === 'output') { showToast('Nothing to speak'); return; }
+  if (!text || document.getElementById('outputText').classList.contains('empty') && which === 'output') { showToast(GI.get('translateNothingToSpeak')); return; }
   const lang = which === 'source'
     ? document.getElementById('fromLang').value
     : document.getElementById('toLang').value;
@@ -682,7 +682,7 @@ function speakText(which) {
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = lang; utt.rate = 0.9;
   speechSynthesis.speak(utt);
-  showToast('🔊 Speaking…');
+  showToast('🔊 ' + GI.get('translateSpeaking'));
 }
 
 // ── Favorites ──
@@ -702,14 +702,14 @@ function updateFavBtn() {
 }
 
 function toggleFavoriteCurrent() {
-  if (!lastTranslation) { showToast('Translate something first!'); return; }
+  if (!lastTranslation) { showToast(GI.get('translateFirst')); return; }
   const idx = favorites.findIndex(f => f.id === lastTranslation.id);
   if (idx >= 0) {
     favorites.splice(idx, 1);
-    showToast('Removed from favorites');
+    showToast(GI.get('translateRemovedFav'));
   } else {
     favorites.unshift({...lastTranslation});
-    showToast('⭐ Saved to favorites!');
+    showToast('⭐ ' + GI.get('translateSavedFav'));
   }
   saveFavs(); updateFavBtn(); renderList();
 }
@@ -720,10 +720,10 @@ function toggleFavCard(id) {
   const idx = favorites.findIndex(f => f.id === id);
   if (idx >= 0) {
     favorites.splice(idx, 1);
-    showToast('Removed from favorites');
+    showToast(GI.get('translateRemovedFav'));
   } else {
     favorites.unshift({...entry});
-    showToast('⭐ Saved to favorites!');
+    showToast('⭐ ' + GI.get('translateSavedFav'));
   }
   saveFavs(); renderList();
   if (lastTranslation?.id === id) updateFavBtn();
@@ -769,8 +769,8 @@ function renderList() {
   if (!items.length) {
     list.innerHTML = `<div class="empty-state">
       <div class="empty-icon">${currentTab === 'history' ? '🕐' : '⭐'}</div>
-      <div class="empty-title">${currentTab === 'history' ? 'No translations yet' : 'No saved favorites'}</div>
-      <div class="empty-sub">${currentTab === 'history' ? 'Your recent translations will appear here.' : 'Hit ⭐ Save after translating to add favorites.'}</div>
+      <div class="empty-title">${currentTab === 'history' ? GI.get('translateNoHistory') : GI.get('translateNoFavorites')}</div>
+      <div class="empty-sub">${currentTab === 'history' ? GI.get('translateNoHistorySub') : GI.get('translateNoFavoritesSub')}</div>
     </div>`;
     return;
   }
@@ -784,7 +784,7 @@ function renderList() {
       <div class="trans-source-text">${esc(entry.source)}</div>
       <div class="trans-output-text">${esc(entry.translated)}</div>
       <div class="trans-card-actions">
-        <button class="tca-btn ${faved?'fav-active':''}" onclick="event.stopPropagation();toggleFavCard(${entry.id})" title="${faved?'Remove favorite':'Save favorite'}">
+        <button class="tca-btn ${faved?'fav-active':''}" onclick="event.stopPropagation();toggleFavCard(${entry.id})" title="${faved?GI.get('translateRemoveFav'):GI.get('translateSave')}">
           <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="${faved?'currentColor':'none'}" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </button>
         <button class="tca-btn del" onclick="event.stopPropagation();deleteEntry(${entry.id},'${source}')" title="Delete">
@@ -817,7 +817,7 @@ populateLangs();
 renderList();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); renderList(); });});
 </script>
 </body>
 </html>

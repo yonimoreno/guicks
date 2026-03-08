@@ -386,7 +386,7 @@ body::before{
       guicks
     </a>
     <div class="topnav-right">
-      <button class="icon-btn" onclick="clearAll()" title="Clear all">
+      <button class="icon-btn" onclick="clearAll()" data-i18n-title="remClearAll" title="Clear all">
         <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>
     </div>
@@ -402,7 +402,7 @@ body::before{
     </div>
     <div>
       <div class="app-title" data-i18n="remTitle">Reminders</div>
-      <div class="app-sub" id="app-sub">0 reminders</div>
+      <div class="app-sub" id="app-sub" data-i18n="remNone">0 reminders</div>
     </div>
   </div>
 
@@ -527,7 +527,7 @@ function renderFilterBar(){
   let html = `<div class="filter-tag${activeFilter==='all'?' active':''}"
     style="${activeFilter==='all'?'background:linear-gradient(135deg,#4a1fb8,#6c3fe0)':''}"
     onclick="setFilter('all')">
-    All <span class="ft-count">${total}</span>
+    ${GI.get('remAll')} <span class="ft-count">${total}</span>
   </div>`;
 
   tags.forEach(t=>{
@@ -538,11 +538,11 @@ function renderFilterBar(){
       onclick="setFilter('${t.id}')">
       #${t.label}
       <span class="ft-count">${count}</span>
-      <button class="del-tag-btn" onclick="event.stopPropagation();deleteTag('${t.id}')" title="Delete tag">✕</button>
+      <button class="del-tag-btn" onclick="event.stopPropagation();deleteTag('${t.id}')" data-i18n-title="remDeleteTag" title="Delete tag">✕</button>
     </div>`;
   });
 
-  html += `<button class="manage-tags-btn" onclick="showTagPicker()">+ tag</button>`;
+  html += `<button class="manage-tags-btn" onclick="showTagPicker()" data-i18n="remNewTag">+ tag</button>`;
 
   scroll.innerHTML = html;
 }
@@ -554,8 +554,8 @@ function renderItems(){
 
   if(!filtered.length){
     const msg = activeFilter==='all'
-      ? 'No reminders yet<br>Add one above'
-      : `Nothing tagged #${getTag(activeFilter).label}`;
+      ? GI.get('remEmpty')
+      : GI.get('remNothingTagged',{tag:getTag(activeFilter).label});
     wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">🔔</div><div>${msg}</div></div>`;
     return;
   }
@@ -606,13 +606,13 @@ function renderSummary(){
   bar.style.display='flex';
   const done=items.filter(i=>i.done).length;
   document.getElementById('summary-counts').innerHTML=
-    `<span><span class="s-dot" style="background:#a78bfa"></span>${done} done</span>
-     <span><span class="s-dot" style="background:#94a3b8"></span>${items.length-done} left</span>`;
+    `<span><span class="s-dot" style="background:#a78bfa"></span>${done} ${GI.get('remDone')}</span>
+     <span><span class="s-dot" style="background:#94a3b8"></span>${items.length-done} ${GI.get('remLeft')}</span>`;
 }
 
 function updateSub(){
   const n=items.length;
-  document.getElementById('app-sub').textContent=n===0?'Nothing here yet':`${n} reminder${n!==1?'s':''}`;
+  document.getElementById('app-sub').textContent=n===0?GI.get('remNone'):`${n} ${n!==1?GI.get('remCountPlural'):GI.get('remCountSingular')}`;
 }
 
 /* ═══════════════════════════════════════
@@ -621,7 +621,7 @@ function updateSub(){
 function addItem(){
   const input=document.getElementById('item-input');
   const name=input.value.trim();
-  if(!name){showToast('Write something first');return;}
+  if(!name){showToast(GI.get('remWriteFirst'));return;}
   items.unshift({
     id:'r'+Date.now(),
     name,
@@ -648,17 +648,17 @@ function deleteItem(id){
 
 function clearDone(){
   const count=items.filter(i=>i.done).length;
-  if(!count){showToast('No completed reminders');return;}
+  if(!count){showToast(GI.get('remNoDone'));return;}
   items=items.filter(i=>!i.done);
   saveItems();render();
-  showToast(`🗑 Cleared ${count} reminder${count!==1?'s':''}`);
+  showToast(`🗑 ${GI.get('remCleared',{n:count})}`);
 }
 
 function clearAll(){
-  if(!items.length){showToast('Already empty');return;}
-  if(!confirm(`Delete all ${items.length} reminders?`))return;
+  if(!items.length){showToast(GI.get('remAlreadyEmpty'));return;}
+  if(!confirm(GI.get('remConfirmClear',{n:items.length})))return;
   items=[];saveItems();render();
-  showToast('🗑 All cleared');
+  showToast('🗑 ' + GI.get('remAllCleared'));
 }
 
 function setFilter(f){activeFilter=f;render();}
@@ -676,8 +676,8 @@ function pickColor(c){
 function createTag(){
   const input=document.getElementById('new-tag-input');
   const label=input.value.trim().replace(/^#+/,'').replace(/\s+/g,'_');
-  if(!label){showToast('Enter a tag name');return;}
-  if(tags.find(t=>t.label.toLowerCase()===label.toLowerCase())){showToast('Tag already exists');return;}
+  if(!label){showToast(GI.get('remEnterTag'));return;}
+  if(tags.find(t=>t.label.toLowerCase()===label.toLowerCase())){showToast(GI.get('remTagExists'));return;}
   const id='tag_'+Date.now();
   tags.push({id,label,color:newTagColor});
   saveTags();
@@ -687,12 +687,12 @@ function createTag(){
   const idx=TAG_COLORS.indexOf(newTagColor);
   newTagColor=TAG_COLORS[(idx+1)%TAG_COLORS.length];
   render();
-  showToast(`✅ #${label} created`);
+  showToast(`✅ #${label} ` + GI.get('remTagCreated'));
 }
 
 function deleteTag(id){
   const usedBy=items.filter(i=>i.tag===id).length;
-  if(usedBy>0){showToast(`⚠️ ${usedBy} reminder${usedBy!==1?'s':''} use this tag`);return;}
+  if(usedBy>0){showToast(`⚠️ ${usedBy} ${usedBy!==1?GI.get('remCountPlural'):GI.get('remCountSingular')} ` + GI.get('remTagInUse'));return;}
   tags=tags.filter(t=>t.id!==id);
   saveTags();
   if(activeFilter===id) activeFilter='all';
@@ -755,7 +755,7 @@ render();
 document.getElementById('item-input').focus();
 
 // ── i18n ──
-document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ render(); });});
+document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); render(); });});
 </script>
 </body>
 </html>

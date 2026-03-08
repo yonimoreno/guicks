@@ -374,14 +374,14 @@ body::before{
       </svg>
     </div>
     <div>
-      <div class="app-title" data-i18n="shoppingTitle">Shopping List</div>
+      <div class="app-title" data-i18n="shopTitle">Shopping List</div>
       <div class="app-sub" id="app-sub">0 items</div>
     </div>
   </div>
 
   <!-- Add input -->
   <div class="input-wrap">
-    <input class="item-input" id="item-input" placeholder="Add item…" data-i18n-ph="shoppingPlaceholder" maxlength="60"
+    <input class="item-input" id="item-input" placeholder="Add item…" data-i18n-ph="shopPh" maxlength="60"
       autocomplete="off" autocorrect="off" spellcheck="false"
       oninput="onInputChange()" onkeydown="onInputKey(event)">
     <button class="add-btn" onclick="addItem()">+</button>
@@ -393,7 +393,7 @@ body::before{
   <!-- Summary bar -->
   <div class="summary-bar" id="summary-bar" style="display:none">
     <div class="summary-counts" id="summary-counts"></div>
-    <button class="clear-done-btn" onclick="clearDone()" data-i18n="shoppingClearDone">Clear done</button>
+    <button class="clear-done-btn" onclick="clearDone()" data-i18n="shopClearDone">Clear done</button>
   </div>
 
   <!-- Items list -->
@@ -413,20 +413,21 @@ body::before{
    SECTIONS CONFIG
 ═══════════════════════════════════════ */
 const SECTIONS = [
-  { id:'produce',   label:'Produce',    icon:'🥦', color:'#22c55e' },
-  { id:'dairy',     label:'Dairy',      icon:'🥛', color:'#60a5fa' },
-  { id:'meat',      label:'Meat',       icon:'🥩', color:'#f87171' },
-  { id:'bakery',    label:'Bakery',     icon:'🍞', color:'#fb923c' },
-  { id:'frozen',    label:'Frozen',     icon:'🧊', color:'#38bdf8' },
-  { id:'drinks',    label:'Drinks',     icon:'🥤', color:'#a78bfa' },
-  { id:'snacks',    label:'Snacks',     icon:'🍿', color:'#fbbf24' },
-  { id:'cleaning',  label:'Cleaning',   icon:'🧹', color:'#34d399' },
-  { id:'personal',  label:'Personal',   icon:'🧴', color:'#f472b6' },
-  { id:'pantry',    label:'Pantry',     icon:'🫙', color:'#d97706' },
-  { id:'other',     label:'Other',      icon:'🛒', color:'#94a3b8' },
+  { id:'produce',   labelKey:'shopSecProduce',   icon:'🥦', color:'#22c55e' },
+  { id:'dairy',     labelKey:'shopSecDairy',     icon:'🥛', color:'#60a5fa' },
+  { id:'meat',      labelKey:'shopSecMeat',      icon:'🥩', color:'#f87171' },
+  { id:'bakery',    labelKey:'shopSecBakery',    icon:'🍞', color:'#fb923c' },
+  { id:'frozen',    labelKey:'shopSecFrozen',    icon:'🧊', color:'#38bdf8' },
+  { id:'drinks',    labelKey:'shopSecDrinks',    icon:'🥤', color:'#a78bfa' },
+  { id:'snacks',    labelKey:'shopSecSnacks',    icon:'🍿', color:'#fbbf24' },
+  { id:'cleaning',  labelKey:'shopSecCleaning',  icon:'🧹', color:'#34d399' },
+  { id:'personal',  labelKey:'shopSecPersonal',  icon:'🧴', color:'#f472b6' },
+  { id:'pantry',    labelKey:'shopSecPantry',    icon:'🫙', color:'#d97706' },
+  { id:'other',     labelKey:'shopSecOther',     icon:'🛒', color:'#94a3b8' },
 ];
 
-const SECT_MAP = Object.fromEntries(SECTIONS.map(s=>[s.id, s]));
+function getSections(){ return SECTIONS.map(s=>({...s, label: GI.get(s.labelKey)||s.labelKey})); }
+function getSectMap(){ const m={}; getSections().forEach(s=>m[s.id]=s); return m; }
 
 /* ═══════════════════════════════════════
    DATA
@@ -452,7 +453,7 @@ function render(){
 
 function renderSectionPicker(){
   const wrap = document.getElementById('section-picker');
-  wrap.innerHTML = SECTIONS.map(s=>`
+  wrap.innerHTML = getSections().map(s=>`
     <button class="section-opt${s.id===selectedSection?' active':''}"
       style="${s.id===selectedSection?`background:${s.color};border-color:${s.color}`:'border-color:rgba(255,255,255,.1)'}"
       onclick="pickSection('${s.id}')">
@@ -468,11 +469,11 @@ function renderFilterBar(){
   let tags = `<div class="filter-tag${activeFilter==='all'?' active':''}"
     style="${activeFilter==='all'?'background:linear-gradient(135deg,#0d6b2a,#1a8a40)':''}"
     onclick="setFilter('all')">
-    <span class="ft-icon">🛒</span> All
+    <span class="ft-icon">🛒</span> ${GI.get('all')}
     <span class="ft-count">${totalCount}</span>
   </div>`;
 
-  SECTIONS.forEach(s=>{
+  getSections().forEach(s=>{
     const count = items.filter(i=>i.section===s.id).length;
     if(count === 0) return;
     const isActive = activeFilter===s.id;
@@ -489,12 +490,13 @@ function renderFilterBar(){
 
 function renderItems(){
   const wrap = document.getElementById('items-wrap');
+  const SECT_MAP = getSectMap();
   let filtered = activeFilter==='all' ? items : items.filter(i=>i.section===activeFilter);
 
   if(!filtered.length){
     const msg = activeFilter==='all'
-      ? 'Your list is empty<br>Add items above'
-      : `No items in #${SECT_MAP[activeFilter]?.label || activeFilter}`;
+      ? GI.get('shopEmpty').replace('\\n','<br>')
+      : GI.get('shopNoSection').replace('{section}', SECT_MAP[activeFilter]?.label || activeFilter);
     wrap.innerHTML = `<div class="empty-state"><div class="empty-icon">🛒</div><div>${msg}</div></div>`;
     return;
   }
@@ -508,7 +510,7 @@ function renderItems(){
 
   // Sort: pending first within each group
   let html = '';
-  const sectionOrder = SECTIONS.map(s=>s.id).filter(id=>groups[id]);
+  const sectionOrder = getSections().map(s=>s.id).filter(id=>groups[id]);
   sectionOrder.forEach(sid=>{
     const s = SECT_MAP[sid];
     const grpItems = groups[sid].sort((a,b)=>a.done-b.done);
@@ -524,6 +526,7 @@ function renderItems(){
 }
 
 function renderItemRow(item){
+  const SECT_MAP = getSectMap();
   const s = SECT_MAP[item.section] || SECT_MAP['other'];
   return `<div class="item-row${item.done?' done':''}" id="row-${item.id}">
     <div class="check-box" onclick="toggleDone('${item.id}')">
@@ -551,14 +554,14 @@ function renderSummary(){
   if(!total){ bar.style.display='none'; return; }
   bar.style.display='flex';
   document.getElementById('summary-counts').innerHTML =
-    `<div class="summary-count-item"><div class="summary-dot" style="background:#34c759"></div>${done} done</div>
-     <div class="summary-count-item"><div class="summary-dot" style="background:#94a3b8"></div>${total-done} left</div>`;
+    `<div class="summary-count-item"><div class="summary-dot" style="background:#34c759"></div>${done} ${GI.get('shopDone')}</div>
+     <div class="summary-count-item"><div class="summary-dot" style="background:#94a3b8"></div>${total-done} ${GI.get('shopLeft')}</div>`;
 }
 
 function updateSub(){
   document.getElementById('app-sub').textContent =
-    items.length === 0 ? 'Your list is empty' :
-    `${items.length} item${items.length!==1?'s':''}`;
+    items.length === 0 ? GI.get('shopEmpty').split('\n')[0] :
+    `${items.length} ${GI.get(items.length!==1?'shopItems':'shopItem')}`;
 }
 
 /* ═══════════════════════════════════════
@@ -599,17 +602,17 @@ function deleteItem(id){
 
 function clearDone(){
   const count = items.filter(i=>i.done).length;
-  if(!count){ showToast('No completed items'); return; }
+  if(!count){ showToast(GI.get('shopNoCompleted')); return; }
   items = items.filter(i=>!i.done);
   save(); render();
-  showToast(`🗑 Cleared ${count} item${count!==1?'s':''}`);
+  showToast(`🗑 ${GI.get('shopCleared').replace('{n}', count)}`);
 }
 
 function clearAll(){
-  if(!items.length){ showToast('List is already empty'); return; }
-  if(!confirm(`Clear all ${items.length} items?`)) return;
+  if(!items.length){ showToast(GI.get('shopAlreadyEmpty')); return; }
+  if(!confirm(GI.get('shopConfirmClear').replace('{n}', items.length))) return;
   items=[];save();render();
-  showToast('🗑 List cleared');
+  showToast('🗑 ' + GI.get('shopListCleared'));
 }
 
 function setFilter(f){
