@@ -206,6 +206,30 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
 .day-rain-bar { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .day-rain-fill { height: 100%; background: linear-gradient(90deg, #4f8ef7, #7cbeff); border-radius: 2px; transition: width 0.8s ease; }
 
+/* ── Sun & Moon ── */
+.sun-moon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sun-moon-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; box-shadow: var(--shadow-sm);
+  padding: 14px 16px;
+}
+.sun-moon-card-title {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.6px; color: var(--text-3); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 6px;
+}
+.sun-moon-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.sun-moon-row:last-child { margin-bottom: 0; }
+.sun-moon-label { font-size: 11.5px; color: var(--text-3); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+.sun-moon-val { font-size: 13px; font-weight: 700; }
+.moon-phase-icon { font-size: 36px; text-align: center; margin: 4px 0 10px; }
+.moon-phase-name { font-size: 12px; font-weight: 600; color: var(--text-2); text-align: center; }
+.sun-arc-wrap { position: relative; height: 60px; margin: 4px 0 10px; overflow: hidden; }
+.sun-arc-wrap svg { width: 100%; height: 100%; }
+
 /* ── Saved locations ── */
 .locations-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .loc-card {
@@ -362,6 +386,12 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
     <div class="forecast-list" id="dailyList"></div>
   </div>
 
+  <!-- Sun & Moon -->
+  <div class="section-pad" id="sunMoonSection" style="display:none">
+    <div class="section-title" data-i18n="weatherSunMoon">Sun & Moon</div>
+    <div class="sun-moon-grid" id="sunMoonGrid"></div>
+  </div>
+
   <!-- Saved locations -->
   <div class="section-pad" id="locationsSection">
     <div class="section-title" data-i18n="weatherSavedLocations">Saved locations</div>
@@ -459,7 +489,7 @@ function setUnit(u) {
 
 // ── Weather API ──
 async function fetchWeather(lat, lon) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=7&wind_speed_unit=kmh`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,moonrise,moonset,moon_phase&timezone=auto&forecast_days=7&wind_speed_unit=kmh`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Weather fetch failed');
   return res.json();
@@ -507,6 +537,7 @@ async function loadWeather(loc) {
   document.getElementById('heroContent').innerHTML = `<div class="hero-skeleton"><div class="skel skel-sm"></div><div class="skel skel-lg"></div><div class="skel skel-md"></div></div>`;
   document.getElementById('hourlySection').style.display = 'none';
   document.getElementById('dailySection').style.display = 'none';
+  document.getElementById('sunMoonSection').style.display = 'none';
 
   try {
     const data = await fetchWeather(loc.lat, loc.lon);
@@ -563,6 +594,94 @@ async function loadWeather(loc) {
     }).join('');
     document.getElementById('dailyList').innerHTML = dailyHtml;
     document.getElementById('dailySection').style.display = 'block';
+
+    // Sun & Moon (today = index 0)
+    const sr = data.daily.sunrise?.[0];
+    const ss = data.daily.sunset?.[0];
+    const mr = data.daily.moonrise?.[0];
+    const ms = data.daily.moonset?.[0];
+    const mp = data.daily.moon_phase?.[0]; // 0..1
+
+    function fmtTime(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    }
+
+    function moonPhaseName(p) {
+      // p = 0..1 where 0/1 = new moon, 0.5 = full moon
+      if (p < 0.0625 || p >= 0.9375) return [GI.get('weatherMoonNew'), '🌑'];
+      if (p < 0.1875) return [GI.get('weatherMoonWaxCrescent'), '🌒'];
+      if (p < 0.3125) return [GI.get('weatherMoonFirstQ'), '🌓'];
+      if (p < 0.4375) return [GI.get('weatherMoonWaxGibbous'), '🌔'];
+      if (p < 0.5625) return [GI.get('weatherMoonFull'), '🌕'];
+      if (p < 0.6875) return [GI.get('weatherMoonWanGibbous'), '🌖'];
+      if (p < 0.8125) return [GI.get('weatherMoonLastQ'), '🌗'];
+      return [GI.get('weatherMoonWanCrescent'), '🌘'];
+    }
+
+    function sunArcSvg(srIso, ssIso) {
+      if (!srIso || !ssIso) return '';
+      const now = new Date();
+      const rise = new Date(srIso);
+      const set = new Date(ssIso);
+      const total = set - rise;
+      const elapsed = Math.max(0, Math.min(total, now - rise));
+      const progress = total > 0 ? elapsed / total : 0;
+
+      // Arc: semicircle from left to right
+      const W = 160, H = 60, cx = W/2, cy = H, r = H - 4;
+      // Position on arc (0=sunrise left, 1=sunset right)
+      const angle = Math.PI * (1 - progress); // PI=left(rise), 0=right(set)
+      const sx = cx + r * Math.cos(Math.PI); // sunrise point
+      const sy = cy + r * Math.sin(Math.PI);
+      const ex = cx + r * Math.cos(0);       // sunset point
+      const ey = cy;
+      const sunX = cx + r * Math.cos(angle);
+      const sunY = cy - r * Math.sin(Math.PI - angle);
+      const isDaylight = now >= rise && now <= set;
+
+      return `<svg viewBox="0 0 ${W} ${H}" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}"
+          stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+        ${isDaylight ? `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${sunX} ${sunY}"
+          stroke="rgba(255,180,0,0.5)" stroke-width="2" fill="none"/>` : ''}
+        <circle cx="${cx - r}" cy="${cy}" r="3" fill="rgba(255,180,0,0.6)"/>
+        <circle cx="${cx + r}" cy="${cy}" r="3" fill="rgba(255,120,0,0.5)"/>
+        ${isDaylight ? `<circle cx="${sunX}" cy="${sunY}" r="7" fill="rgba(255,200,0,0.25)"/>
+        <circle cx="${sunX}" cy="${sunY}" r="4" fill="#ffc800"/>` : ''}
+      </svg>`;
+    }
+
+    const [mpName, mpIcon] = moonPhaseName(mp ?? 0);
+
+    document.getElementById('sunMoonGrid').innerHTML = `
+      <div class="sun-moon-card">
+        <div class="sun-moon-card-title">☀️ ${GI.get('weatherSun')}</div>
+        <div class="sun-arc-wrap">${sunArcSvg(sr, ss)}</div>
+        <div class="sun-moon-row">
+          <span class="sun-moon-label">🌅 ${GI.get('weatherSunrise')}</span>
+          <span class="sun-moon-val">${fmtTime(sr)}</span>
+        </div>
+        <div class="sun-moon-row">
+          <span class="sun-moon-label">🌇 ${GI.get('weatherSunset')}</span>
+          <span class="sun-moon-val">${fmtTime(ss)}</span>
+        </div>
+      </div>
+      <div class="sun-moon-card">
+        <div class="sun-moon-card-title">🌙 ${GI.get('weatherMoon')}</div>
+        <div class="moon-phase-icon">${mpIcon}</div>
+        <div class="moon-phase-name">${mpName}</div>
+        <div class="sun-moon-row" style="margin-top:10px">
+          <span class="sun-moon-label">🌕 ${GI.get('weatherMoonrise')}</span>
+          <span class="sun-moon-val">${fmtTime(mr)}</span>
+        </div>
+        <div class="sun-moon-row">
+          <span class="sun-moon-label">🌑 ${GI.get('weatherMoonset')}</span>
+          <span class="sun-moon-val">${fmtTime(ms)}</span>
+        </div>
+      </div>`;
+    document.getElementById('sunMoonSection').style.display = 'block';
 
     // Cache temp for saved locations display
     loc._temp = temp;

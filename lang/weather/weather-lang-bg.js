@@ -60,4 +60,20 @@ weatherSearchFailed:"Търсенето не успя. Опитайте отно
 weatherLoadFailed:"Не успя да зареди погодата",
 weatherLoadFailedSub:"Проверете връзката си и опитайте отново",
 weatherLoading:"Зареждане…"
+,
+weatherSunMoon:"Слънце & Луна",
+weatherSun:"Слънце",
+weatherMoon:"Луна",
+weatherSunrise:"Изгрев",
+weatherSunset:"Залез",
+weatherMoonrise:"Изгрев на луната",
+weatherMoonset:"Залез на луната",
+weatherMoonNew:"Новолуние",
+weatherMoonWaxCrescent:"Нарастваща луна",
+weatherMoonFirstQ:"Първа четвърт",
+weatherMoonWaxGibbous:"Нарастваща изпъкнала",
+weatherMoonFull:"Пълнолуние",
+weatherMoonWanGibbous:"Намаляваща изпъкнала",
+weatherMoonLastQ:"Последна четвърт",
+weatherMoonWanCrescent:"Намаляваща луна"
 };

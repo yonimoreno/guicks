@@ -60,4 +60,20 @@ weatherSearchFailed:"Η αναζήτηση απέτυχε. Δοκιμάστε ξ
 weatherLoadFailed:"Αποτυχία φόρτωσης καιρού",
 weatherLoadFailedSub:"Ελέγξτε τη σύνδεση και δοκιμάστε ξανά",
 weatherLoading:"Φόρτωση…"
+,
+weatherSunMoon:"Ήλιος & Σελήνη",
+weatherSun:"Ήλιος",
+weatherMoon:"Σελήνη",
+weatherSunrise:"Ανατολή",
+weatherSunset:"Δύση",
+weatherMoonrise:"Ανατολή σελήνης",
+weatherMoonset:"Δύση σελήνης",
+weatherMoonNew:"Νέα σελήνη",
+weatherMoonWaxCrescent:"Αυξανόμενη μηνίσκος",
+weatherMoonFirstQ:"Πρώτο τέταρτο",
+weatherMoonWaxGibbous:"Αυξανόμενη αμφίκυρτος",
+weatherMoonFull:"Πανσέληνος",
+weatherMoonWanGibbous:"Φθίνουσα αμφίκυρτος",
+weatherMoonLastQ:"Τελευταίο τέταρτο",
+weatherMoonWanCrescent:"Φθίνουσα μηνίσκος"
 };
