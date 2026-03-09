@@ -31,7 +31,7 @@ monthsShort:["Ιαν", "Φεβ", "Μαρ", "Απρ", "Μαΐ", "Ιουν", "Ιο
 days:["Κυρ", "Δευ", "Τρί", "Τετ", "Πέμ", "Παρ", "Σάβ"],
 homeTagline:"Γρήγορα εργαλεία, μηδέν τριβή",
 homeSearch:"Αναζήτηση εργαλείων…",
-appNames:{"qr": "Γεννήτρια QR", "currency": "Νόμισμα", "favorites": "Αγαπημένα", "converter": "Μετατροπέας", "weather": "Καιρός", "lucky": "Τύχη", "calculator": "Αριθμομηχανή", "stocks": "Μετοχές", "translate": "Μετάφραση", "clock": "Ρολόι", "calendar": "Ημερολόγιο", "shopping": "Ψώνια", "reminders": "Υπενθυμίσεις", "notes": "Σημειώσεις", "settings": "Ρυθμίσεις",imageStudio:"Στούντιο εικόνων"},
+appNames:{"qr": "Γεννήτρια QR", "currency": "Νόμισμα", "favorites": "Αγαπημένα", "converter": "Μετατροπέας", "weather": "Καιρός", "lucky": "Τύχη", "calculator": "Αριθμομηχανή", "stocks": "Μετοχές", "translate": "Μετάφραση", "clock": "Ρολόι", "calendar": "Ημερολόγιο", "shopping": "Ψώνια", "reminders": "Υπενθυμίσεις", "notes": "Σημειώσεις", "settings": "Ρυθμίσεις",imageStudio:"Στούντιο εικόνων",password:"Κωδικός"},
 dockHint:"Κρατήστε πατημένη μια εφαρμογή για να τη σύρετε στο dock",
 dockEditHint:"Πατήστε εικονίδιο για αφαίρεση · Πατήστε αλλού για τέλος",
 dockLongPress:"Παρατεταμένο πάτημα εφαρμογής για επεξεργασία dock",

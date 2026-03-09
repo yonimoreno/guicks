@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt
 days:["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
 homeTagline:"Snelle tools, nul wrijving",
 homeSearch:"Tools zoeken…",
-appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favorieten", "converter": "Converter", "weather": "Weer", "lucky": "Geluk", "calculator": "Rekenmachine", "stocks": "Aandelen", "translate": "Vertalen", "clock": "Klok", "calendar": "Kalender", "shopping": "Boodschappen", "reminders": "Herinneringen", "notes": "Notities", "settings": "Instellingen",imageStudio:"Beeldstudio"},
+appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favorieten", "converter": "Converter", "weather": "Weer", "lucky": "Geluk", "calculator": "Rekenmachine", "stocks": "Aandelen", "translate": "Vertalen", "clock": "Klok", "calendar": "Kalender", "shopping": "Boodschappen", "reminders": "Herinneringen", "notes": "Notities", "settings": "Instellingen",imageStudio:"Beeldstudio",password:"Wachtwoord"},
 dockHint:"Houd een app ingedrukt om naar het dock te slepen",
 dockEditHint:"Tik op pictogram om te verwijderen · Tik elders om te beëindigen",
 dockLongPress:"Houd een app lang ingedrukt om het dock te bewerken",

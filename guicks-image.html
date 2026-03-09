@@ -38,6 +38,7 @@ html.guicks-light .toggle-bg{background:rgba(0,0,0,.07)!important}
 <title>Image Studio – Guicks</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="./guicks-i18n.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -233,15 +234,15 @@ body::before{
       </svg>
     </div>
     <div class="app-header-text">
-      <h1>Image Studio</h1>
-      <p>Compress · Convert · Resize — 100% private</p>
+      <h1 data-i18n="imgTitle">Image Studio</h1>
+      <p data-i18n="imgSub">Compress · Convert · Resize — 100% private</p>
     </div>
   </div>
 
   <!-- Tab bar -->
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('single')">Single</button>
-    <button class="tab-btn" onclick="switchTab('batch')">Batch</button>
+    <button class="tab-btn active" onclick="switchTab('single')" data-i18n="imgSingle">Single</button>
+    <button class="tab-btn" onclick="switchTab('batch')" data-i18n="imgBatch">Batch</button>
   </div>
 
   <!-- ═══ SINGLE TAB ═══ -->
@@ -251,8 +252,8 @@ body::before{
     <div class="card" style="padding:14px">
       <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
         <div class="drop-icon">🖼️</div>
-        <div class="drop-label">Drop image here</div>
-        <div class="drop-sub">or <span>browse files</span> — JPG, PNG, WebP, GIF, BMP</div>
+        <div class="drop-label" data-i18n="imgDrop">Drop image here</div>
+        <div class="drop-sub"><span data-i18n="imgDropOr">or</span> <span data-i18n="imgDropBrowse">browse files</span> — <span data-i18n="imgDropFormats">JPG, PNG, WebP, GIF, BMP</span></div>
       </div>
       <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="onFileSelect(event)">
 
@@ -261,11 +262,11 @@ body::before{
         <div class="before-after">
           <div class="ba-panel">
             <img class="ba-img" id="imgBefore" src="" alt="Original">
-            <div class="before-after-label">Original</div>
+            <div class="before-after-label" data-i18n="imgOriginal">Original</div>
           </div>
           <div class="ba-panel">
             <img class="ba-img" id="imgAfter" src="" alt="Result">
-            <div class="before-after-label">Result</div>
+            <div class="before-after-label" data-i18n="imgResult">Result</div>
           </div>
         </div>
         <!-- Savings -->
@@ -286,7 +287,7 @@ body::before{
     <div class="card" id="ctrlCard" style="display:none">
 
       <!-- Format -->
-      <div class="section-title">Output Format</div>
+      <div class="section-title" data-i18n="imgOutputFmt">Output Format</div>
       <div class="fmt-row" style="margin-bottom:18px" id="fmtRow">
         <button class="fmt-btn active" onclick="setFmt('jpeg')" data-fmt="jpeg">JPEG</button>
         <button class="fmt-btn" onclick="setFmt('png')" data-fmt="png">PNG</button>
@@ -295,28 +296,28 @@ body::before{
 
       <!-- Quality -->
       <div id="qualitySection">
-        <div class="section-title">Compression</div>
+        <div class="section-title" data-i18n="imgCompression">Compression</div>
         <div class="ctrl-row">
-          <span class="slider-label">Quality</span>
+          <span class="slider-label" data-i18n="imgQuality">Quality</span>
           <span class="slider-val" id="qualVal">82%</span>
         </div>
         <input type="range" class="slider" id="qualSlider" min="10" max="100" value="82" oninput="onQualityChange()">
         <div style="display:flex;justify-content:space-between;margin-top:4px;margin-bottom:18px">
-          <span class="dim-text">Smaller file</span>
-          <span class="dim-text">Best quality</span>
+          <span class="dim-text" data-i18n="imgSmallerFile">Smaller file</span>
+          <span class="dim-text" data-i18n="imgBestQuality">Best quality</span>
         </div>
       </div>
 
       <!-- Resize -->
-      <div class="section-title">Resize</div>
+      <div class="section-title" data-i18n="imgResize">Resize</div>
       <div class="toggle-row" style="margin-bottom:10px">
-        <span style="font-size:13px;font-weight:600">Enable resize</span>
+        <span style="font-size:13px;font-weight:600" data-i18n="imgEnableResize">Enable resize</span>
         <div class="toggle-bg" id="resizeToggle" onclick="toggleResize()"><div class="toggle-knob"></div></div>
       </div>
       <div id="resizeControls" style="display:none">
         <div style="display:flex;gap:8px;margin-bottom:10px">
-          <button class="fmt-btn active" onclick="setResizeMode('px')" data-rmode="px" style="font-size:11px;padding:6px 12px">Pixels</button>
-          <button class="fmt-btn" onclick="setResizeMode('pct')" data-rmode="pct" style="font-size:11px;padding:6px 12px">Percent</button>
+          <button class="fmt-btn active" onclick="setResizeMode('px')" data-rmode="px" style="font-size:11px;padding:6px 12px" data-i18n="imgPixels">Pixels</button>
+          <button class="fmt-btn" onclick="setResizeMode('pct')" data-rmode="pct" style="font-size:11px;padding:6px 12px" data-i18n="imgPercent">Percent</button>
         </div>
         <div class="resize-grid" id="pxGrid">
           <input type="number" class="resize-input" id="rW" placeholder="W" min="1" oninput="onWidthChange()">
@@ -328,15 +329,13 @@ body::before{
           <span style="font-size:13px;margin-left:8px;color:var(--text3)">%</span>
         </div>
         <div class="toggle-row">
-          <span class="dim-text">Keep aspect ratio</span>
+          <span class="dim-text" data-i18n="imgKeepAspect">Keep aspect ratio</span>
           <div class="toggle-bg on" id="aspectToggle" onclick="toggleAspect()"><div class="toggle-knob"></div></div>
         </div>
       </div>
 
       <!-- Download -->
-      <button class="dl-btn" id="dlBtn" onclick="downloadSingle()">
-        ⬇ Download Result
-      </button>
+      <button class="dl-btn" id="dlBtn" onclick="downloadSingle()" data-i18n="imgDownload">⬇ Download Result</button>
     </div>
   </div>
 
@@ -345,53 +344,49 @@ body::before{
 
     <!-- Settings for batch -->
     <div class="card">
-      <div class="section-title">Batch Settings</div>
-
-      <label class="opt-label">Output Format</label>
+      <div class="section-title" data-i18n="imgBatchSettings">Batch Settings</div>
+      <label class="opt-label" data-i18n="imgOutputFmt">Output Format</label>
       <div class="fmt-row" style="margin-bottom:14px" id="bFmtRow">
         <button class="fmt-btn active" onclick="setBatchFmt('jpeg')" data-bfmt="jpeg">JPEG</button>
         <button class="fmt-btn" onclick="setBatchFmt('png')" data-bfmt="png">PNG</button>
         <button class="fmt-btn" onclick="setBatchFmt('webp')" data-bfmt="webp">WebP</button>
-        <button class="fmt-btn" onclick="setBatchFmt('original')" data-bfmt="original">Keep original</button>
+        <button class="fmt-btn" onclick="setBatchFmt('original')" data-bfmt="original" data-i18n="imgKeepOriginal">Keep original</button>
       </div>
-
-      <label class="opt-label">Quality</label>
+      <label class="opt-label" data-i18n="imgQuality">Quality</label>
       <div class="ctrl-row" style="margin-bottom:4px">
         <div class="slider-wrap"><input type="range" class="slider" id="bQualSlider" min="10" max="100" value="82" oninput="document.getElementById('bQualVal').textContent=this.value+'%'"></div>
         <span class="slider-val" id="bQualVal">82%</span>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:16px">
-        <span class="dim-text">Smaller file</span>
-        <span class="dim-text">Best quality</span>
+        <span class="dim-text" data-i18n="imgSmallerFile">Smaller file</span>
+        <span class="dim-text" data-i18n="imgBestQuality">Best quality</span>
       </div>
 
-      <label class="opt-label">Max Width (optional)</label>
+      <label class="opt-label" data-i18n="imgMaxWidth">Max Width (optional)</label>
       <div style="display:flex;align-items:center;gap:8px">
         <input type="number" class="resize-input" id="bMaxW" placeholder="e.g. 1920" min="1" style="max-width:150px">
-        <span class="dim-text">px — leave empty to keep original</span>
+        <span class="dim-text" data-i18n="imgMaxWidthHint">px — leave empty to keep original</span>
       </div>
     </div>
 
     <!-- File list -->
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="section-title" style="margin-bottom:0">Files (<span id="batchCount">0</span>)</div>
-        <button class="batch-remove" onclick="clearBatch()" style="font-size:12px;font-weight:700;color:var(--text3);padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer" id="clearBatchBtn">Clear all</button>
+        <div class="section-title" style="margin-bottom:0"><span data-i18n="imgBatchFiles">Files</span> (<span id="batchCount">0</span>)</div>
+        <button class="batch-remove" onclick="clearBatch()" style="font-size:12px;font-weight:700;color:var(--text3);padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer" id="clearBatchBtn" data-i18n="imgClearAll">Clear all</button>
       </div>
       <div class="batch-list" id="batchList">
         <div class="empty-state" id="batchEmpty">
           <div class="es-icon">📂</div>
-          <p>No files added yet</p>
+          <p data-i18n="imgNoFiles">No files added yet</p>
         </div>
       </div>
       <input type="file" id="batchInput" accept="image/*" multiple style="display:none" onchange="onBatchSelect(event)">
-      <button class="add-more-btn" onclick="document.getElementById('batchInput').click()">+ Add images</button>
+      <button class="add-more-btn" onclick="document.getElementById('batchInput').click()" data-i18n="imgAddImages">+ Add images</button>
     </div>
 
     <div style="padding:0 16px">
-      <button class="dl-btn dl-btn-all" id="batchDlBtn" onclick="downloadAll()" disabled>
-        ⬇ Process &amp; Download All
-      </button>
+      <button class="dl-btn dl-btn-all" id="batchDlBtn" onclick="downloadAll()" disabled data-i18n="imgProcessAll">⬇ Process &amp; Download All</button>
     </div>
   </div>
 
@@ -500,12 +495,12 @@ function processImage() {
 
     const pctEl = document.getElementById('savingsPct');
     if (savingPct > 0) {
-      pctEl.textContent = '↓ ' + savingPct + '% smaller';
+      pctEl.textContent = '↓ ' + savingPct + '% ' + GI.get('imgSmaller');
       pctEl.className = 'savings-pct';
       document.getElementById('savingsBar').style.width = Math.min(savingPct, 100) + '%';
       document.getElementById('savingsBar').style.background = 'linear-gradient(90deg,#12b76a,#84f7b0)';
     } else {
-      pctEl.textContent = '↑ ' + Math.abs(savingPct) + '% larger';
+      pctEl.textContent = '↑ ' + Math.abs(savingPct) + '% ' + GI.get('imgLarger');
       pctEl.className = 'savings-pct savings-neg';
       document.getElementById('savingsBar').style.width = '100%';
       document.getElementById('savingsBar').style.background = 'linear-gradient(90deg,#f97316,#fbbf24)';
@@ -592,7 +587,7 @@ function downloadSingle() {
     const dataUrl = canvas.toDataURL(mime, fmt === 'png' ? undefined : quality);
     const base = currentFile.name.replace(/\.[^.]+$/, '');
     triggerDownload(dataUrl, base + '_guicks.' + ext);
-    showToast('✅ Downloaded!');
+    showToast(GI.get('imgDownloaded'));
   };
   img.src = URL.createObjectURL(currentFile);
 }
@@ -629,7 +624,7 @@ function renderBatch() {
     const name = item.file.name;
     const origSize = fmtBytes(item.file.size);
     const newSize = item.resultSize ? fmtBytes(item.resultSize) : '—';
-    const statusLabel = item.status === 'done' ? '✓ Done' : item.status === 'processing' ? '⏳' : 'Pending';
+    const statusLabel = item.status === 'done' ? GI.get('imgDone') : item.status === 'processing' ? '⏳' : GI.get('imgPending');
     const thumbSrc = item.thumbUrl || '';
     return `<div class="batch-item" id="bitem-${i}">
       <img class="batch-thumb" src="${thumbSrc}" id="bthumb-${i}">
@@ -667,7 +662,7 @@ async function downloadAll() {
   if (!batchFiles.length) return;
   const btn = document.getElementById('batchDlBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ Processing…';
+  btn.textContent = GI.get('imgProcessing');
 
   const quality = parseInt(document.getElementById('bQualSlider').value) / 100;
   const fmt = batchFormat;
@@ -711,8 +706,8 @@ async function downloadAll() {
   }
 
   btn.disabled = false;
-  btn.textContent = '⬇ Process & Download All';
-  showToast('✅ All ' + batchFiles.length + ' images processed!');
+  btn.textContent = GI.get('imgProcessAll');
+  showToast(GI.get('imgAllDone').replace('{n}', batchFiles.length));
 }
 
 function downloadBatchItem(i) {
@@ -746,6 +741,10 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  GI.init(function() { /* translations applied automatically via data-i18n */ });
+});
 </script>
 </body>
 </html>

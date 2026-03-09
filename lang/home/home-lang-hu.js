@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Már", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep"
 days:["V", "H", "K", "Sze", "Cs", "P", "Szo"],
 homeTagline:"Gyors eszközök, nulla súrlódás",
 homeSearch:"Eszközök keresése…",
-appNames:{"qr": "QR-generátor", "currency": "Valuta", "favorites": "Kedvencek", "converter": "Átalakító", "weather": "Időjárás", "lucky": "Szerencse", "calculator": "Számológép", "stocks": "Részvények", "translate": "Fordítás", "clock": "Óra", "calendar": "Naptár", "shopping": "Bevásárlás", "reminders": "Emlékeztetők", "notes": "Jegyzetek", "settings": "Beállítások",imageStudio:"Képstúdió"},
+appNames:{"qr": "QR-generátor", "currency": "Valuta", "favorites": "Kedvencek", "converter": "Átalakító", "weather": "Időjárás", "lucky": "Szerencse", "calculator": "Számológép", "stocks": "Részvények", "translate": "Fordítás", "clock": "Óra", "calendar": "Naptár", "shopping": "Bevásárlás", "reminders": "Emlékeztetők", "notes": "Jegyzetek", "settings": "Beállítások",imageStudio:"Képstúdió",password:"Jelszó"},
 dockHint:"Tartsa nyomva az appot a dockba húzáshoz",
 dockEditHint:"Koppintson az ikonra az eltávolításhoz · Koppintson máshova a befejezéshez",
 dockLongPress:"Tartsa nyomva az appot a dock szerkesztéséhez",

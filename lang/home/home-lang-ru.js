@@ -31,7 +31,7 @@ monthsShort:["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл
 days:["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
 homeTagline:"Быстрые инструменты, ноль трений",
 homeSearch:"Поиск инструментов…",
-appNames:{"qr": "QR-генератор", "currency": "Валюта", "favorites": "Избранное", "converter": "Конвертер", "weather": "Погода", "lucky": "Удача", "calculator": "Калькулятор", "stocks": "Акции", "translate": "Перевод", "clock": "Часы", "calendar": "Календарь", "shopping": "Покупки", "reminders": "Напоминания", "notes": "Заметки", "settings": "Настройки",imageStudio:"Студия изображений"},
+appNames:{"qr": "QR-генератор", "currency": "Валюта", "favorites": "Избранное", "converter": "Конвертер", "weather": "Погода", "lucky": "Удача", "calculator": "Калькулятор", "stocks": "Акции", "translate": "Перевод", "clock": "Часы", "calendar": "Календарь", "shopping": "Покупки", "reminders": "Напоминания", "notes": "Заметки", "settings": "Настройки",imageStudio:"Студия изображений",password:"Пароль"},
 dockHint:"Удерживайте приложение, чтобы перетащить в dock",
 dockEditHint:"Нажмите иконку для удаления · Нажмите в стороне для завершения",
 dockLongPress:"Удержите приложение для редактирования dock",

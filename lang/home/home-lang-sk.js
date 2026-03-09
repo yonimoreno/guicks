@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "Máj", "Jún", "Júl", "Aug", "Sep", "
 days:["Ne", "Po", "Ut", "St", "Št", "Pi", "So"],
 homeTagline:"Rýchle nástroje, nulové trenie",
 homeSearch:"Hľadať nástroje…",
-appNames:{"qr": "Generátor QR", "currency": "Mena", "favorites": "Obľúbené", "converter": "Prevodník", "weather": "Počasie", "lucky": "Šťastie", "calculator": "Kalkulačka", "stocks": "Akcie", "translate": "Preložiť", "clock": "Hodiny", "calendar": "Kalendár", "shopping": "Nákupy", "reminders": "Pripomienky", "notes": "Poznámky", "settings": "Nastavenia",imageStudio:"Obrazové štúdio"},
+appNames:{"qr": "Generátor QR", "currency": "Mena", "favorites": "Obľúbené", "converter": "Prevodník", "weather": "Počasie", "lucky": "Šťastie", "calculator": "Kalkulačka", "stocks": "Akcie", "translate": "Preložiť", "clock": "Hodiny", "calendar": "Kalendár", "shopping": "Nákupy", "reminders": "Pripomienky", "notes": "Poznámky", "settings": "Nastavenia",imageStudio:"Obrazové štúdio",password:"Heslo"},
 dockHint:"Podržte aplikáciu na pretiahnutie do docku",
 dockEditHint:"Klepnite na ikonu pre odobratie · Klepnite inde pre dokončenie",
 dockLongPress:"Podržte aplikáciu na úpravu docku",

@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct
 days:["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
 homeTagline:"Quick tools, zero friction",
 homeSearch:"Search tools…",
-appNames:{"qr": "QR Generator", "currency": "Currency", "favorites": "Favorites", "converter": "Converter", "weather": "Weather", "lucky": "Lucky", "calculator": "Calculator", "stocks": "Stocks", "translate": "Translate", "clock": "Clock", "calendar": "Calendar", "shopping": "Shopping", "reminders": "Reminders", "notes": "Notes", "settings": "Settings",imageStudio:"Image Studio"},
+appNames:{"qr": "QR Generator", "currency": "Currency", "favorites": "Favorites", "converter": "Converter", "weather": "Weather", "lucky": "Lucky", "calculator": "Calculator", "stocks": "Stocks", "translate": "Translate", "clock": "Clock", "calendar": "Calendar", "shopping": "Shopping", "reminders": "Reminders", "notes": "Notes", "settings": "Settings",imageStudio:"Image Studio",password:"Password"},
 dockHint:"Hold an app to drag it to the dock",
 dockEditHint:"Tap icon to remove · Tap elsewhere to finish",
 dockLongPress:"Long press an app to edit dock",

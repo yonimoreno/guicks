@@ -966,6 +966,18 @@
         <span class="app-name" data-i18n="appNames.clock">Clock</span>
       </div>
 
+      <!-- Password Generator -->
+      <div class="app" onclick="openTool('./guicks-password.html', 'Password')" draggable="true" data-tool-name="Password" data-tool-url="./guicks-password.html">
+        <div class="icon" style="background: linear-gradient(145deg, #2d1060, #6b21d4);">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="5" y="11" width="14" height="10" rx="2.5" stroke="white" stroke-width="1.7"/>
+            <path d="M8 11V7a4 4 0 018 0v4" stroke="white" stroke-width="1.7" stroke-linecap="round"/>
+            <circle cx="12" cy="16" r="1.5" fill="white"/>
+          </svg>
+        </div>
+        <span class="app-name" data-i18n="appNames.password">Password</span>
+      </div>
+
       <!-- Image Studio -->
       <div class="app" onclick="openTool('./guicks-image.html', 'Image Studio')" draggable="true" data-tool-name="Image Studio" data-tool-url="./guicks-image.html">
         <div class="icon" style="background: linear-gradient(145deg, #1a1f5e, #3a4fd4);">
@@ -1216,8 +1228,12 @@
   function loadDock() {
     try {
       const saved = localStorage.getItem(DOCK_KEY);
-      if (saved) dockItems = JSON.parse(saved);
-    } catch(e) { dockItems = [null,null,null,null]; }
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        dockItems = Array.from({ length: DOCK_SIZE }, (_, i) => parsed[i] ?? null);
+      }
+    } catch(e) {}
+    dockItems = Array.from({ length: DOCK_SIZE }, (_, i) => dockItems[i] ?? null);
     renderDock();
   }
 
@@ -1388,6 +1404,20 @@
     const el = document.elementFromPoint(clientX, clientY);
     ghost.style.display = 'flex';
 
+    // Check if over a dock slot
+    const dockSlot = el?.closest('.dock-slot');
+    if (dockSlot) {
+      // Highlight dock slot
+      document.querySelectorAll('.dock-slot').forEach(s => s.classList.remove('drag-over'));
+      dockSlot.classList.add('drag-over');
+      document.getElementById('dock').classList.add('drag-over');
+      if (gridDragOver) { gridDragOver.classList.remove('drag-over-target'); gridDragOver = null; }
+      return;
+    } else {
+      document.querySelectorAll('.dock-slot').forEach(s => s.classList.remove('drag-over'));
+      document.getElementById('dock').classList.remove('drag-over');
+    }
+
     const target = el?.closest('#mainGrid .app');
     if (target && target !== gridDragSrc) {
       if (target !== gridDragOver) {
@@ -1413,8 +1443,32 @@
   }
 
   // End drag
-  function gridEndDrag() {
+  function gridEndDrag(clientX, clientY) {
     ghost.style.display = 'none';
+
+    // Check if dropped on a dock slot
+    if (clientX !== undefined && clientY !== undefined && draggingTool) {
+      ghost.style.display = 'none';
+      const el = document.elementFromPoint(clientX, clientY);
+      const dockSlot = el?.closest('.dock-slot');
+      if (dockSlot) {
+        const slotId = dockSlot.id; // "dock-0", "dock-1", etc.
+        const slotIndex = parseInt(slotId.split('-')[1]);
+        if (!isNaN(slotIndex)) {
+          const tool = getToolByName(draggingTool);
+          if (tool && tool.url) {
+            dockItems = dockItems.map(x => x === draggingTool ? null : x);
+            dockItems[slotIndex] = draggingTool;
+            saveDock();
+            renderDock();
+            showToast(`${draggingTool} ${GI.get('dockAdded')}`);
+          }
+        }
+      }
+    }
+
+    document.querySelectorAll('.dock-slot').forEach(s => s.classList.remove('drag-over'));
+    document.getElementById('dock').classList.remove('drag-over');
     if (gridDragSrc) gridDragSrc.classList.remove('drag-source');
     if (gridDragOver) gridDragOver.classList.remove('drag-over-target');
     gridDragSrc = null;
@@ -1457,9 +1511,9 @@
     }
   }, { passive: false });
 
-  document.getElementById('mainGrid').addEventListener('pointerup', (e) => {
+  document.addEventListener('pointerup', (e) => {
     clearTimeout(gridLongPressTimer);
-    if (gridDragSrc) gridEndDrag();
+    if (gridDragSrc) gridEndDrag(e.clientX, e.clientY);
   });
 
   document.getElementById('mainGrid').addEventListener('pointercancel', () => {

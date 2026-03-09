@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Ok
 days:["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
 homeTagline:"Schnelle Tools, null Reibung",
 homeSearch:"Tools suchen…",
-appNames:{"qr": "QR-Generator", "currency": "Währung", "favorites": "Favoriten", "converter": "Konverter", "weather": "Wetter", "lucky": "Glück", "calculator": "Rechner", "stocks": "Aktien", "translate": "Übersetzen", "clock": "Uhr", "calendar": "Kalender", "shopping": "Einkaufen", "reminders": "Erinnerungen", "notes": "Notizen", "settings": "Einstellungen",imageStudio:"Bildstudio"},
+appNames:{"qr": "QR-Generator", "currency": "Währung", "favorites": "Favoriten", "converter": "Konverter", "weather": "Wetter", "lucky": "Glück", "calculator": "Rechner", "stocks": "Aktien", "translate": "Übersetzen", "clock": "Uhr", "calendar": "Kalender", "shopping": "Einkaufen", "reminders": "Erinnerungen", "notes": "Notizen", "settings": "Einstellungen",imageStudio:"Bildstudio",password:"Passwort"},
 dockHint:"App gedrückt halten zum Ablegen im Dock",
 dockEditHint:"Icon tippen zum Entfernen · Woanders tippen zum Beenden",
 dockLongPress:"App lange drücken zum Bearbeiten des Docks",
