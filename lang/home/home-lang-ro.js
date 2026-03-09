@@ -31,7 +31,7 @@ monthsShort:["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct
 days:["Du", "Lu", "Ma", "Mi", "Jo", "Vi", "Sâ"],
 homeTagline:"Instrumente rapide, zero fricțiune",
 homeSearch:"Căutați instrumente…",
-appNames:{"qr": "Generator QR", "currency": "Valute", "favorites": "Favorite", "converter": "Convertor", "weather": "Vreme", "lucky": "Noroc", "calculator": "Calculator", "stocks": "Acțiuni", "translate": "Traducere", "clock": "Ceas", "calendar": "Calendar", "shopping": "Cumpărături", "reminders": "Memento-uri", "notes": "Note", "settings": "Setări",imageStudio:"Studio imagini",password:"Parolă"},
+appNames:{"qr": "Generator QR", "currency": "Valute", "favorites": "Favorite", "converter": "Convertor", "weather": "Vreme", "lucky": "Noroc", "calculator": "Calculator", "stocks": "Acțiuni", "translate": "Traducere", "clock": "Ceas", "calendar": "Calendar", "shopping": "Cumpărături", "reminders": "Memento-uri", "notes": "Note", "settings": "Setări",imageStudio:"Studio imagini",password:"Parolă",tip:"Bacșiș"},
 dockHint:"Țineți apăsată o aplicație pentru a o trage în dock",
 dockEditHint:"Atingeți pictograma pentru a elimina · Atingeți în altă parte pentru a termina",
 dockLongPress:"Apăsați lung o aplicație pentru a edita dock-ul",

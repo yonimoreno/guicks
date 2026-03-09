@@ -31,7 +31,7 @@ monthsShort:["Led", "Úno", "Bře", "Dub", "Kvě", "Čer", "Čvc", "Srp", "Zář
 days:["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],
 homeTagline:"Rychlé nástroje, nulové tření",
 homeSearch:"Hledat nástroje…",
-appNames:{"qr": "Generátor QR", "currency": "Měna", "favorites": "Oblíbené", "converter": "Převodník", "weather": "Počasí", "lucky": "Štěstí", "calculator": "Kalkulačka", "stocks": "Akcie", "translate": "Přeložit", "clock": "Hodiny", "calendar": "Kalendář", "shopping": "Nákupy", "reminders": "Připomínky", "notes": "Poznámky", "settings": "Nastavení",imageStudio:"Obrázkové studio",password:"Heslo"},
+appNames:{"qr": "Generátor QR", "currency": "Měna", "favorites": "Oblíbené", "converter": "Převodník", "weather": "Počasí", "lucky": "Štěstí", "calculator": "Kalkulačka", "stocks": "Akcie", "translate": "Přeložit", "clock": "Hodiny", "calendar": "Kalendář", "shopping": "Nákupy", "reminders": "Připomínky", "notes": "Poznámky", "settings": "Nastavení",imageStudio:"Obrázkové studio",password:"Heslo",tip:"Spropitné"},
 dockHint:"Podržte aplikaci pro přetažení do docku",
 dockEditHint:"Klepněte na ikonu pro odebrání · Klepněte jinam pro dokončení",
 dockLongPress:"Podržte aplikaci pro úpravu docku",

@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt
 days:["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
 homeTagline:"Snabba verktyg, noll friktion",
 homeSearch:"Sök verktyg…",
-appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favoriter", "converter": "Omvandlare", "weather": "Väder", "lucky": "Tur", "calculator": "Kalkylator", "stocks": "Aktier", "translate": "Översätt", "clock": "Klocka", "calendar": "Kalender", "shopping": "Inköp", "reminders": "Påminnelser", "notes": "Anteckningar", "settings": "Inställningar",imageStudio:"Bildstudio",password:"Lösenord"},
+appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favoriter", "converter": "Omvandlare", "weather": "Väder", "lucky": "Tur", "calculator": "Kalkylator", "stocks": "Aktier", "translate": "Översätt", "clock": "Klocka", "calendar": "Kalender", "shopping": "Inköp", "reminders": "Påminnelser", "notes": "Anteckningar", "settings": "Inställningar",imageStudio:"Bildstudio",password:"Lösenord",tip:"Dricks"},
 dockHint:"Håll en app intryckt för att dra till dockan",
 dockEditHint:"Tryck på ikon för att ta bort · Tryck någon annanstans för att avsluta",
 dockLongPress:"Håll en app intryckt för att redigera dockan",

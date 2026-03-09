@@ -31,7 +31,7 @@ monthsShort:["Sau", "Vas", "Kov", "Bal", "Geg", "Bir", "Lie", "Rgp", "Rgs", "Spa
 days:["Sek", "Pir", "Ant", "Tre", "Ket", "Pen", "Šeš"],
 homeTagline:"Greiti įrankiai, nulis trintis",
 homeSearch:"Ieškoti įrankių…",
-appNames:{"qr": "QR generatorius", "currency": "Valiuta", "favorites": "Mėgstami", "converter": "Konverteris", "weather": "Oras", "lucky": "Sėkmė", "calculator": "Skaičiuotuvas", "stocks": "Akcijos", "translate": "Vertimas", "clock": "Laikrodis", "calendar": "Kalendorius", "shopping": "Apsipirkimas", "reminders": "Priminimai", "notes": "Užrašai", "settings": "Nustatymai",imageStudio:"Vaizdo studija",password:"Slaptažodis"},
+appNames:{"qr": "QR generatorius", "currency": "Valiuta", "favorites": "Mėgstami", "converter": "Konverteris", "weather": "Oras", "lucky": "Sėkmė", "calculator": "Skaičiuotuvas", "stocks": "Akcijos", "translate": "Vertimas", "clock": "Laikrodis", "calendar": "Kalendorius", "shopping": "Apsipirkimas", "reminders": "Priminimai", "notes": "Užrašai", "settings": "Nustatymai",imageStudio:"Vaizdo studija",password:"Slaptažodis",tip:"Arbatpinigiai"},
 dockHint:"Laikykite programą nuspaustą, kad nutempytumėte į doką",
 dockEditHint:"Palieskite piktogramą norėdami pašalinti · Palieskite kitur norėdami baigti",
 dockLongPress:"Ilgai spauskite programą dokui redaguoti",

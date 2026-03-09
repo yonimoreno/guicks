@@ -31,7 +31,7 @@ monthsShort:["Jaan", "Veeb", "Märts", "Apr", "Mai", "Juuni", "Juuli", "Aug", "S
 days:["P", "E", "T", "K", "N", "R", "L"],
 homeTagline:"Kiired tööriistad, null hõõrdumist",
 homeSearch:"Otsi tööriistu…",
-appNames:{"qr": "QR-generaator", "currency": "Valuuta", "favorites": "Lemmikud", "converter": "Teisendaja", "weather": "Ilm", "lucky": "Õnn", "calculator": "Kalkulaator", "stocks": "Aktsiad", "translate": "Tõlge", "clock": "Kell", "calendar": "Kalender", "shopping": "Ostlemine", "reminders": "Meeldetuletused", "notes": "Märkmed", "settings": "Seaded",imageStudio:"Pildistuudio",password:"Parool"},
+appNames:{"qr": "QR-generaator", "currency": "Valuuta", "favorites": "Lemmikud", "converter": "Teisendaja", "weather": "Ilm", "lucky": "Õnn", "calculator": "Kalkulaator", "stocks": "Aktsiad", "translate": "Tõlge", "clock": "Kell", "calendar": "Kalender", "shopping": "Ostlemine", "reminders": "Meeldetuletused", "notes": "Märkmed", "settings": "Seaded",imageStudio:"Pildistuudio",password:"Parool",tip:"Jootraha"},
 dockHint:"Hoia rakendust all, et lohistada doki",
 dockEditHint:"Puuduta ikooni eemaldamiseks · Puuduta mujal lõpetamiseks",
 dockLongPress:"Hoia rakendust all doki redigeerimiseks",

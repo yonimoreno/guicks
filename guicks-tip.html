@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<style>
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .back-btn{color:#1c1c2e!important}
+html.guicks-light .back-btn svg{stroke:#1c1c2e!important}
+html.guicks-light .card{background:#fff!important;border-color:rgba(0,0,0,.07)!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important}
+html.guicks-light .bill-input{background:#fff!important;border-color:rgba(0,0,0,.15)!important;color:#0d0d1a!important}
+html.guicks-light .bill-input:focus{border-color:#12b76a!important}
+html.guicks-light .currency-btn{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.5)!important}
+html.guicks-light .currency-btn.active{color:#fff!important}
+html.guicks-light .tip-btn{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.5)!important}
+html.guicks-light .tip-btn.active{color:#fff!important}
+html.guicks-light .section-title{color:#9090b0!important}
+html.guicks-light .result-row{border-color:rgba(0,0,0,.06)!important}
+html.guicks-light .result-label{color:#9090b0!important}
+html.guicks-light .result-value{color:#0d0d1a!important}
+html.guicks-light .result-value.accent{color:#0a9455!important}
+html.guicks-light .per-person-card{background:linear-gradient(135deg,#0a9455,#12d48a)!important}
+html.guicks-light .split-input{background:#fff!important;border-color:rgba(0,0,0,.12)!important;color:#0d0d1a!important}
+html.guicks-light .stepper-btn{background:rgba(0,0,0,.06)!important;color:#0d0d1a!important}
+html.guicks-light .custom-tip-input{background:#fff!important;border-color:rgba(0,0,0,.12)!important;color:#0d0d1a!important}
+html.guicks-light .rounding-row{border-color:rgba(0,0,0,.06)!important}
+html.guicks-light .dim-text{color:#9090b0!important}
+html.guicks-light .hist-item{background:rgba(0,0,0,.03)!important;border-color:rgba(0,0,0,.07)!important}
+html.guicks-light .hist-bill{color:#0d0d1a!important}
+html.guicks-light .hist-meta{color:#9090b0!important}
+html.guicks-light .tab-bar{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .tab-btn{color:rgba(0,0,0,.45)!important}
+html.guicks-light .tab-btn.active{color:#fff!important}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tip Calculator — Guicks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="./guicks-i18n.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090f;
+  --surface:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.09);
+  --text:#f0f0f5;
+  --text2:rgba(240,240,245,.65);
+  --text3:rgba(240,240,245,.35);
+  --accent:#12b76a;
+  --accent2:#0a9455;
+  --red:#ef4444;
+  --yellow:#f5c542;
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 15% 15%,rgba(18,183,106,.1) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 40% at 85% 80%,rgba(10,148,85,.07) 0%,transparent 60%)}
+
+.page{position:relative;z-index:1;max-width:600px;margin:0 auto;padding-bottom:48px}
+
+/* ── Status bar ── */
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 0;font-size:13px;font-weight:700;color:#f0f0f5}
+.statusbar .time{font-size:16px;font-weight:800}
+.statusbar .icons{display:flex;gap:5px;align-items:center}
+.statusbar .icons svg{width:16px;height:16px;fill:#f0f0f5}
+
+/* ── Back ── */
+.topnav{display:flex;align-items:center;padding:10px 20px 0}
+.back-btn{display:inline-flex;align-items:center;gap:4px;color:#a0a0c8;font-size:15px;font-weight:700;text-decoration:none;padding:6px 10px 6px 4px;border-radius:10px;transition:background .15s}
+.back-btn:hover{background:rgba(255,255,255,.06)}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Header ── */
+.app-header{display:flex;align-items:center;gap:14px;padding:8px 24px 16px}
+.app-icon-wrap{width:52px;height:52px;border-radius:14px;background:linear-gradient(145deg,#064d2c,#12b76a);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12);flex-shrink:0}
+.app-icon-wrap svg{width:28px;height:28px}
+.app-header-text h1{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.app-header-text p{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* ── Tabs ── */
+.tab-bar{display:flex;gap:5px;margin:0 16px 18px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:14px;padding:4px}
+.tab-btn{flex:1;padding:9px 6px;border-radius:10px;border:none;background:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);cursor:pointer;transition:all .18s}
+.tab-btn.active{background:linear-gradient(135deg,#064d2c,#12b76a);color:#fff;box-shadow:0 3px 12px rgba(18,183,106,.35)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ── Card ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px;margin:0 16px 14px;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+
+/* ── Section title ── */
+.section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:10px}
+
+/* ── Bill input ── */
+.bill-wrap{position:relative;margin-bottom:16px}
+.bill-symbol{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;pointer-events:none}
+.bill-input{width:100%;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:800;padding:16px 16px 16px 42px;border-radius:14px;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.bill-input::-webkit-outer-spin-button,.bill-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.bill-input:focus{border-color:var(--accent)}
+.bill-input::placeholder{color:var(--text3)}
+
+/* ── Currency row ── */
+.currency-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.currency-btn{padding:6px 12px;border-radius:9px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.currency-btn.active{background:linear-gradient(135deg,#064d2c,#12b76a);border-color:transparent;color:#fff;box-shadow:0 2px 8px rgba(18,183,106,.3)}
+
+/* ── Tip buttons ── */
+.tip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.tip-btn{padding:12px 6px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;text-align:center}
+.tip-btn:hover{border-color:rgba(18,183,106,.3);color:rgba(255,255,255,.8)}
+.tip-btn.active{background:linear-gradient(135deg,#064d2c,#12b76a);border-color:transparent;color:#fff;box-shadow:0 3px 12px rgba(18,183,106,.35)}
+.tip-btn .tip-common{font-size:9px;font-weight:600;color:rgba(255,255,255,.4);display:block;margin-top:2px}
+.tip-btn.active .tip-common{color:rgba(255,255,255,.6)}
+
+/* ── Custom tip ── */
+.custom-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.custom-tip-input{width:80px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;padding:9px 12px;border-radius:10px;outline:none;text-align:center;transition:border-color .15s;-moz-appearance:textfield}
+.custom-tip-input::-webkit-outer-spin-button,.custom-tip-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.custom-tip-input:focus{border-color:var(--accent)}
+.dim-text{color:var(--text3);font-size:12px}
+
+/* ── Split stepper ── */
+.split-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.split-label{font-size:13px;font-weight:600;flex:1}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper-btn{width:36px;height:36px;border-radius:10px;border:none;background:rgba(255,255,255,.08);color:var(--text);font-size:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Outfit',sans-serif}
+.stepper-btn:hover{background:rgba(18,183,106,.2);color:var(--accent)}
+.stepper-btn:active{transform:scale(.92)}
+.stepper-val{font-size:20px;font-weight:900;min-width:28px;text-align:center;font-family:'JetBrains Mono',monospace}
+
+/* ── Rounding toggle ── */
+.rounding-row{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);margin-top:4px}
+.toggle-bg{width:38px;height:22px;border-radius:11px;background:rgba(255,255,255,.12);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-bg.on{background:var(--accent)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.toggle-bg.on .toggle-knob{transform:translateX(16px)}
+
+/* ── Results ── */
+.results-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin:0 16px 14px;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.05)}
+.result-row:last-child{border-bottom:none}
+.result-label{font-size:13px;font-weight:600;color:var(--text2)}
+.result-value{font-size:16px;font-weight:800;font-family:'JetBrains Mono',monospace}
+.result-value.accent{color:var(--accent)}
+.result-value.big{font-size:20px}
+
+/* ── Per-person hero ── */
+.per-person-card{background:linear-gradient(135deg,#064d2c,#12b76a);border-radius:18px;margin:0 16px 14px;padding:22px 20px;box-shadow:0 8px 28px rgba(18,183,106,.35)}
+.pp-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.65);margin-bottom:6px}
+.pp-amount{font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1}
+.pp-sub{font-size:13px;color:rgba(255,255,255,.6);margin-top:8px}
+
+/* ── Tip distribution bar ── */
+.dist-wrap{margin:0 16px 14px}
+.dist-bar{height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;margin-bottom:6px}
+.dist-bill{background:rgba(255,255,255,.25);transition:width .4s ease}
+.dist-tip{background:var(--accent);transition:width .4s ease}
+.dist-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3)}
+.dist-labels span b{color:var(--text2)}
+
+/* ── History tab ── */
+.hist-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
+.hist-list::-webkit-scrollbar{width:4px}
+.hist-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.hist-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;transition:background .15s}
+.hist-item:hover{background:rgba(255,255,255,.07)}
+.hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.hist-bill{font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace}
+.hist-per{font-size:13px;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.hist-meta{font-size:11px;color:var(--text3)}
+.hist-del{background:none;border:none;color:rgba(255,255,255,.2);font-size:16px;cursor:pointer;transition:color .15s;padding:0 2px;margin-left:8px}
+.hist-del:hover{color:var(--red)}
+.empty-state{text-align:center;padding:32px;color:var(--text3)}
+.empty-icon{font-size:36px;margin-bottom:10px}
+
+/* ── Save btn ── */
+.save-btn{width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#064d2c,#12b76a);color:#fff;font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .18s;box-shadow:0 4px 16px rgba(18,183,106,.35)}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(18,183,106,.45)}
+.save-btn:active{transform:translateY(0)}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,30,50,.95);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:14px;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Animations ── */
+@keyframes popIn{0%{transform:scale(.96);opacity:.6}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
+.pop{animation:popIn .2s ease-out}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time" id="sbTime">10:00</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="1" width="3" height="17" rx="1"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M1.5 8.5C5.5 4.5 10 2.8 12 2.8s6.5 1.7 10.5 5.7M5 12c1.9-1.9 4.3-3 7-3s5.1 1.1 7 3M8.5 15.5c.9-.9 2.2-1.5 3.5-1.5s2.6.6 3.5 1.5M12 19h.01"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3"/><rect x="4" y="9" width="10" height="7" rx="1" fill="currentColor" opacity=".5"/></svg>
+    </div>
+  </div>
+
+  <!-- Back -->
+  <div class="topnav">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="white" stroke-width="1.6"/>
+        <path d="M12 6v2M12 16v2M8 12h8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M9.5 9.5h3a1.5 1.5 0 010 3H11a1.5 1.5 0 000 3h3.5" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1 data-i18n="tipTitle">Tip Calculator</h1>
+      <p data-i18n="tipSub">Split bills · Any currency</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('calc',this)" data-i18n="tipTabCalc">Calculator</button>
+    <button class="tab-btn" onclick="switchTab('history',this)" data-i18n="tipTabHistory">History</button>
+  </div>
+
+  <!-- ═══ CALCULATOR TAB ═══ -->
+  <div class="tab-content active" id="tab-calc">
+
+    <!-- Bill input -->
+    <div class="card">
+      <div class="section-title" data-i18n="tipBillAmount">Bill Amount</div>
+      <div class="bill-wrap">
+        <span class="bill-symbol" id="currSymbol">$</span>
+        <input type="number" class="bill-input" id="billInput" placeholder="0.00" min="0" step="0.01" oninput="calculate()">
+      </div>
+      <div class="currency-row" id="currencyRow">
+        <button class="currency-btn active" onclick="setCurrency('$','USD')" data-curr="$">$ USD</button>
+        <button class="currency-btn" onclick="setCurrency('€','EUR')" data-curr="€">€ EUR</button>
+        <button class="currency-btn" onclick="setCurrency('£','GBP')" data-curr="£">£ GBP</button>
+        <button class="currency-btn" onclick="setCurrency('¥','JPY')" data-curr="¥">¥ JPY</button>
+        <button class="currency-btn" onclick="setCurrency('₹','INR')" data-curr="₹">₹ INR</button>
+        <button class="currency-btn" onclick="setCurrency('R$','BRL')" data-curr="R$">R$ BRL</button>
+      </div>
+    </div>
+
+    <!-- Tip % -->
+    <div class="card">
+      <div class="section-title" data-i18n="tipPercent">Tip Percentage</div>
+      <div class="tip-grid" id="tipGrid">
+        <button class="tip-btn" onclick="setTip(5)"  data-tip="5">5%</button>
+        <button class="tip-btn" onclick="setTip(10)" data-tip="10">10%<span class="tip-common" data-i18n="tipOk">OK</span></button>
+        <button class="tip-btn" onclick="setTip(15)" data-tip="15">15%<span class="tip-common" data-i18n="tipGood">Good</span></button>
+        <button class="tip-btn active" onclick="setTip(18)" data-tip="18">18%<span class="tip-common" data-i18n="tipNice">Nice</span></button>
+        <button class="tip-btn" onclick="setTip(20)" data-tip="20">20%<span class="tip-common" data-i18n="tipGreat">Great</span></button>
+        <button class="tip-btn" onclick="setTip(25)" data-tip="25">25%<span class="tip-common" data-i18n="tipGenerous">Generous</span></button>
+      </div>
+      <div class="custom-row">
+        <span class="dim-text" data-i18n="tipCustom">Custom:</span>
+        <input type="number" class="custom-tip-input" id="customTip" placeholder="0" min="0" max="100" oninput="setCustomTip()">
+        <span class="dim-text">%</span>
+      </div>
+    </div>
+
+    <!-- Split -->
+    <div class="card">
+      <div class="section-title" data-i18n="tipSplitBill">Split Bill</div>
+      <div class="split-row">
+        <span class="split-label" data-i18n="tipPeople">People</span>
+        <div class="stepper">
+          <button class="stepper-btn" onclick="changeSplit(-1)">−</button>
+          <span class="stepper-val" id="splitVal">1</span>
+          <button class="stepper-btn" onclick="changeSplit(1)">+</button>
+        </div>
+      </div>
+      <div class="rounding-row">
+        <span class="dim-text" data-i18n="tipRoundUp">Round up per person</span>
+        <div class="toggle-bg" id="roundToggle" onclick="toggleRound()"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+
+    <!-- Per-person hero -->
+    <div class="per-person-card" id="perPersonCard">
+      <div class="pp-label" data-i18n="tipPerPerson">Per Person</div>
+      <div class="pp-amount" id="ppAmount">—</div>
+      <div class="pp-sub" id="ppSub">—</div>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="results-card" id="resultsCard">
+      <div class="result-row">
+        <span class="result-label" data-i18n="tipBillOnly">Bill</span>
+        <span class="result-value" id="rBill">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label" id="rTipLabel">Tip (18%)</span>
+        <span class="result-value accent" id="rTip">—</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label" data-i18n="tipTotal">Total</span>
+        <span class="result-value big" id="rTotal">—</span>
+      </div>
+    </div>
+
+    <!-- Distribution bar -->
+    <div class="dist-wrap" id="distWrap" style="display:none">
+      <div class="dist-bar">
+        <div class="dist-bill" id="distBill"></div>
+        <div class="dist-tip" id="distTip"></div>
+      </div>
+      <div class="dist-labels">
+        <span><b data-i18n="tipBillOnly">Bill</b> <span id="distBillPct"></span></span>
+        <span><b data-i18n="tipTip">Tip</b> <span id="distTipPct"></span></span>
+      </div>
+    </div>
+
+    <!-- Save button -->
+    <div style="padding:0 16px">
+      <button class="save-btn" onclick="saveToHistory()" data-i18n="tipSave">💾 Save to History</button>
+    </div>
+
+  </div>
+
+  <!-- ═══ HISTORY TAB ═══ -->
+  <div class="tab-content" id="tab-history">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div class="section-title" style="margin-bottom:0" data-i18n="tipHistory">History</div>
+        <button onclick="clearHistory()" style="font-size:12px;font-weight:700;color:var(--text3);padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:none;cursor:pointer;font-family:'Outfit',sans-serif" data-i18n="tipClearAll">Clear all</button>
+      </div>
+      <div class="hist-list" id="histList">
+        <div class="empty-state" id="histEmpty">
+          <div class="empty-icon">🧾</div>
+          <p data-i18n="tipNoHistory">No saved calculations yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Clock ──
+(function tick(){const n=new Date();document.getElementById('sbTime').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');setTimeout(tick,10000);})();
+
+// ── State ──
+const HIST_KEY = 'guicks_tip_hist_v1';
+let currSymbol = '$';
+let tipPct = 18;
+let splitCount = 1;
+let roundUp = false;
+
+// ── Currency ──
+function setCurrency(sym, code) {
+  currSymbol = sym;
+  document.getElementById('currSymbol').textContent = sym;
+  document.querySelectorAll('.currency-btn').forEach(b => b.classList.toggle('active', b.dataset.curr === sym));
+  calculate();
+}
+
+// ── Tip ──
+function setTip(pct) {
+  tipPct = pct;
+  document.querySelectorAll('.tip-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.tip) === pct));
+  document.getElementById('customTip').value = '';
+  calculate();
+}
+
+function setCustomTip() {
+  const v = parseFloat(document.getElementById('customTip').value);
+  if (!isNaN(v) && v >= 0) {
+    tipPct = v;
+    document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('active'));
+  }
+  calculate();
+}
+
+// ── Split ──
+function changeSplit(delta) {
+  splitCount = Math.max(1, Math.min(50, splitCount + delta));
+  document.getElementById('splitVal').textContent = splitCount;
+  calculate();
+}
+
+// ── Round ──
+function toggleRound() {
+  roundUp = !roundUp;
+  document.getElementById('roundToggle').classList.toggle('on', roundUp);
+  calculate();
+}
+
+// ── Calculate ──
+function calculate() {
+  const bill = parseFloat(document.getElementById('billInput').value) || 0;
+  const tip = bill * tipPct / 100;
+  const total = bill + tip;
+  let perPerson = total / splitCount;
+  if (roundUp) perPerson = Math.ceil(perPerson * 100) / 100;
+
+  const fmt = (n) => currSymbol + n.toFixed(currSymbol === '¥' ? 0 : 2);
+
+  document.getElementById('rBill').textContent = bill > 0 ? fmt(bill) : '—';
+  document.getElementById('rTip').textContent = bill > 0 ? fmt(tip) : '—';
+  document.getElementById('rTotal').textContent = bill > 0 ? fmt(total) : '—';
+  document.getElementById('rTipLabel').textContent = GI.get('tipTip') + ' (' + tipPct + '%)';
+
+  const ppEl = document.getElementById('ppAmount');
+  if (bill > 0) {
+    ppEl.textContent = fmt(perPerson);
+    ppEl.classList.remove('pop'); void ppEl.offsetWidth; ppEl.classList.add('pop');
+
+    const splitInfo = splitCount > 1
+      ? splitCount + ' × ' + fmt(perPerson)
+      : fmt(total) + ' ' + (GI.get('tipTotal')||'total');
+    document.getElementById('ppSub').textContent = splitInfo;
+
+    // Distribution bar
+    const billPct = Math.round(bill / total * 100);
+    const tipPctBar = 100 - billPct;
+    document.getElementById('distBill').style.width = billPct + '%';
+    document.getElementById('distTip').style.width = tipPctBar + '%';
+    document.getElementById('distBillPct').textContent = billPct + '%';
+    document.getElementById('distTipPct').textContent = tipPctBar + '%';
+    document.getElementById('distWrap').style.display = 'block';
+  } else {
+    ppEl.textContent = '—';
+    document.getElementById('ppSub').textContent = GI.get('tipEnterBill') || 'Enter a bill amount';
+    document.getElementById('distWrap').style.display = 'none';
+  }
+}
+
+// ── History ──
+function saveToHistory() {
+  const bill = parseFloat(document.getElementById('billInput').value) || 0;
+  if (!bill) { showToast('⚠️ ' + (GI.get('tipEnterBill') || 'Enter a bill amount')); return; }
+  const tip = bill * tipPct / 100;
+  const total = bill + tip;
+  let perPerson = total / splitCount;
+  if (roundUp) perPerson = Math.ceil(perPerson * 100) / 100;
+  const fmt = (n) => currSymbol + n.toFixed(currSymbol === '¥' ? 0 : 2);
+
+  const entry = { bill: fmt(bill), tip: fmt(tip), total: fmt(total), perPerson: fmt(perPerson), tipPct, splitCount, sym: currSymbol, ts: Date.now() };
+  let hist = loadHistory();
+  hist.unshift(entry);
+  if (hist.length > 30) hist = hist.slice(0,30);
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(hist)); } catch(e) {}
+  showToast('✅ ' + (GI.get('tipSaved') || 'Saved!'));
+}
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e) { return []; }
+}
+
+function renderHistory() {
+  const hist = loadHistory();
+  const list = document.getElementById('histList');
+  if (!hist.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🧾</div><p>${GI.get('tipNoHistory')}</p></div>`;
+    return;
+  }
+  list.innerHTML = hist.map((item, i) => {
+    const ago = timeAgo(item.ts);
+    const splitInfo = item.splitCount > 1 ? ` · ${item.splitCount} ${GI.get('tipPeople')}` : '';
+    return `<div class="hist-item" onclick="loadHistItem(${i})">
+      <div class="hist-top">
+        <span class="hist-bill">${item.total} ${GI.get('tipTotal')||'total'}</span>
+        <span style="display:flex;align-items:center;gap:4px">
+          <span class="hist-per">${item.perPerson}/${GI.get('tipPerPerson')||'person'}</span>
+          <button class="hist-del" onclick="event.stopPropagation();deleteHist(${i})">✕</button>
+        </span>
+      </div>
+      <div class="hist-meta">${item.bill} + ${item.tipPct}% ${GI.get('tipTip')||'tip'}${splitInfo} · ${ago}</div>
+    </div>`;
+  }).join('');
+}
+
+function loadHistItem(i) {
+  const item = loadHistory()[i];
+  if (!item) return;
+  // Switch to calc tab and restore
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-calc').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  setCurrency(item.sym, '');
+  document.getElementById('billInput').value = parseFloat(item.bill.replace(/[^0-9.]/g,''));
+  setTip(item.tipPct);
+  splitCount = item.splitCount;
+  document.getElementById('splitVal').textContent = splitCount;
+  calculate();
+}
+
+function deleteHist(i) {
+  let hist = loadHistory();
+  hist.splice(i,1);
+  try { localStorage.setItem(HIST_KEY, JSON.stringify(hist)); } catch(e) {}
+  renderHistory();
+}
+
+function clearHistory() {
+  try { localStorage.removeItem(HIST_KEY); } catch(e) {}
+  renderHistory();
+}
+
+function timeAgo(ts) {
+  const d = Math.floor((Date.now()-ts)/1000);
+  if (d < 60) return GI.get('tipJustNow')||'just now';
+  if (d < 3600) return Math.floor(d/60)+' '+(GI.get('tipMinAgo')||'min ago');
+  if (d < 86400) return Math.floor(d/3600)+' '+(GI.get('tipHrAgo')||'hr ago');
+  return Math.floor(d/86400)+' '+(GI.get('tipDayAgo')||'d ago');
+}
+
+// ── Tab switch ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'history') renderHistory();
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', function() {
+  GI.init(function() {
+    calculate();
+  });
+});
+</script>
+</body>
+</html>

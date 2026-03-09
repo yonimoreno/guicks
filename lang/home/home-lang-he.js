@@ -31,7 +31,7 @@ monthsShort:["ינו", "פבר", "מרץ", "אפר", "מאי", "יוני", "יו
 days:["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"],
 homeTagline:"כלים מהירים, אפס חיכוך",
 homeSearch:"חיפוש כלים…",
-appNames:{"qr": "מחולל QR", "currency": "מטבעות", "favorites": "מועדפים", "converter": "ממיר", "weather": "מזג אוויר", "lucky": "מזל", "calculator": "מחשבון", "stocks": "מניות", "translate": "תרגום", "clock": "שעון", "calendar": "לוח שנה", "shopping": "קניות", "reminders": "תזכורות", "notes": "פתקים", "settings": "הגדרות",imageStudio:"סטודיו תמונות",password:"סיסמה"},
+appNames:{"qr": "מחולל QR", "currency": "מטבעות", "favorites": "מועדפים", "converter": "ממיר", "weather": "מזג אוויר", "lucky": "מזל", "calculator": "מחשבון", "stocks": "מניות", "translate": "תרגום", "clock": "שעון", "calendar": "לוח שנה", "shopping": "קניות", "reminders": "תזכורות", "notes": "פתקים", "settings": "הגדרות",imageStudio:"סטודיו תמונות",password:"סיסמה",tip:"טיפ"},
 dockHint:"לחץ לחיצה ארוכה על אפליקציה כדי לגרור לעגן",
 dockEditHint:"לחץ על סמל להסרה · לחץ במקום אחר לסיום",
 dockLongPress:"לחיצה ארוכה על אפליקציה לעריכת העגן",

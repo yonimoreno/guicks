@@ -31,7 +31,7 @@ monthsShort:["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out
 days:["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
 homeTagline:"Ferramentas rápidas, zero fricção",
 homeSearch:"Pesquisar ferramentas…",
-appNames:{"qr": "Gerador QR", "currency": "Moedas", "favorites": "Favoritos", "converter": "Conversor", "weather": "Tempo", "lucky": "Sorte", "calculator": "Calculadora", "stocks": "Ações", "translate": "Traduzir", "clock": "Relógio", "calendar": "Calendário", "shopping": "Compras", "reminders": "Lembretes", "notes": "Notas", "settings": "Configurações",imageStudio:"Estúdio de Imagem",password:"Senha"},
+appNames:{"qr": "Gerador QR", "currency": "Moedas", "favorites": "Favoritos", "converter": "Conversor", "weather": "Tempo", "lucky": "Sorte", "calculator": "Calculadora", "stocks": "Ações", "translate": "Traduzir", "clock": "Relógio", "calendar": "Calendário", "shopping": "Compras", "reminders": "Lembretes", "notes": "Notas", "settings": "Configurações",imageStudio:"Estúdio de Imagem",password:"Senha",tip:"Gorjeta"},
 dockHint:"Segure um app para arrastá-lo ao dock",
 dockEditHint:"Toque no ícone para remover · Toque fora para terminar",
 dockLongPress:"Pressione longo em um app para editar o dock",

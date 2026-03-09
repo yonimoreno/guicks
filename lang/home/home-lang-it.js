@@ -31,7 +31,7 @@ monthsShort:["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott
 days:["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
 homeTagline:"Strumenti rapidi, zero attrito",
 homeSearch:"Cerca strumenti…",
-appNames:{"qr": "Generatore QR", "currency": "Valute", "favorites": "Preferiti", "converter": "Convertitore", "weather": "Meteo", "lucky": "Fortuna", "calculator": "Calcolatrice", "stocks": "Azioni", "translate": "Traduci", "clock": "Orologio", "calendar": "Calendario", "shopping": "Spesa", "reminders": "Promemoria", "notes": "Note", "settings": "Impostazioni",imageStudio:"Studio Immagini",password:"Password"},
+appNames:{"qr": "Generatore QR", "currency": "Valute", "favorites": "Preferiti", "converter": "Convertitore", "weather": "Meteo", "lucky": "Fortuna", "calculator": "Calcolatrice", "stocks": "Azioni", "translate": "Traduci", "clock": "Orologio", "calendar": "Calendario", "shopping": "Spesa", "reminders": "Promemoria", "notes": "Note", "settings": "Impostazioni",imageStudio:"Studio Immagini",password:"Password",tip:"Mancia"},
 dockHint:"Tieni premuta un'app per trascinarla nel dock",
 dockEditHint:"Tocca l'icona per rimuovere · Tocca altrove per finire",
 dockLongPress:"Tieni premuta un'app per modificare il dock",

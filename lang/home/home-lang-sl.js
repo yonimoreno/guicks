@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt
 days:["Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob"],
 homeTagline:"Hitri pripomočki, nič trenja",
 homeSearch:"Išči pripomočke…",
-appNames:{"qr": "Generator QR", "currency": "Valuta", "favorites": "Priljubljeni", "converter": "Pretvornik", "weather": "Vreme", "lucky": "Sreča", "calculator": "Kalkulator", "stocks": "Delnice", "translate": "Prevod", "clock": "Ura", "calendar": "Koledar", "shopping": "Nakupi", "reminders": "Opomniki", "notes": "Opombe", "settings": "Nastavitve",imageStudio:"Slikovni studio",password:"Geslo"},
+appNames:{"qr": "Generator QR", "currency": "Valuta", "favorites": "Priljubljeni", "converter": "Pretvornik", "weather": "Vreme", "lucky": "Sreča", "calculator": "Kalkulator", "stocks": "Delnice", "translate": "Prevod", "clock": "Ura", "calendar": "Koledar", "shopping": "Nakupi", "reminders": "Opomniki", "notes": "Opombe", "settings": "Nastavitve",imageStudio:"Slikovni studio",password:"Geslo",tip:"Napitnina"},
 dockHint:"Pridržite aplikacijo, da jo povlečete v dock",
 dockEditHint:"Dotaknite se ikone za odstranitev · Dotaknite se drugje za konec",
 dockLongPress:"Dolgo pritisnite aplikacijo za urejanje docka",
