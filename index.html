@@ -21,11 +21,13 @@
     html, body {
       width: 100%; height: 100%;
       font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-      background: var(--bg);
+      background: transparent;
       color: var(--text);
       overflow: hidden;
       user-select: none;
     }
+    /* Dark mode base color (fallback behind bg-wrap) */
+    html { background: var(--bg); }
 
     /* ── Background presets ── */
     .bg-image-layer {
@@ -750,8 +752,18 @@
     .info-close:hover { background: rgba(255,255,255,0.1); }
 
     /* Dark mode support */
-    body.theme-light { background: #f0f2f7; }
-    body.theme-light .bg-wrap { display: none; }
+    body.theme-light { background: transparent; }
+    body.theme-light .bg-wrap { display: block; }
+    body.theme-light .bg-orb { filter: blur(80px) brightness(2.5) saturate(0.4); opacity: 0.6; }
+    body.theme-light .bg-preset-cosmos,
+    body.theme-light .bg-preset-aurora,
+    body.theme-light .bg-preset-sunset,
+    body.theme-light .bg-preset-ocean,
+    body.theme-light .bg-preset-rose,
+    body.theme-light .bg-preset-forest,
+    body.theme-light .bg-preset-midnight,
+    body.theme-light .bg-preset-slate { background-color: #e8eaf2 !important; background-image: none !important; }
+    body.theme-light .bg-image-layer { opacity: 1 !important; filter: none; }
     body.theme-light .statusbar { color: #0d0d1a; }
     body.theme-light .statusbar svg { fill: #0d0d1a; }
     body.theme-light .statusbar .time { color: #0d0d1a; }
