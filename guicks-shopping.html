@@ -170,6 +170,15 @@ body::before{
 .section-opt.active{color:#fff;border-color:transparent;}
 .sect-icon{font-size:13px;}
 
+.autocat-hint{
+  margin:-4px 14px 8px;
+  font-size:11.5px;font-weight:600;
+  color:rgba(255,255,255,.35);
+  min-height:16px;
+  transition:opacity .2s;
+  padding:0 4px;
+}
+html.guicks-light .autocat-hint{color:rgba(0,0,0,.35);}
 /* ── Summary bar ── */
 .summary-bar{
   margin:0 14px 8px;
@@ -389,6 +398,7 @@ body::before{
 
   <!-- Section picker -->
   <div class="section-picker" id="section-picker"></div>
+  <div class="autocat-hint" id="autocat-hint"></div>
 
   <!-- Summary bar -->
   <div class="summary-bar" id="summary-bar" style="display:none">
@@ -581,6 +591,9 @@ function addItem(){
   save();
   input.value='';
   hideSectionPicker();
+  document.getElementById('autocat-hint').textContent = '';
+  autocatActive = false;
+  selectedSection = SECTIONS[0].id;
   render();
 }
 
@@ -621,8 +634,431 @@ function setFilter(f){
 }
 
 function pickSection(id){
-  selectedSection=id;
+  setSection(id, false);
+}
+
+/* ═══════════════════════════════════════
+   AUTOCATEGORIZATION
+═══════════════════════════════════════ */
+const AUTOCAT_MAP = {
+  produce: [
+    // EN
+    'apple','banana','orange','lemon','lime','grape','strawberr','blueberr','raspberr','blackberr','cherry','peach','pear','mango','pineapple','watermelon','melon','kiwi','avocado','tomato','lettuce','spinach','kale','carrot','broccoli','cauliflower','onion','garlic','potato','sweet potato','cucumber','zucchini','pepper','celery','mushroom','corn','pea','bean','asparagus','artichoke','cabbage','beet','radish','parsley','cilantro','basil','mint','ginger','leek','scallion','shallot','fennel','eggplant','squash','pumpkin','herb','veggie','vegetable','fruit','salad','greens',
+    // ES
+    'manzana','plátano','platano','naranja','limón','limon','uva','fresa','cereza','melocotón','melocoton','pera','piña','pina','sandía','sandia','melón','melon','aguacate','tomate','lechuga','espinaca','zanahoria','brócoli','brocoli','coliflor','cebolla','ajo','patata','papa','pepino','calabacín','calabacin','pimiento','apio','champiñon','champiñón','maíz','maiz','guisante','judía','judia','espárrago','esparrago','col','remolacha','rábano','rabano','perejil','albahaca','jengibre','puerro','hinojo','berenjena','calabaza','hierba','verdura','fruta','ensalada',
+    // FR
+    'pomme','banane','citron','raisin','fraise','cerise','pêche','peche','poire','ananas','pastèque','pasteque','avocat','tomate','laitue','épinard','epinard','carotte','brocoli','chou-fleur','oignon','ail','pomme de terre','concombre','courgette','poivron','céleri','celeri','champignon','maïs','mais','petit pois','haricot','asperge','artichaut','chou','betterave','radis','persil','basilic','gingembre','poireau','fenouil','aubergine','courge','citrouille','herbe','légume','legume','fruit','salade',
+    // DE
+    'apfel','banane','orange','zitrone','traube','erdbeere','kirsche','pfirsich','birne','ananas','wassermelone','melone','avocado','tomate','kopfsalat','spinat','karotte','möhre','mohre','brokkoli','blumenkohl','zwiebel','knoblauch','kartoffel','gurke','zucchini','paprika','sellerie','pilz','mais','erbse','bohne','spargel','artischocke','kohl','rote beete','rettich','petersilie','basilikum','ingwer','lauch','fenchel','aubergine','kürbis','kurbis','gemüse','gemuese','obst','salat',
+    // IT
+    'mela','banana','arancia','limone','uva','fragola','ciliegia','pesca','pera','ananas','anguria','melone','avocado','pomodoro','lattuga','spinaci','carota','broccoli','cavolfiore','cipolla','aglio','patata','cetriolo','zucchina','peperone','sedano','fungo','mais','pisello','fagiolo','asparago','carciofo','cavolo','barbabietola','ravanello','prezzemolo','basilico','zenzero','porro','finocchio','melanzana','zucca','erba','verdura','frutta','insalata',
+    // PT
+    'maçã','maca','banana','laranja','limão','limao','uva','morango','cereja','pêssego','pessego','pera','abacaxi','melancia','melão','melao','abacate','tomate','alface','espinafre','cenoura','brócolis','brocolis','couve-flor','cebola','alho','batata','pepino','abobrinha','pimentão','pimentao','aipo','cogumelo','milho','ervilha','feijão','feijao','aspargo','alcachofra','repolho','beterraba','rabanete','salsa','manjericão','manjericao','gengibre','alho-poró','erva-doce','berinjela','abóbora','abobora','erva','legume','fruta','salada',
+    // NL
+    'appel','banaan','sinaasappel','citroen','druif','aardbei','kers','perzik','peer','ananas','watermeloen','meloen','avocado','tomaat','sla','spinazie','wortel','broccoli','bloemkool','ui','knoflook','aardappel','komkommer','courgette','paprika','selderij','paddenstoel','mais','erwt','boon','asperge','artisjok','kool','biet','radijs','peterselie','basilicum','gember','prei','venkel','aubergine','pompoen','groente','fruit','salade',
+    // PL
+    'jabłko','jablko','banan','pomarańcza','pomarancza','cytryna','winogrono','truskawka','wiśnia','wisnia','brzoskwinia','gruszka','ananas','arbuz','melon','awokado','pomidor','sałata','salata','szpinak','marchew','brokuły','brokuły','kalafior','cebula','czosnek','ziemniak','ogórek','ogorek','cukinia','papryka','seler','grzyb','kukurydza','groszek','fasola','szparag','karczoch','kapusta','burak','rzodkiewka','pietruszka','bazylia','imbir','por','koper','bakłażan','baklagan','dynia','warzywo','owoc','sałatka','salatka',
+    // RU
+    'яблоко','банан','апельсин','лимон','виноград','клубника','вишня','персик','груша','ананас','арбуз','дыня','авокадо','помидор','томат','салат','шпинат','морковь','брокколи','цветная капуста','лук','чеснок','картофель','огурец','кабачок','перец','сельдерей','гриб','кукуруза','горошек','фасоль','спаржа','артишок','капуста','свёкла','редис','петрушка','базилик','имбирь','лук-порей','укроп','баклажан','тыква','зелень','овощ','фрукт',
+    // UK
+    'яблуко','банан','апельсин','лимон','виноград','полуниця','вишня','персик','груша','ананас','кавун','диня','авокадо','помідор','салат','шпинат','морква','броколі','цвітна капуста','цибуля','часник','картопля','огірок','кабачок','перець','селера','гриб','кукурудза','горошок','квасоля','спаржа','капуста','буряк','редиска','петрушка','базилік','імбир','цибуля-порей','баклажан','гарбуз','овоч','фрукт',
+    // SV
+    'äpple','apfel','banan','apelsin','citron','druva','jordgubbe','körsbär','korsbar','persika','päron','paron','ananas','vattenmelon','melon','avokado','tomat','sallad','spenat','morot','broccoli','blomkål','blomkal','lök','lok','vitlök','vitlok','potatis','gurka','zucchini','paprika','selleri','svamp','majs','ärta','arta','böna','bona','sparris','kronärtskocka','kål','kal','rödbeta','rodbeta','rädisa','radisa','persilja','basilika','ingefära','purjolök','dill','aubergine','pumpa','grönsak','gronsak','frukt',
+    // DA
+    'æble','aeble','banan','appelsin','citron','drue','jordbær','jordbaer','kirsebær','kirsebaer','fersken','pære','paere','ananas','vandmelon','melon','avocado','tomat','salat','spinat','gulerod','broccoli','blomkål','blomkal','løg','log','hvidløg','hvidlog','kartoffel','agurk','squash','peberfrugt','selleri','svamp','majs','ært','aert','bønne','bonne','asparges','artiskok','kål','kal','rødbede','rodbede','radise','persille','basilikum','ingefær','porre','fennikel','aubergine','græskar','graeskar','grøntsag','grøntsager','frugt',
+    // FI
+    'omena','banaani','appelsiini','sitruuna','viinirypäle','mansikka','kirsikka','persikka','päärynä','ananas','vesimeloni','meloni','avokado','tomaatti','salaatti','pinaatti','porkkana','parsakaali','kukkakaali','sipuli','valkosipuli','peruna','kurkku','kesäkurpitsa','paprika','selleri','sieni','maissi','herne','papu','parsa','latva-artisokka','kaali','punajuuri','retiisi','persilja','basilika','inkivääri','purjo','fenkoli','munakoiso','kurpitsa','vihannes','hedelmä','salaatti',
+    // ZH
+    '苹果','香蕉','橙子','柠檬','葡萄','草莓','樱桃','桃子','梨','菠萝','西瓜','哈密瓜','牛油果','番茄','西红柿','生菜','菠菜','胡萝卜','西兰花','花椰菜','洋葱','大蒜','土豆','黄瓜','西葫芦','辣椒','芹菜','蘑菇','玉米','豌豆','豆子','芦笋','朝鲜蓟','卷心菜','甜菜','萝卜','欧芹','罗勒','生姜','韭葱','茴香','茄子','南瓜','蔬菜','水果','沙拉',
+    // JA
+    'りんご','バナナ','オレンジ','レモン','ぶどう','いちご','さくらんぼ','もも','なし','パイナップル','スイカ','メロン','アボカド','トマト','レタス','ほうれん草','にんじん','ブロッコリー','カリフラワー','たまねぎ','にんにく','じゃがいも','きゅうり','ズッキーニ','ピーマン','セロリ','きのこ','とうもろこし','えんどう豆','インゲン豆','アスパラガス','キャベツ','ビーツ','大根','パセリ','バジル','しょうが','ネギ','ナス','かぼちゃ','野菜','果物','サラダ',
+    // KO
+    '사과','바나나','오렌지','레몬','포도','딸기','체리','복숭아','배','파인애플','수박','멜론','아보카도','토마토','상추','시금치','당근','브로콜리','콜리플라워','양파','마늘','감자','오이','호박','피망','셀러리','버섯','옥수수','완두콩','콩','아스파라거스','양배추','비트','무','파슬리','바질','생강','파','가지','야채','채소','과일','샐러드',
+    // HE
+    'תפוח','בננה','תפוז','לימון','ענב','תות','דובדבן','אפרסק','אגס','אננס','אבטיח','מלון','אבוקדו','עגבנייה','חסה','תרד','גזר','ברוקולי','כרובית','בצל','שום','תפוח אדמה','מלפפון','קישוא','פלפל','סלרי','פטרייה','תירס','אפונה','שעועית','אספרגוס','כרוב','סלק','צנון','פטרוזיליה','בזיליקום','ג׳ינג׳ר','כרישה','חציל','דלעת','ירק','פרי','סלט',
+    // AR
+    'تفاح','موز','برتقال','ليمون','عنب','فراولة','كرز','خوخ','كمثرى','أناناس','بطيخ','شمام','أفوكادو','طماطم','خس','سبانخ','جزر','بروكلي','قرنبيط','بصل','ثوم','بطاطس','خيار','كوسا','فلفل','كرفس','فطر','ذرة','بازلاء','فاصوليا','هليون','أرضيشوكي','ملفوف','شمندر','فجل','بقدونس','ريحان','زنجبيل','كراث','باذنجان','قرع','خضروات','فاكهة','سلطة',
+  ],
+  dairy: [
+    // EN
+    'milk','cream','butter','cheese','cheddar','mozzarella','parmesan','brie','gouda','feta','ricotta','yogurt','yoghurt','kefir','egg','oat milk','almond milk','soy milk',
+    // ES
+    'leche','crema','mantequilla','queso','huevo','yogur','nata','requesón','requesón',
+    // FR
+    'lait','crème','creme','beurre','fromage','oeuf','yaourt','yogourt','kéfir','kefir',
+    // DE
+    'milch','sahne','butter','käse','kase','quark','ei','eier','joghurt','kefir',
+    // IT
+    'latte','panna','burro','formaggio','uova','uovo','yogurt','ricotta','parmigiano',
+    // PT
+    'leite','creme','manteiga','queijo','ovo','iogurte','nata',
+    // NL
+    'melk','room','boter','kaas','ei','eieren','yoghurt','kwark',
+    // PL
+    'mleko','śmietana','smietana','masło','maslo','ser','jajko','jajka','jogurt',
+    // RU
+    'молоко','сливки','масло','сыр','яйцо','яйца','йогурт','кефир','творог',
+    // UK
+    'молоко','вершки','масло','сир','яйце','яйця','йогурт','кефір','сметана',
+    // SV
+    'mjölk','mjolk','grädde','gradde','smör','smor','ost','ägg','agg','yoghurt',
+    // DA
+    'mælk','maelk','fløde','floede','smør','smor','ost','æg','aeg','yoghurt',
+    // FI
+    'maito','kerma','voi','juusto','kananmuna','muna','jogurtti','kermaviili',
+    // ZH
+    '牛奶','奶油','黄油','奶酪','鸡蛋','酸奶','奶粉',
+    // JA
+    '牛乳','ミルク','クリーム','バター','チーズ','卵','たまご','ヨーグルト',
+    // KO
+    '우유','크림','버터','치즈','달걀','계란','요구르트',
+    // HE
+    'חלב','שמנת','חמאה','גבינה','ביצה','ביצים','יוגורט',
+    // AR
+    'حليب','كريمة','زبدة','جبن','جبنة','بيض','زبادي','لبن',
+  ],
+  meat: [
+    // EN
+    'chicken','beef','pork','lamb','turkey','duck','fish','salmon','tuna','shrimp','prawn','crab','lobster','bacon','ham','sausage','salami','pepperoni','steak','veal','brisket','ribs','wings','fillet','tilapia','cod','trout','sardine','anchovy','chorizo','prosciutto',
+    // ES
+    'pollo','ternera','cerdo','cordero','pavo','pato','pescado','salmón','salmon','atún','atun','gambas','cangrejo','langosta','beicon','jamón','jamon','salchicha','filete','bacalao','trucha','sardina','anchoa',
+    // FR
+    'poulet','boeuf','bœuf','porc','agneau','dinde','canard','poisson','saumon','thon','crevette','crabe','homard','lard','jambon','saucisse','steak','filet','cabillaud','truite','sardine',
+    // DE
+    'huhn','hühnchen','huhnchen','rindfleisch','rind','schweinefleisch','schwein','lamm','pute','truthahn','ente','fisch','lachs','thunfisch','garnele','krebs','hummer','speck','schinken','wurst','steak','filet','kabeljau','forelle','sardine',
+    // IT
+    'pollo','manzo','maiale','agnello','tacchino','anatra','pesce','salmone','tonno','gambero','granchio','astice','pancetta','prosciutto','salsiccia','bistecca','filetto','merluzzo','trota','sardina',
+    // PT
+    'frango','carne bovina','carne de vaca','porco','cordeiro','peru','pato','peixe','salmão','salmao','atum','camarão','camarao','caranguejo','lagosta','bacon','presunto','linguiça','linguica','bife','filé','file','bacalhau','truta','sardinha',
+    // NL
+    'kip','rundvlees','rund','varkensvlees','varken','lam','kalkoen','eend','vis','zalm','tonijn','garnaal','krab','kreeft','spek','ham','worst','biefstuk','filet','kabeljauw','forel','sardine',
+    // PL
+    'kurczak','wołowina','wolowina','wieprzowina','jagnięcina','jagniocina','indyk','kaczka','ryba','łosoś','losos','tuńczyk','tunczyk','krewetka','krab','homar','boczek','szynka','kiełbasa','kielabasa','stek','filet','dorsz','pstrąg','pstrag','sardynka',
+    // RU
+    'курица','говядина','свинина','баранина','индейка','утка','рыба','лосось','тунец','креветка','краб','омар','бекон','ветчина','колбаса','сосиска','стейк','филе','треска','форель','сардина',
+    // UK
+    'курка','яловичина','свинина','баранина','індичка','качка','риба','лосось','тунець','креветка','краб','омар','бекон','шинка','ковбаса','сосиска','стейк','філе','тріска','форель','сардина',
+    // SV
+    'kyckling','nötkött','fläskkött','fläsk','lammkött','lamm','kalkon','anka','fisk','lax','tonfisk','räka','krabba','hummer','bacon','skinka','korv','biff','filé','file','torsk','forell','sardin',
+    // DA
+    'kylling','oksekød','okse','svinekød','svin','lammekød','lam','kalkun','and','fisk','laks','tun','reje','krabbe','hummer','bacon','skinke','pølse','bøf','filet','torsk','ørred','sardin',
+    // FI
+    'kana','naudanliha','nauta','sianliha','sika','karitsa','lammas','kalkkuna','ankka','kala','lohi','tonnikala','katkarapu','rapu','hummeri','pekoni','kinkku','makkara','pihvi','filee','turska','taimen','sardiini',
+    // ZH
+    '鸡肉','牛肉','猪肉','羊肉','火鸡','鸭肉','鱼','三文鱼','金枪鱼','虾','螃蟹','龙虾','培根','火腿','香肠','牛排','鳕鱼','鳟鱼','沙丁鱼',
+    // JA
+    '鶏肉','牛肉','豚肉','羊肉','七面鳥','アヒル','魚','サーモン','マグロ','エビ','カニ','ロブスター','ベーコン','ハム','ソーセージ','ステーキ','タラ','マス','イワシ',
+    // KO
+    '닭고기','소고기','돼지고기','양고기','칠면조','오리','생선','연어','참치','새우','게','랍스터','베이컨','햄','소시지','스테이크','대구','송어','정어리',
+    // HE
+    'עוף','בקר','חזיר','כבש','הודו','ברווז','דג','סלמון','טונה','שרימפס','סרטן','לובסטר','בייקון','חזיר','נקניק','סטייק','בקלה','פורל','סרדין',
+    // AR
+    'دجاج','لحم بقر','لحم خنزير','خروف','ديك رومي','بط','سمك','سلمون','تونة','روبيان','سرطان','جراد البحر','لحم مقدد','لحم خنزير مقدد','نقانق','شريحة لحم','سمك القد','تراوت','سردين',
+  ],
+  bakery: [
+    // EN
+    'bread','baguette','sourdough','tortilla','croissant','muffin','bagel','roll','bun','focaccia','ciabatta','brioche','cake','cupcake','pastry','donut','doughnut','scone','waffle','pancake','tart','pie','cookie','cracker','flour','yeast',
+    // ES
+    'pan','baguette','tortilla','croissant','magdalena','bollo','bollería','bolleria','focaccia','pastel','tarta','galleta','harina','levadura','bizcocho',
+    // FR
+    'pain','baguette','croissant','muffin','brioche','gâteau','gateau','tarte','biscuit','farine','levure','viennoiserie','patisserie','pâtisserie',
+    // DE
+    'brot','brötchen','brotchen','baguette','croissant','muffin','brötchen','brotchen','kuchen','torte','keks','mehl','hefe','gebäck','gebaeck','waffle','waffel',
+    // IT
+    'pane','baguette','croissant','muffin','focaccia','ciabatta','brioche','torta','biscotto','farina','lievito','pasticceria','pizza',
+    // PT
+    'pão','pao','baguette','croissant','muffin','focaccia','bolo','torta','biscoito','farinha','fermento',
+    // NL
+    'brood','baguette','croissant','muffin','broodje','cake','taart','koekje','bloem','gist',
+    // PL
+    'chleb','baguette','rogalik','croissant','muffin','bułka','bulka','ciasto','tarta','ciastko','mąka','maka','drożdże','drozdze',
+    // RU
+    'хлеб','багет','круассан','маффин','булочка','торт','пирог','печенье','мука','дрожжи','выпечка',
+    // UK
+    'хліб','хлеб','багет','круасан','маффін','булочка','торт','пиріг','печиво','борошно','дріжджі',
+    // SV
+    'bröd','brod','baguette','croissant','muffin','bulle','kaka','tårta','tarta','kex','mjöl','mjol','jäst','jast',
+    // DA
+    'brød','brod','baguette','croissant','muffin','bolle','kage','tærte','taerte','kiks','mel','gær','gaer',
+    // FI
+    'leipä','leipa','baguette','croissant','muffini','sämpylä','sampyla','kakku','piirakka','keksi','jauho','hiiva',
+    // ZH
+    '面包','法棍','可颂','牛角包','马芬','蛋糕','饼干','面粉','酵母',
+    // JA
+    'パン','バゲット','クロワッサン','マフィン','ケーキ','クッキー','小麦粉','イースト',
+    // KO
+    '빵','바게트','크루아상','머핀','케이크','쿠키','밀가루','효모',
+    // HE
+    'לחם','באגט','קרואסון','מאפין','עוגה','עוגיה','קמח','שמרים',
+    // AR
+    'خبز','باغيت','كرواسون','كعك','كيك','بسكويت','دقيق','خميرة',
+  ],
+  frozen: [
+    // EN
+    'frozen','ice cream','gelato','sorbet','popsicle','pizza','nuggets','fries','edamame','ice',
+    // ES
+    'congelado','helado','sorbete','pizza','nuggets','patatas fritas','papas fritas','hielo',
+    // FR
+    'surgelé','surgele','glace','sorbet','pizza','nuggets','frites','glaçon','glacon',
+    // DE
+    'tiefkühl','tiefkuhl','gefroren','eis','eiscreme','pizza','nuggets','pommes','eiswürfel',
+    // IT
+    'surgelato','gelato','sorbetto','pizza','nuggets','patatine fritte','ghiaccio',
+    // PT
+    'congelado','sorvete','sorbete','pizza','nuggets','batata frita','gelo',
+    // NL
+    'diepvries','ijs','ijsje','pizza','nuggets','friet','frietjes','ijsblokje',
+    // PL
+    'mrożony','mrozony','lody','sorbet','pizza','nuggets','frytki','lód','lod',
+    // RU
+    'замороженный','мороженое','сорбет','пицца','наггетсы','картошка фри','лёд',
+    // UK
+    'заморожений','морозиво','сорбет','піца','наггетси','картопля фрі','лід',
+    // SV
+    'fryst','glass','sorbet','pizza','nuggets','pommes frites','is',
+    // DA
+    'frossen','is','is','sorbet','pizza','nuggets','pommes frites',
+    // FI
+    'pakaste','jäätelö','jäätelo','sorbet','pizza','nuggets','ranskalaiset','jää',
+    // ZH
+    '冷冻','冰淇淋','冰激凌','雪糕','比萨','薯条','冰块',
+    // JA
+    '冷凍','アイスクリーム','ソルベ','ピザ','ナゲット','フライドポテト','氷',
+    // KO
+    '냉동','아이스크림','소르베','피자','너겟','감자튀김','얼음',
+    // HE
+    'קפוא','גלידה','שרבט','פיצה','נאגטס','צ׳יפס','קרח',
+    // AR
+    'مجمد','آيس كريم','مثلجات','بيتزا','نوجتس','بطاطس مقلية','ثلج',
+  ],
+  drinks: [
+    // EN
+    'water','soda','cola','juice','tea','coffee','wine','beer','vodka','whiskey','rum','gin','tequila','champagne','kombucha','smoothie','drink','beverage',
+    // ES
+    'agua','refresco','zumo','jugo','té','te','café','cafe','vino','cerveza','vodka','whisky','ron','ginebra','tequila','cava','bebida',
+    // FR
+    'eau','soda','jus','thé','the','café','cafe','vin','bière','biere','vodka','whisky','rhum','gin','tequila','champagne','boisson',
+    // DE
+    'wasser','saft','tee','kaffee','wein','bier','vodka','whisky','rum','gin','tequila','sekt','getränk','getraenk',
+    // IT
+    'acqua','succo','tè','te','caffè','caffe','vino','birra','vodka','whisky','rum','gin','tequila','spumante','bevanda',
+    // PT
+    'água','agua','suco','chá','cha','café','cafe','vinho','cerveja','vodka','uísque','rum','gin','tequila','bebida',
+    // NL
+    'water','sap','thee','koffie','wijn','bier','vodka','whisky','rum','gin','tequila','drank','drankje',
+    // PL
+    'woda','sok','herbata','kawa','wino','piwo','wódka','wodka','whisky','rum','gin','tequila','napój','napoj',
+    // RU
+    'вода','сок','чай','кофе','вино','пиво','водка','виски','ром','джин','текила','напиток',
+    // UK
+    'вода','сік','сок','чай','кава','вино','пиво','горілка','водка','віскі','ром','джин','текіла','напій',
+    // SV
+    'vatten','juice','saft','te','kaffe','vin','öl','ol','vodka','whisky','rom','gin','tequila','dryck',
+    // DA
+    'vand','juice','saft','te','kaffe','vin','øl','oel','vodka','whisky','rom','gin','tequila','drik',
+    // FI
+    'vesi','mehu','tee','kahvi','viini','olut','vodka','viskilata','rommi','gin','tequila','juoma',
+    // ZH
+    '水','果汁','茶','咖啡','葡萄酒','啤酒','伏特加','威士忌','朗姆酒','金酒','龙舌兰','饮料',
+    // JA
+    '水','ジュース','お茶','コーヒー','ワイン','ビール','ウォッカ','ウイスキー','ラム','ジン','テキーラ','飲み物',
+    // KO
+    '물','주스','차','커피','와인','맥주','보드카','위스키','럼','진','데킬라','음료',
+    // HE
+    'מים','מיץ','תה','קפה','יין','בירה','וודקה','וויסקי','רום','ג׳ין','טקילה','משקה',
+    // AR
+    'ماء','عصير','شاي','قهوة','نبيذ','بيرة','فودكا','ويسكي','روم','جين','تكيلا','مشروب',
+  ],
+  snacks: [
+    // EN
+    'chips','crisps','popcorn','pretzels','nuts','almonds','cashews','peanuts','walnuts','pistachios','granola','chocolate','candy','sweets','gummy','caramel','snack','peanut butter','nutella','jam','jelly','honey','syrup','cereal','oats',
+    // ES
+    'patatas fritas','papas fritas','palomitas','palomitas','frutos secos','almendras','anacardos','cacahuetes','nueces','pistachos','granola','chocolate','caramelo','dulces','golosinas','mermelada','miel','jarabe','cereales','avena',
+    // FR
+    'chips','pop-corn','cacahuète','amande','noix de cajou','noix','pistache','granola','chocolat','bonbon','confiture','miel','sirop','céréales','cereales','flocons d\'avoine',
+    // DE
+    'chips','popcorn','brezeln','nüsse','nusse','mandeln','cashews','erdnüsse','erdnusse','walnüsse','walnusse','pistazien','granola','schokolade','süßigkeiten','susigkeiten','bonbon','marmelade','honig','sirup','müsli','musli','haferflocken',
+    // IT
+    'patatine','popcorn','noccioline','mandorle','anacardi','noci','pistacchi','granola','cioccolato','caramella','marmellata','miele','sciroppo','cereali','avena',
+    // PT
+    'batata chips','pipoca','amendoins','amêndoas','castanha de caju','nozes','pistache','granola','chocolate','bala','doce','geleia','mel','xarope','cereal','aveia',
+    // NL
+    'chips','popcorn','noten','amandelen','cashewnoten','pinda','walnoten','pistache','granola','chocolade','snoep','jam','honing','siroop','ontbijtgranen','havermout',
+    // PL
+    'chipsy','popcorn','orzechy','migdały','orzechy nerkowca','orzeszki ziemne','orzechy włoskie','pistacje','granola','czekolada','cukierek','słodycze','slodycze','dżem','dzem','miód','miod','syrop','płatki','platki','owsianka',
+    // RU
+    'чипсы','попкорн','орехи','миндаль','кешью','арахис','грецкие орехи','фисташки','гранола','шоколад','конфета','сладости','варенье','мёд','сироп','хлопья','овсянка',
+    // UK
+    'чіпси','попкорн','горіхи','мигдаль','кеш\'ю','арахіс','грецькі горіхи','фісташки','гранола','шоколад','цукерка','солодощі','варення','мед','сироп','пластівці','вівсянка',
+    // SV
+    'chips','popcorn','nötter','mandel','cashew','jordnöt','valnöt','pistaschmandel','granola','choklad','godis','sylt','honung','sirap','flingor','havregryn',
+    // DA
+    'chips','popcorn','nødder','mandler','cashewnødder','jordnødder','valnødder','pistacienødder','granola','chokolade','slik','syltetøj','honning','sirup','morgenmad','havregryn',
+    // FI
+    'sipsit','popcorn','pähkinät','mantelit','cashewpähkinät','maapähkinät','saksanpähkinät','pistaasipähkinät','granola','suklaa','karkki','hillo','hunaja','siirappi','murot','kaurahiutaleet',
+    // ZH
+    '薯片','爆米花','坚果','杏仁','腰果','花生','核桃','开心果','格兰诺拉','巧克力','糖果','果酱','蜂蜜','糖浆','麦片','燕麦',
+    // JA
+    'ポテトチップス','ポップコーン','ナッツ','アーモンド','カシューナッツ','ピーナッツ','クルミ','ピスタチオ','グラノーラ','チョコレート','キャンディ','ジャム','はちみつ','シロップ','シリアル','オートミール',
+    // KO
+    '과자','팝콘','견과류','아몬드','캐슈넛','땅콩','호두','피스타치오','그래놀라','초콜릿','사탕','잼','꿀','시럽','시리얼','오트밀',
+    // HE
+    'צ׳יפס','פופקורן','אגוזים','שקדים','קשיו','בוטנים','אגוזי מלך','פיסטוקים','גרנולה','שוקולד','סוכריות','ריבה','דבש','סירופ','דגני בוקר','שיבולת שועל',
+    // AR
+    'رقائق','فشار','مكسرات','لوز','كاجو','فول سوداني','جوز','فستق','جرانولا','شوكولاتة','حلوى','مربى','عسل','شراب','حبوب','شوفان',
+  ],
+  cleaning: [
+    // EN
+    'soap','detergent','bleach','spray','cleaner','sponge','mop','broom','vacuum','paper towel','trash bag','garbage bag','toilet paper','tissue','wipes','scrub','brush','gloves','disinfect','sanitizer','air freshener','fabric softener','polish',
+    // ES
+    'jabón','jabon','detergente','lejía','lejia','limpiador','esponja','fregona','escoba','aspiradora','papel de cocina','bolsa de basura','papel higiénico','papel higienico','pañuelo','panuelo','guantes','desinfectante','suavizante','ambientador',
+    // FR
+    'savon','détergent','detergent','javel','nettoyant','éponge','eponge','serpillière','serpilliere','balai','aspirateur','essuie-tout','sac poubelle','papier toilette','mouchoir','gants','désinfectant','desinfectant','assouplissant','désodorisant','desodorisant',
+    // DE
+    'seife','waschmittel','bleiche','reiniger','schwamm','wischmopp','besen','staubsauger','küchenrolle','kuchenrolle','müllbeutel','mullbeutel','toilettenpapier','taschentuch','handschuhe','desinfektionsmittel','weichspüler','weichspuler','raumduft',
+    // IT
+    'sapone','detersivo','candeggina','spray','detergente','spugna','mocio','scopa','aspirapolvere','carta da cucina','sacchetto della spazzatura','carta igienica','fazzoletto','guanti','disinfettante','ammorbidente','deodorante',
+    // PT
+    'sabão','sabao','detergente','água sanitária','água sanitaria','limpador','esponja','rodo','vassoura','aspirador','papel toalha','saco de lixo','papel higiênico','papel higienico','lenço','lenco','luvas','desinfetante','amaciante','aromatizante',
+    // NL
+    'zeep','wasmiddel','bleekwater','reiniger','spons','dweil','bezem','stofzuiger','keukenpapier','vuilniszak','wc-papier','tissue','handschoenen','desinfectiemiddel','wasverzachter','luchtverfrisser',
+    // PL
+    'mydło','mydlo','detergent','wybielacz','środek czyszczący','srodek czyszczacy','gąbka','gabka','mop','miotła','miota','odkurzacz','ręcznik papierowy','recznik papierowy','worek na śmieci','worek na smieci','papier toaletowy','chusteczka','rękawiczki','rekawiczki','dezynfekcja','płyn do płukania','plyn do plukania',
+    // RU
+    'мыло','моющее средство','отбеливатель','спрей','чистящее средство','губка','швабра','метла','пылесос','бумажные полотенца','мусорный пакет','туалетная бумага','салфетки','перчатки','дезинфицирующее средство','кондиционер','освежитель воздуха',
+    // UK
+    'мило','миючий засіб','відбілювач','спрей','мийний засіб','губка','швабра','мітла','пилосос','паперові рушники','сміттєвий пакет','туалетний папір','серветки','рукавички','дезінфікуючий засіб','кондиціонер для білизни','освіжувач повітря',
+    // SV
+    'tvål','tvättmedel','blekmedel','rengöringsmedel','svamp','mopp','kvast','dammsugare','hushållspapper','soppåse','toalettpapper','pappersnäsduk','handskar','desinfektionsmedel','sköljmedel','luftfräschare',
+    // DA
+    'sæbe','saebe','vaskemiddel','blegemiddel','rengøringsmiddel','rengøringsmiddel','svamp','moppe','kost','støvsuger','stoevsuger','køkkenrulle','køkkenrulle','skraldpose','toiletpapir','lommetørklæde','lommetorklaede','handsker','desinfektionsmiddel','skyllemiddel','luftfrisker',
+    // FI
+    'saippua','pesuaine','valkaisuaine','puhdistusaine','sieni','moppi','luuta','pölynimuri','polynimuri','talouspaperi','roskasäkki','wc-paperi','nenäliina','hanskat','desinfiointiaine','huuhteluaine','ilmanraikastin',
+    // ZH
+    '肥皂','洗涤剂','漂白剂','清洁剂','海绵','拖把','扫帚','吸尘器','纸巾','垃圾袋','卫生纸','手套','消毒剂','柔顺剂','空气清新剂',
+    // JA
+    '石けん','洗剤','漂白剤','スプレー','クリーナー','スポンジ','モップ','ほうき','掃除機','ペーパータオル','ゴミ袋','トイレットペーパー','ティッシュ','手袋','消毒','消臭剤',
+    // KO
+    '비누','세제','표백제','스프레이','세정제','스펀지','걸레','빗자루','청소기','키친타올','쓰레기봉투','화장지','티슈','장갑','소독제','방향제',
+    // HE
+    'סבון','חומר ניקוי','אקונומיקה','ספוג','מגב','מטאטא','שואב אבק','מגבת נייר','שקית אשפה','נייר טואלט','ממחטה','כפפות','חומר חיטוי','מרכך','מטהר אוויר',
+    // AR
+    'صابون','منظف','مبيض','منظف','إسفنجة','ممسحة','مكنسة','مكنسة كهربائية','مناشف ورقية','كيس قمامة','ورق تواليت','مناديل','قفازات','معقم','منعم','معطر جو',
+  ],
+  personal: [
+    // EN
+    'shampoo','conditioner','body wash','toothpaste','toothbrush','mouthwash','floss','razor','deodorant','lotion','moisturizer','sunscreen','perfume','cologne','makeup','lipstick','mascara','tampon','pad','bandage','medicine','vitamin','ibuprofen','aspirin',
+    // ES
+    'champú','champu','acondicionador','gel de ducha','pasta de dientes','cepillo de dientes','enjuague bucal','hilo dental','maquinilla','desodorante','crema','hidratante','protector solar','perfume','colonia','maquillaje','pintalabios','rímel','rimel','tampón','tampon','compresas','venda','medicamento','vitaminas','ibuprofeno','aspirina',
+    // FR
+    'shampooing','shampoing','après-shampooing','gel douche','dentifrice','brosse à dents','rince-bouche','fil dentaire','rasoir','déodorant','deodorant','crème','creme','hydratant','écran solaire','ecran solaire','parfum','maquillage','rouge à lèvres','mascara','tampon','serviette hygiénique','pansement','médicament','medicament','vitamine','ibuprofène',
+    // DE
+    'shampoo','spülung','spulung','duschgel','zahnpasta','zahnbürste','zahnburste','mundwasser','zahnseide','rasierer','deo','deodorant','lotion','feuchtigkeitscreme','sonnenschutz','parfüm','parfum','make-up','lippenstift','mascara','tampon','binde','pflaster','medikament','vitamin','ibuprofen','aspirin',
+    // IT
+    'shampoo','balsamo','bagnoschiuma','dentifricio','spazzolino','collutorio','filo interdentale','rasoio','deodorante','crema','idratante','protezione solare','profumo','trucco','rossetto','mascara','tampone','assorbente','cerotto','medicinale','vitamina','ibuprofene','aspirina',
+    // PT
+    'shampoo','condicionador','sabonete','creme dental','escova de dentes','enxaguante bucal','fio dental','barbeador','desodorante','creme','hidratante','protetor solar','perfume','maquiagem','batom','rímel','rimel','tampão','absorvente','curativo','remédio','vitamina','ibuprofeno','aspirina',
+    // NL
+    'shampoo','conditioner','douchegel','tandpasta','tandenborstel','mondwater','tandzijde','scheerapparaat','deodorant','lotion','gezichtscrème','gezichtscrème','zonnebrand','parfum','make-up','lippenstift','mascara','tampon','maandverband','pleister','medicijn','vitamine','ibuprofen','aspirine',
+    // PL
+    'szampon','odżywka','żel pod prysznic','zel pod prysznic','pasta do zębów','pasta do zebow','szczoteczka do zębów','szczoteczka do zebow','płyn do płukania ust','plyn do plukania ust','nić dentystyczna','nic dentystyczna','maszynka do golenia','dezodorant','krem','nawilżacz','nawilzacz','krem przeciwsłoneczny','krem przeciwsloneczny','perfumy','makijaż','makijaz','szminka','tusz do rzęs','tusz do rzes','tampon','podpaska','plaster','lek','witamina','ibuprofen','aspiryna',
+    // RU
+    'шампунь','кондиционер','гель для душа','зубная паста','зубная щётка','ополаскиватель','зубная нить','бритва','дезодорант','крем','увлажнитель','солнцезащитный крем','духи','макияж','помада','тушь','тампон','прокладка','пластырь','лекарство','витамин','ибупрофен','аспирин',
+    // UK
+    'шампунь','кондиціонер','гель для душу','зубна паста','зубна щітка','ополіскувач','зубна нитка','бритва','дезодорант','крем','зволожувач','сонцезахисний крем','духи','макіяж','помада','туш','тампон','прокладка','пластир','ліки','вітамін','ібупрофен','аспірин',
+    // SV
+    'schampo','balsam','duschgel','tandkräm','tandkram','tandborste','munskölj','munskölj','tandtråd','rakapparat','deodorant','lotion','solskydd','parfym','smink','läppstift','lappstift','mascara','tampong','binda','plåster','platser','medicin','vitamin','ibuprofen','aspirin',
+    // DA
+    'shampoo','balsam','brusegel','tandpasta','tandbørste','tandborste','mundskyllemiddel','tandtråd','barbermaskine','deodorant','creme','solcreme','parfume','makeup','læbestift','labestift','mascara','tampon','bind','plaster','medicin','vitamin','ibuprofen','aspirin',
+    // FI
+    'shampoo','hoitoaine','suihkugeeli','hammastahna','hammasharja','suuvesi','hammaslanka','partakone','deodorantti','voide','kosteusvoide','aurinkovoide','hajuvesi','meikki','huulipuna','ripsiväri','tamponi','side','laastari','lääke','vitamiini','ibuprofeeni','aspiriini',
+    // ZH
+    '洗发水','护发素','沐浴露','牙膏','牙刷','漱口水','牙线','剃须刀','除臭剂','乳液','保湿霜','防晒霜','香水','化妆品','口红','睫毛膏','卫生棉条','卫生巾','创可贴','药','维生素','布洛芬','阿司匹林',
+    // JA
+    'シャンプー','コンディショナー','ボディウォッシュ','歯磨き粉','歯ブラシ','マウスウォッシュ','デンタルフロス','カミソリ','デオドラント','ローション','日焼け止め','香水','メイク','口紅','マスカラ','タンポン','生理用品','絆創膏','薬','ビタミン','イブプロフェン','アスピリン',
+    // KO
+    '샴푸','컨디셔너','바디워시','치약','칫솔','구강청결제','치실','면도기','데오드란트','로션','보습크림','선크림','향수','화장품','립스틱','마스카라','탐폰','생리대','반창고','약','비타민','이부프로펜','아스피린',
+    // HE
+    'שמפו','מרכך','ג׳ל רחצה','משחת שיניים','מברשת שיניים','מי פה','חוט דנטלי','מגלח','דאודורנט','קרם','קרם לחות','קרם הגנה','בושם','איפור','שפתון','מסקרה','טמפון','תחבושת','פלסטר','תרופה','ויטמין','איבופרופן','אספירין',
+    // AR
+    'شامبو','بلسم','غسول','معجون أسنان','فرشاة أسنان','غسول فم','خيط أسنان','ماكينة حلاقة','مزيل عرق','كريم','مرطب','واقي شمس','عطر','مكياج','أحمر شفاه','ماسكارا','فوط صحية','لاصق','دواء','فيتامين','إيبوبروفين','أسبرين',
+  ],
+  pantry: [
+    // EN
+    'pasta','spaghetti','noodle','rice','quinoa','lentil','chickpea','canned','soup','broth','stock','sauce','ketchup','mustard','mayonnaise','salsa','soy sauce','olive oil','oil','vinegar','salt','cumin','paprika','oregano','thyme','rosemary','cinnamon','vanilla','baking soda','baking powder','sugar','cornstarch','cocoa','tomato paste','coconut milk',
+    // ES
+    'pasta','espagueti','fideos','arroz','quinoa','lentejas','garbanzos','lata','sopa','caldo','salsa','ketchup','mostaza','mayonesa','aceite de oliva','aceite','vinagre','sal','comino','pimentón','pimenton','orégano','oregano','tomillo','romero','canela','vainilla','bicarbonato','azúcar','azucar','almidón','almidon','cacao','tomate frito',
+    // FR
+    'pâtes','pates','spaghetti','nouilles','riz','quinoa','lentilles','pois chiches','boîte de conserve','boite de conserve','soupe','bouillon','sauce','ketchup','moutarde','mayonnaise','huile d\'olive','huile','vinaigre','sel','cumin','paprika','origan','thym','romarin','cannelle','vanille','levure chimique','sucre','amidon','cacao','coulis de tomates',
+    // DE
+    'nudeln','spaghetti','reis','quinoa','linsen','kichererbsen','dose','konserve','suppe','brühe','bruehe','soße','sosse','ketchup','senf','mayonnaise','olivenöl','olivenol','öl','ol','essig','salz','kreuzkümmel','kreuzkümel','paprika','oregano','thymian','rosmarin','zimt','vanille','backpulver','zucker','stärke','starke','kakao','tomatenmark',
+    // IT
+    'pasta','spaghetti','riso','quinoa','lenticchie','ceci','scatola','zuppa','brodo','salsa','ketchup','senape','maionese','olio d\'oliva','olio','aceto','sale','cumino','paprica','origano','timo','rosmarino','cannella','vaniglia','lievito','zucchero','amido','cacao','passata',
+    // PT
+    'macarrão','macarrao','espaguete','arroz','quinoa','lentilha','grão de bico','lata','sopa','caldo','molho','ketchup','mostarda','maionese','azeite','óleo','oleo','vinagre','sal','cominho','páprica','paprica','orégano','oregano','tomilho','alecrim','canela','baunilha','fermento','açúcar','acucar','amido','cacau','extrato de tomate',
+    // NL
+    'pasta','spaghetti','rijst','quinoa','linzen','kikkererwten','blik','soep','bouillon','saus','ketchup','mosterd','mayonaise','olijfolie','olie','azijn','zout','komijn','paprika','oregano','tijm','rozemarijn','kaneel','vanille','bakpoeder','suiker','maizena','cacao','tomatenpuree',
+    // PL
+    'makaron','spaghetti','ryż','quinoa','soczewica','ciecierzyca','puszka','zupa','bulion','sos','ketchup','musztarda','majonez','oliwa','olej','ocet','sól','sol','kminek','papryka','oregano','tymianek','rozmaryn','cynamon','wanilia','proszek do pieczenia','cukier','skrobia','kakao','koncentrat pomidorowy',
+    // RU
+    'макароны','спагетти','лапша','рис','киноа','чечевица','нут','консервы','суп','бульон','соус','кетчуп','горчица','майонез','оливковое масло','масло','уксус','соль','тмин','паприка','орегано','тимьян','розмарин','корица','ваниль','разрыхлитель','сахар','крахмал','какао','томатная паста',
+    // UK
+    'макарони','спагеті','локшина','рис','кіноа','сочевиця','нут','консерви','суп','бульйон','соус','кетчуп','гірчиця','майонез','оливкова олія','олія','оцет','сіль','кмин','паприка','орегано','чебрець','розмарин','кориця','ваніль','розпушувач','цукор','крохмаль','какао','томатна паста',
+    // SV
+    'pasta','spagetti','nudlar','ris','quinoa','linser','kikärtor','konserv','soppa','buljong','sås','sas','ketchup','senap','majonnäs','olivolja','olja','vinäger','salt','spiskummin','paprika','oregano','timjan','rosmarin','kanel','vanilj','bakpulver','socker','maizena','kakao','tomatpuré','tomatpure',
+    // DA
+    'pasta','spaghetti','nudler','ris','quinoa','linser','kikærter','kikaerter','dåse','daase','suppe','bouillon','sovs','ketchup','sennep','mayonnaise','olivenolie','olie','eddike','salt','spidskommen','paprika','oregano','timian','rosmarin','kanel','vanilje','bagepulver','sukker','maizena','kakao','tomatpuré','tomatpure',
+    // FI
+    'pasta','spagetti','nuudeli','riisi','kvinoa','linssit','kahviherneet','säilyke','keitto','liemi','kastike','ketsuppi','sinappi','majoneesi','oliiviöljy','öljy','etikka','suola','juustokumina','paprika','oregano','timjami','rosmariini','kaneli','vanilja','leivinjauhe','sokeri','maissitärkkelys','kaakao','tomaattisose',
+    // ZH
+    '意大利面','面条','大米','藜麦','扁豆','鹰嘴豆','罐头','汤','高汤','酱汁','番茄酱','芥末','蛋黄酱','橄榄油','食用油','醋','盐','孜然','红椒粉','牛至','百里香','迷迭香','肉桂','香草','泡打粉','糖','淀粉','可可粉','番茄膏',
+    // JA
+    'パスタ','スパゲッティ','ヌードル','米','キヌア','レンズ豆','ひよこ豆','缶詰','スープ','だし','ソース','ケチャップ','マスタード','マヨネーズ','オリーブオイル','油','酢','塩','クミン','パプリカ','オレガノ','タイム','ローズマリー','シナモン','バニラ','ベーキングパウダー','砂糖','コーンスターチ','ココア','トマトペースト',
+    // KO
+    '파스타','스파게티','국수','쌀','퀴노아','렌틸콩','병아리콩','통조림','수프','육수','소스','케첩','겨자','마요네즈','올리브유','식용유','식초','소금','커민','파프리카','오레가노','타임','로즈마리','시나몬','바닐라','베이킹파우더','설탕','전분','코코아','토마토 페이스트',
+    // HE
+    'פסטה','ספגטי','אטריות','אורז','קינואה','עדשים','חומוס','שימורים','מרק','ציר','רוטב','קטשופ','חרדל','מיונז','שמן זית','שמן','חומץ','מלח','כמון','פפריקה','אורגנו','טימין','רוזמרין','קינמון','וניל','אבקת אפייה','סוכר','עמילן','קקאו','רסק עגבניות',
+    // AR
+    'معكرونة','إسباغيتي','شعيرية','أرز','كينوا','عدس','حمص','معلبات','حساء','مرق','صلصة','كاتشب','خردل','مايونيز','زيت زيتون','زيت','خل','ملح','كمون','فلفل أحمر','أوريجانو','زعتر','إكليل الجبل','قرفة','فانيليا','بيكنج باودر','سكر','نشا','كاكاو','معجون طماطم',
+  ],
+};
+
+let autocatActive = false; // true = autocat set the section, false = user manually set it
+
+function detectSection(val) {
+  const lower = val.toLowerCase().trim();
+  // Split input into words for boundary matching
+  const words = lower.split(/\s+/);
+  for (const [section, keywords] of Object.entries(AUTOCAT_MAP)) {
+    for (const kw of keywords) {
+      // Full word match: keyword equals one of the typed words,
+      // OR typed input starts with the keyword (handles e.g. "pollo a la plancha")
+      // OR keyword is multi-word and is contained in input (e.g. "olive oil")
+      const kwLower = kw.toLowerCase();
+      if (kw.includes(' ')) {
+        // Multi-word keyword: substring match is fine
+        if (lower.includes(kwLower)) return section;
+      } else {
+        // Single-word keyword: must match a whole word in input
+        if (words.some(w => w === kwLower || w.startsWith(kwLower) && kwLower.length >= 4)) return section;
+      }
+    }
+  }
+  return null;
+}
+
+function setSection(id, isAuto) {
+  selectedSection = id;
+  autocatActive = isAuto;
   renderSectionPicker();
+  // Update hint
+  const hint = document.getElementById('autocat-hint');
+  if (isAuto) {
+    const s = getSections().find(s => s.id === id);
+    hint.textContent = s ? `${s.icon} ${GI.get('shopAutocat')} ${s.label}` : '';
+  } else {
+    hint.textContent = '';
+  }
 }
 
 /* ═══════════════════════════════════════
@@ -633,8 +1069,19 @@ function onInputChange(){
   const picker = document.getElementById('section-picker');
   if(val.length > 0){
     picker.classList.add('visible');
+    // Only autocat if user hasn't manually picked
+    if (autocatActive || selectedSection === SECTIONS[0].id) {
+      const detected = detectSection(val);
+      if (detected) {
+        setSection(detected, true);
+      } else if (autocatActive) {
+        setSection(SECTIONS[0].id, true);
+      }
+    }
   } else {
     picker.classList.remove('visible');
+    document.getElementById('autocat-hint').textContent = '';
+    if (autocatActive) setSection(SECTIONS[0].id, true);
   }
 }
 
