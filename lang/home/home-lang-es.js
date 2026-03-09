@@ -93,4 +93,12 @@ homepageStepEdge3:"En Abrir estas páginas, haz clic en Añadir nueva página e 
 homepageStepOpera1:"Abre Opera y haz clic en el menú Opera (arriba a la izquierda)",
 homepageStepOpera2:"Ve a Configuración → Básico → Al iniciar",
 homepageStepOpera3:"Selecciona Abrir una página específica e introduce: {url}"
+,
+settingsBg:"Fondo",
+settingsBgDesc:"Temas predeterminados y foto personalizada",
+settingsBgCustom:"Foto personalizada",
+settingsBgUpload:"Subir foto",
+settingsBgApplied:"¡Fondo aplicado!",
+settingsBgTooBig:"Imagen demasiado grande",
+settingsBgStorageErr:"No hay espacio suficiente"
 };

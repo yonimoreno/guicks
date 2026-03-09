@@ -93,4 +93,12 @@ homepageStepEdge3:"V sekci Otevřít tyto stránky klikněte na Přidat novou st
 homepageStepOpera1:"Otevřete Opera a klikněte na menu Opera (vlevo nahoře)",
 homepageStepOpera2:"Přejděte na Nastavení → Základní → Při spuštění",
 homepageStepOpera3:"Vyberte Otevřít konkrétní stránku a zadejte: {url}"
+,
+settingsBg:"Pozadí",
+settingsBgDesc:"Předvolby a vlastní fotografie",
+settingsBgCustom:"Vlastní fotografie",
+settingsBgUpload:"Nahrát fotografii",
+settingsBgApplied:"Pozadí použito!",
+settingsBgTooBig:"Obrázek je příliš velký",
+settingsBgStorageErr:"Nedostatek místa"
 };

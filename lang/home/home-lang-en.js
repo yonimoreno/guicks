@@ -93,4 +93,12 @@ homepageStepEdge3:"Under Open these pages, click Add a new page and enter: {url}
 homepageStepOpera1:"Open Opera and click the Opera menu (top left)",
 homepageStepOpera2:"Go to Settings → Basic → On startup",
 homepageStepOpera3:"Select Open a specific page and enter: {url}"
+,
+settingsBg:"Background",
+settingsBgDesc:"Preset themes & custom photo",
+settingsBgCustom:"Custom photo",
+settingsBgUpload:"Upload photo",
+settingsBgApplied:"Background applied!",
+settingsBgTooBig:"Image too large, try a smaller one",
+settingsBgStorageErr:"Not enough storage space"
 };

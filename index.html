@@ -27,6 +27,45 @@
       user-select: none;
     }
 
+    /* ── Background presets ── */
+    .bg-image-layer {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0; transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .bg-image-layer.visible { opacity: 1; }
+
+    /* Preset gradient overrides on bg-wrap */
+    .bg-preset-cosmos    { background: radial-gradient(ellipse 80% 60% at 20% 20%, #1a1040 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 80%, #0d2a50 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 50% 50%, #0f1a35 0%, transparent 70%), #07070d; }
+    .bg-preset-aurora    { background: radial-gradient(ellipse 80% 60% at 10% 30%, #003d1a 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 85% 70%, #001a3d 0%, transparent 55%), radial-gradient(ellipse 50% 60% at 50% 10%, #1a0d3d 0%, transparent 60%), #020d07; }
+    .bg-preset-sunset    { background: radial-gradient(ellipse 80% 60% at 20% 80%, #3d1a00 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 80% 20%, #3d0028 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 50% 50%, #1a0d00 0%, transparent 65%), #0d0507; }
+    .bg-preset-ocean     { background: radial-gradient(ellipse 80% 60% at 20% 20%, #001a3d 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 80% 80%, #003d3d 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 50% 50%, #000d1a 0%, transparent 65%), #020710; }
+    .bg-preset-rose      { background: radial-gradient(ellipse 80% 60% at 20% 20%, #3d001a 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 80% 80%, #1a003d 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 50% 50%, #200020 0%, transparent 65%), #0a0209; }
+    .bg-preset-forest    { background: radial-gradient(ellipse 80% 60% at 20% 20%, #001a0d 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 80% 80%, #0a1a00 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 50% 50%, #001408 0%, transparent 65%), #020a04; }
+    .bg-preset-midnight  { background: #000000; }
+    .bg-preset-slate     { background: radial-gradient(ellipse 80% 60% at 20% 20%, #1a1a2e 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 80% 80%, #16213e 0%, transparent 60%), #0a0a14; }
+
+    /* Bg picker swatch */
+    .bg-picker { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px 14px; }
+    .bg-swatch {
+      width: 48px; height: 48px; border-radius: 12px; cursor: pointer;
+      border: 2.5px solid transparent; transition: all 0.18s;
+      position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    .bg-swatch:hover { transform: scale(1.08); }
+    .bg-swatch.active { border-color: #4f8ef7; box-shadow: 0 0 0 2px rgba(79,142,247,0.4); }
+    .bg-swatch-img { width: 100%; height: 100%; object-fit: cover; border-radius: 9px; }
+    .bg-swatch-check { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; background: rgba(0,0,0,0.3); border-radius: 9px; opacity: 0; transition: opacity 0.15s; }
+    .bg-swatch.active .bg-swatch-check { opacity: 1; }
+    .bg-upload-swatch {
+      width: 48px; height: 48px; border-radius: 12px; cursor: pointer;
+      border: 2px dashed rgba(255,255,255,0.25); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+      font-size: 18px; color: rgba(255,255,255,0.4); transition: all 0.18s; flex-shrink: 0;
+    }
+    .bg-upload-swatch:hover { border-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.7); transform: scale(1.05); }
+
     /* ── Animated background ── */
     .bg-wrap {
       position: fixed; inset: 0; z-index: 0;
@@ -762,10 +801,11 @@
 </head>
 <body>
 
-<div class="bg-wrap">
+<div class="bg-wrap" id="bgWrap">
   <div class="bg-orb orb1"></div>
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
+  <div class="bg-image-layer" id="bgImageLayer"></div>
 </div>
 
 <div class="shell">
@@ -1488,6 +1528,134 @@
     if (e.target === document.getElementById('settingsOverlay')) closeSettings();
   }
 
+  // ── Background ──
+  const BG_KEY     = 'guicks_bg_v1';     // stores preset id or 'custom'
+  const BG_IMG_KEY = 'guicks_bg_img_v1'; // stores compressed base64 (only when custom)
+
+  const BG_PRESETS = [
+    { id: 'cosmos',   label: 'Cosmos',   orbs: true,  colors: ['#1a1040','#0d2a50','#1a3a6e'] },
+    { id: 'aurora',   label: 'Aurora',   orbs: true,  colors: ['#003d1a','#001a3d','#1a0d3d'] },
+    { id: 'sunset',   label: 'Sunset',   orbs: true,  colors: ['#3d1a00','#3d0028','#1a0d00'] },
+    { id: 'ocean',    label: 'Ocean',    orbs: true,  colors: ['#001a3d','#003d3d','#000d1a'] },
+    { id: 'rose',     label: 'Rose',     orbs: true,  colors: ['#3d001a','#1a003d','#200020'] },
+    { id: 'forest',   label: 'Forest',   orbs: true,  colors: ['#001a0d','#0a1a00','#001408'] },
+    { id: 'midnight', label: 'Midnight', orbs: false, colors: ['#000','#000','#111'] },
+    { id: 'slate',    label: 'Slate',    orbs: false, colors: ['#1a1a2e','#16213e','#0a0a14'] },
+  ];
+
+  function applyBg(id, imgData) {
+    const wrap = document.getElementById('bgWrap');
+    const layer = document.getElementById('bgImageLayer');
+    // Remove all preset classes
+    BG_PRESETS.forEach(p => wrap.classList.remove('bg-preset-' + p.id));
+    const orbs = document.querySelectorAll('.bg-orb');
+
+    if (id === 'custom' && imgData) {
+      wrap.classList.add('bg-preset-midnight');
+      layer.style.backgroundImage = `url(${imgData})`;
+      layer.classList.add('visible');
+      orbs.forEach(o => o.style.opacity = '0');
+    } else {
+      layer.classList.remove('visible');
+      layer.style.backgroundImage = '';
+      const preset = BG_PRESETS.find(p => p.id === id) || BG_PRESETS[0];
+      wrap.classList.add('bg-preset-' + preset.id);
+      // Update orb colors
+      const orbColors = preset.colors;
+      orbs.forEach((o, i) => {
+        o.style.background = orbColors[i] || orbColors[0];
+        o.style.opacity = preset.orbs ? '' : '0';
+      });
+    }
+  }
+
+  function loadBg() {
+    const id = localStorage.getItem(BG_KEY) || 'cosmos';
+    const img = id === 'custom' ? localStorage.getItem(BG_IMG_KEY) : null;
+    applyBg(id, img);
+    updateBgLabel(id);
+  }
+
+  function updateBgLabel(id) {
+    const el = document.getElementById('bgCurrentLabel');
+    if (!el) return;
+    if (id === 'custom') { el.textContent = GI.get('settingsBgCustom') || 'Custom'; return; }
+    const p = BG_PRESETS.find(p => p.id === id);
+    el.textContent = p ? p.label : 'Cosmos';
+  }
+
+  let bgPickerOpen = false;
+  function toggleBgPicker() {
+    bgPickerOpen = !bgPickerOpen;
+    const panel = document.getElementById('bgPickerPanel');
+    const chevron = document.getElementById('bgChevron');
+    panel.style.display = bgPickerOpen ? 'block' : 'none';
+    chevron.style.transform = bgPickerOpen ? 'rotate(90deg)' : '';
+    chevron.style.transition = 'transform 0.2s';
+    if (bgPickerOpen) renderBgSwatches();
+  }
+
+  function renderBgSwatches() {
+    const current = localStorage.getItem(BG_KEY) || 'cosmos';
+    const swatches = document.getElementById('bgSwatches');
+    swatches.innerHTML = BG_PRESETS.map(p => `
+      <div class="bg-swatch bg-preset-${p.id} ${current === p.id ? 'active' : ''}"
+           onclick="selectBgPreset('${p.id}')" title="${p.label}">
+        <div class="bg-swatch-check">✓</div>
+      </div>`).join('') +
+      `<div class="bg-upload-swatch" onclick="document.getElementById('bgUploadInput').click()" title="${GI.get('settingsBgUpload') || 'Upload photo'}">
+        <span>📷</span>
+      </div>
+      ${current === 'custom' ? `<div class="bg-swatch active" style="background:#111" onclick="selectBgPreset('custom')" title="Custom"><div class="bg-swatch-check">✓</div></div>` : ''}`;
+  }
+
+  function selectBgPreset(id) {
+    localStorage.setItem(BG_KEY, id);
+    if (id !== 'custom') localStorage.removeItem(BG_IMG_KEY); // free space
+    applyBg(id, id === 'custom' ? localStorage.getItem(BG_IMG_KEY) : null);
+    updateBgLabel(id);
+    renderBgSwatches();
+  }
+
+  function handleBgUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      // Compress: draw to canvas at max 900px, JPEG q=0.75
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 900;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const compressed = canvas.toDataURL('image/jpeg', 0.75);
+        // Rough size check (~300KB base64 limit)
+        if (compressed.length > 400000) {
+          showToast('⚠️ ' + (GI.get('settingsBgTooBig') || 'Image too large, try a smaller one'));
+          return;
+        }
+        try {
+          localStorage.setItem(BG_IMG_KEY, compressed);
+          localStorage.setItem(BG_KEY, 'custom');
+          applyBg('custom', compressed);
+          updateBgLabel('custom');
+          renderBgSwatches();
+          showToast('🖼️ ' + (GI.get('settingsBgApplied') || 'Background applied!'));
+        } catch(err) {
+          localStorage.removeItem(BG_IMG_KEY);
+          showToast('⚠️ ' + (GI.get('settingsBgStorageErr') || 'Not enough storage space'));
+        }
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+
   // ── Theme ──
   function setTheme(mode) {
     localStorage.setItem(THEME_KEY, mode);
@@ -1522,6 +1690,7 @@
 
   // Apply theme on load
   applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+  loadBg();
 
   // ── Settings save/load (delegates to existing backup functions) ──
   function openBackupFromSettings() {
@@ -1707,11 +1876,18 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-
-    <!-- Language -->
+        <div class="settings-row" style="cursor:pointer" onclick="toggleBgPicker()">
+          <div class="settings-row-icon" style="background:rgba(120,80,255,0.15)">🎨</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label"><span data-i18n="settingsBg">Background</span></div>
+            <div class="settings-row-sub"><span data-i18n="settingsBgDesc" id="bgCurrentLabel">Cosmos</span></div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron" id="bgChevron">›</span></div>
+        </div>
+        <div id="bgPickerPanel" style="display:none">
+          <div class="bg-picker" id="bgSwatches"></div>
+          <input type="file" id="bgUploadInput" accept="image/*" style="display:none" onchange="handleBgUpload(event)"/>
+        </div>
     <div class="settings-group" id="lang-group" style="margin-top:16px">
       <div class="settings-group-label" data-i18n="settingsLanguage">Language</div>
       <div class="settings-rows">

@@ -93,4 +93,12 @@ homepageStepEdge3:"Az Oldalak megnyitása szakaszban kattintson az Új oldal hoz
 homepageStepOpera1:"Nyissa meg az Operát, és kattintson az Opera menüre (bal felső sarok)",
 homepageStepOpera2:"Menjen a Beállítások → Alap → Indításkor",
 homepageStepOpera3:"Válassza a Meghatározott oldal megnyitása lehetőséget, és adja meg: {url}"
+,
+settingsBg:"Háttér",
+settingsBgDesc:"Előre beállított témák és saját fotó",
+settingsBgCustom:"Saját fotó",
+settingsBgUpload:"Fotó feltöltése",
+settingsBgApplied:"Háttér alkalmazva!",
+settingsBgTooBig:"A kép túl nagy",
+settingsBgStorageErr:"Nincs elég tárhely"
 };

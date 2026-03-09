@@ -93,4 +93,12 @@ homepageStepEdge3:"Pod Odpri te strani kliknite Dodaj novo stran in vnesite: {ur
 homepageStepOpera1:"Odprite Opera in kliknite meni Opera (zgoraj levo)",
 homepageStepOpera2:"Pojdite na Nastavitve → Osnovno → Ob zagonu",
 homepageStepOpera3:"Izberite Odpri določeno stran in vnesite: {url}"
+,
+settingsBg:"Ozadje",
+settingsBgDesc:"Prednastavitve in lastna fotografija",
+settingsBgCustom:"Lastna fotografija",
+settingsBgUpload:"Naloži fotografijo",
+settingsBgApplied:"Ozadje uporabljeno!",
+settingsBgTooBig:"Slika je prevelika",
+settingsBgStorageErr:"Ni dovolj prostora"
 };

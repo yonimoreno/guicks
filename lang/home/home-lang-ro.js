@@ -93,4 +93,12 @@ homepageStepEdge3:"La Deschide aceste pagini, apasă Adaugă o pagină nouă și
 homepageStepOpera1:"Deschide Opera și apasă pe meniul Opera (stânga sus)",
 homepageStepOpera2:"Mergi la Setări → De bază → La pornire",
 homepageStepOpera3:"Selectează Deschide o anumită pagină și introdu: {url}"
+,
+settingsBg:"Fundal",
+settingsBgDesc:"Teme presetate și fotografie personalizată",
+settingsBgCustom:"Fotografie personalizată",
+settingsBgUpload:"Încarcă fotografie",
+settingsBgApplied:"Fundal aplicat!",
+settingsBgTooBig:"Imaginea este prea mare",
+settingsBgStorageErr:"Spațiu de stocare insuficient"
 };

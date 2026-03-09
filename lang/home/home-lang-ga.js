@@ -93,4 +93,12 @@ homepageStepEdge3:"Faoi Oscail na leathanaigh seo, cliceáil Cuir leathanach nua
 homepageStepOpera1:"Oscail Opera agus cliceáil ar roghchlár Opera (ar chlé thuas)",
 homepageStepOpera2:"Téigh go Socruithe → Bunúsach → Ag tosú",
 homepageStepOpera3:"Roghnaigh Oscail leathanach ar leith agus cuir isteach: {url}"
+,
+settingsBg:"Cúlra",
+settingsBgDesc:"Téamaí réamhshocraithe agus grianghraf pearsanta",
+settingsBgCustom:"Grianghraf pearsanta",
+settingsBgUpload:"Uaslódáil grianghraf",
+settingsBgApplied:"Cúlra curtha i bhfeidhm!",
+settingsBgTooBig:"Íomhá ró-mhór",
+settingsBgStorageErr:"Níl go leor spáis stórála ann"
 };

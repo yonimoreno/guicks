@@ -93,4 +93,12 @@ homepageStepEdge3:"Skyriuje Atidaryti šiuos puslapius spustelėkite Pridėti na
 homepageStepOpera1:"Atidarykite Opera ir spustelėkite meniu Opera (viršuje kairėje)",
 homepageStepOpera2:"Eikite į Nustatymai → Pagrindiniai → Paleidžiant",
 homepageStepOpera3:"Pasirinkite Atidaryti konkretų puslapį ir įveskite: {url}"
+,
+settingsBg:"Fonas",
+settingsBgDesc:"Iš anksto nustatytos temos ir savo nuotrauka",
+settingsBgCustom:"Sava nuotrauka",
+settingsBgUpload:"Įkelti nuotrauką",
+settingsBgApplied:"Fonas pritaikytas!",
+settingsBgTooBig:"Vaizdas per didelis",
+settingsBgStorageErr:"Nepakanka vietos"
 };

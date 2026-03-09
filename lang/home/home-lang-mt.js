@@ -93,4 +93,12 @@ homepageStepEdge3:"Taħt Iftaħ dawn il-paġni, kklikkja Żid paġna ġdida u da
 homepageStepOpera1:"Iftaħ Opera u kklikkja fuq il-menu Opera (fuq ix-xellug)",
 homepageStepOpera2:"Mur għal Settings → Bażiku → Fil-bidu",
 homepageStepOpera3:"Agħżel Iftaħ paġna speċifika u daħħal: {url}"
+,
+settingsBg:"Sfond",
+settingsBgDesc:"Temi preimpostati u ritratt personali",
+settingsBgCustom:"Ritratt personali",
+settingsBgUpload:"Itlà ritratt",
+settingsBgApplied:"Sfond applikat!",
+settingsBgTooBig:"L-immaġni hija kbira wisq",
+settingsBgStorageErr:"Mhux biżżejjed spazju"
 };

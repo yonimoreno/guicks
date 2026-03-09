@@ -93,4 +93,12 @@ homepageStepEdge3:"Kohdassa Avaa nämä sivut, klikkaa Lisää uusi sivu ja syö
 homepageStepOpera1:"Avaa Opera ja klikkaa Opera-valikkoa (vasemmassa yläkulmassa)",
 homepageStepOpera2:"Mene Asetukset → Perus → Käynnistyksen yhteydessä",
 homepageStepOpera3:"Valitse Avaa tietty sivu ja syötä: {url}"
+,
+settingsBg:"Tausta",
+settingsBgDesc:"Esiasetukset ja oma kuva",
+settingsBgCustom:"Oma kuva",
+settingsBgUpload:"Lataa kuva",
+settingsBgApplied:"Tausta asetettu!",
+settingsBgTooBig:"Kuva on liian suuri",
+settingsBgStorageErr:"Ei tarpeeksi tallennustilaa"
 };

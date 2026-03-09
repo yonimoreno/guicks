@@ -93,4 +93,12 @@ homepageStepEdge3:"Under Öppna dessa sidor, klicka Lägg till ny sida och skriv
 homepageStepOpera1:"Öppna Opera och klicka på Opera-menyn (uppe till vänster)",
 homepageStepOpera2:"Gå till Inställningar → Grundläggande → Vid start",
 homepageStepOpera3:"Välj Öppna en specifik sida och skriv: {url}"
+,
+settingsBg:"Bakgrund",
+settingsBgDesc:"Förinställda teman och eget foto",
+settingsBgCustom:"Eget foto",
+settingsBgUpload:"Ladda upp foto",
+settingsBgApplied:"Bakgrund tillämpad!",
+settingsBgTooBig:"Bilden är för stor",
+settingsBgStorageErr:"Inte tillräckligt med lagringsutrymme"
 };

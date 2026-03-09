@@ -93,4 +93,12 @@ homepageStepEdge3:"Jaotises Ava need lehed klõpsake Lisa uus leht ja sisestage:
 homepageStepOpera1:"Avage Opera ja klõpsake Opera menüül (vasakul üleval)",
 homepageStepOpera2:"Minge Seaded → Põhiline → Käivitamisel",
 homepageStepOpera3:"Valige Ava kindel leht ja sisestage: {url}"
+,
+settingsBg:"Taust",
+settingsBgDesc:"Eelseaded ja oma foto",
+settingsBgCustom:"Oma foto",
+settingsBgUpload:"Laadi foto üles",
+settingsBgApplied:"Taust rakendatud!",
+settingsBgTooBig:"Pilt on liiga suur",
+settingsBgStorageErr:"Pole piisavalt salvestusruumi"
 };

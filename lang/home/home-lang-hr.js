@@ -93,4 +93,12 @@ homepageStepEdge3:"Pod Otvori ove stranice kliknite Dodaj novu stranicu i unesit
 homepageStepOpera1:"Otvorite Opera i kliknite na izbornik Opera (gore lijevo)",
 homepageStepOpera2:"Idite na Postavke → Osnovno → Pri pokretanju",
 homepageStepOpera3:"Odaberite Otvori određenu stranicu i unesite: {url}"
+,
+settingsBg:"Pozadina",
+settingsBgDesc:"Unaprijed postavljene teme i vlastita fotografija",
+settingsBgCustom:"Vlastita fotografija",
+settingsBgUpload:"Učitaj fotografiju",
+settingsBgApplied:"Pozadina primijenjena!",
+settingsBgTooBig:"Slika je prevelika",
+settingsBgStorageErr:"Nema dovoljno prostora"
 };

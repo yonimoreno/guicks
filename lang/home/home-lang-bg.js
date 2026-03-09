@@ -93,4 +93,12 @@ homepageStepEdge3:"В секцията Отваряне на тези стран
 homepageStepOpera1:"Отворете Opera и кликнете на менюто Opera (горе вляво)",
 homepageStepOpera2:"Отидете в Настройки → Основни → При стартиране",
 homepageStepOpera3:"Изберете Отваряне на конкретна страница и въведете: {url}"
+,
+settingsBg:"Фон",
+settingsBgDesc:"Предварителни теми и собствена снимка",
+settingsBgCustom:"Собствена снимка",
+settingsBgUpload:"Качи снимка",
+settingsBgApplied:"Фонът е приложен!",
+settingsBgTooBig:"Изображението е твърде голямо",
+settingsBgStorageErr:"Недостатъчно място"
 };

@@ -93,4 +93,12 @@ homepageStepEdge3:"Στην ενότητα Άνοιγμα αυτών των σε
 homepageStepOpera1:"Ανοίξτε την Opera και κάντε κλικ στο μενού Opera (πάνω αριστερά)",
 homepageStepOpera2:"Πηγαίνετε στις Ρυθμίσεις → Βασικές → Κατά την εκκίνηση",
 homepageStepOpera3:"Επιλέξτε Άνοιγμα συγκεκριμένης σελίδας και εισάγετε: {url}"
+,
+settingsBg:"Φόντο",
+settingsBgDesc:"Προεπιλεγμένα θέματα και προσωπική φωτογραφία",
+settingsBgCustom:"Προσωπική φωτογραφία",
+settingsBgUpload:"Μεταφόρτωση φωτογραφίας",
+settingsBgApplied:"Εφαρμόστηκε φόντο!",
+settingsBgTooBig:"Η εικόνα είναι πολύ μεγάλη",
+settingsBgStorageErr:"Ανεπαρκής χώρος αποθήκευσης"
 };

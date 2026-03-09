@@ -93,4 +93,12 @@ homepageStepEdge3:"Sadaļā Atvērt šīs lapas noklikšķiniet uz Pievienot jau
 homepageStepOpera1:"Atveriet Opera un noklikšķiniet uz Opera izvēlnes (augšā pa kreisi)",
 homepageStepOpera2:"Dodieties uz Iestatījumi → Pamata → Palaišanas laikā",
 homepageStepOpera3:"Atlasiet Atvērt konkrētu lapu un ievadiet: {url}"
+,
+settingsBg:"Fons",
+settingsBgDesc:"Iepriekš iestatīti motīvi un pašu foto",
+settingsBgCustom:"Pašu foto",
+settingsBgUpload:"Augšupielādēt foto",
+settingsBgApplied:"Fons lietots!",
+settingsBgTooBig:"Attēls ir pārāk liels",
+settingsBgStorageErr:"Nepietiek krātuves vietas"
 };

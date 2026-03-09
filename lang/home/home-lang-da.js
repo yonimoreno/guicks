@@ -93,4 +93,12 @@ homepageStepEdge3:"Under Åbn disse sider, klik Tilføj ny side og indtast: {url
 homepageStepOpera1:"Åbn Opera og klik på Opera-menuen (øverst til venstre)",
 homepageStepOpera2:"Gå til Indstillinger → Grundlæggende → Ved opstart",
 homepageStepOpera3:"Vælg Åbn en bestemt side og indtast: {url}"
+,
+settingsBg:"Baggrund",
+settingsBgDesc:"Forudindstillede temaer og eget foto",
+settingsBgCustom:"Eget foto",
+settingsBgUpload:"Upload foto",
+settingsBgApplied:"Baggrund anvendt!",
+settingsBgTooBig:"Billedet er for stort",
+settingsBgStorageErr:"Ikke nok lagerplads"
 };
