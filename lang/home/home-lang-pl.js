@@ -31,7 +31,7 @@ monthsShort:["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Pa�
 days:["Nie", "Pon", "Wt", "Śr", "Czw", "Pt", "Sob"],
 homeTagline:"Szybkie narzędzia, zero tarcia",
 homeSearch:"Szukaj narzędzi…",
-appNames:{"qr": "Generator QR", "currency": "Waluty", "favorites": "Ulubione", "converter": "Konwerter", "weather": "Pogoda", "lucky": "Szczęście", "calculator": "Kalkulator", "stocks": "Akcje", "translate": "Tłumacz", "clock": "Zegar", "calendar": "Kalendarz", "shopping": "Zakupy", "reminders": "Przypomnienia", "notes": "Notatki", "settings": "Ustawienia"},
+appNames:{"qr": "Generator QR", "currency": "Waluty", "favorites": "Ulubione", "converter": "Konwerter", "weather": "Pogoda", "lucky": "Szczęście", "calculator": "Kalkulator", "stocks": "Akcje", "translate": "Tłumacz", "clock": "Zegar", "calendar": "Kalendarz", "shopping": "Zakupy", "reminders": "Przypomnienia", "notes": "Notatki", "settings": "Ustawienia",imageStudio:"Studio Obrazów"},
 dockHint:"Przytrzymaj aplikację, aby przeciągnąć ją do docka",
 dockEditHint:"Dotknij ikony, aby usunąć · Dotknij poza, aby zakończyć",
 dockLongPress:"Przytrzymaj aplikację, aby edytować dock",

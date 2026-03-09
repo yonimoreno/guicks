@@ -31,7 +31,7 @@ monthsShort:["Sij", "Vel", "Ožu", "Tra", "Svi", "Lip", "Srp", "Kol", "Ruj", "Li
 days:["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"],
 homeTagline:"Brzi alati, nulto trenje",
 homeSearch:"Pretraži alate…",
-appNames:{"qr": "Generator QR", "currency": "Valuta", "favorites": "Favoriti", "converter": "Pretvarač", "weather": "Vrijeme", "lucky": "Sreća", "calculator": "Kalkulator", "stocks": "Dionice", "translate": "Prijevod", "clock": "Sat", "calendar": "Kalendar", "shopping": "Kupovina", "reminders": "Podsjetnici", "notes": "Bilješke", "settings": "Postavke"},
+appNames:{"qr": "Generator QR", "currency": "Valuta", "favorites": "Favoriti", "converter": "Pretvarač", "weather": "Vrijeme", "lucky": "Sreća", "calculator": "Kalkulator", "stocks": "Dionice", "translate": "Prijevod", "clock": "Sat", "calendar": "Kalendar", "shopping": "Kupovina", "reminders": "Podsjetnici", "notes": "Bilješke", "settings": "Postavke",imageStudio:"Studio slika"},
 dockHint:"Držite aplikaciju da je povučete u dock",
 dockEditHint:"Dodirnite ikonu za uklanjanje · Dodirnite drugdje za završetak",
 dockLongPress:"Dugo pritisnite aplikaciju za uređivanje docka",

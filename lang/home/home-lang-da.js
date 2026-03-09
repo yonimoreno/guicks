@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt
 days:["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"],
 homeTagline:"Hurtige værktøjer, nul friktion",
 homeSearch:"Søg værktøjer…",
-appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favoritter", "converter": "Konverter", "weather": "Vejr", "lucky": "Held", "calculator": "Lommeregner", "stocks": "Aktier", "translate": "Oversæt", "clock": "Ur", "calendar": "Kalender", "shopping": "Indkøb", "reminders": "Påmindelser", "notes": "Noter", "settings": "Indstillinger"},
+appNames:{"qr": "QR-generator", "currency": "Valuta", "favorites": "Favoritter", "converter": "Konverter", "weather": "Vejr", "lucky": "Held", "calculator": "Lommeregner", "stocks": "Aktier", "translate": "Oversæt", "clock": "Ur", "calendar": "Kalender", "shopping": "Indkøb", "reminders": "Påmindelser", "notes": "Noter", "settings": "Indstillinger",imageStudio:"Billedstudio"},
 dockHint:"Hold en app nede for at trække til docken",
 dockEditHint:"Tryk på ikon for at fjerne · Tryk andetsteds for at afslutte",
 dockLongPress:"Hold en app nede for at redigere docken",

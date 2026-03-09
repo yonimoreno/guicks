@@ -31,7 +31,7 @@ monthsShort:["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "O
 days:["Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se"],
 homeTagline:"Ātri rīki, nulle berzes",
 homeSearch:"Meklēt rīkus…",
-appNames:{"qr": "QR ģenerators", "currency": "Valūta", "favorites": "Izlase", "converter": "Pārveidotājs", "weather": "Laiks", "lucky": "Veiksme", "calculator": "Kalkulators", "stocks": "Akcijas", "translate": "Tulkot", "clock": "Pulkstenis", "calendar": "Kalendārs", "shopping": "Iepirkšanās", "reminders": "Atgādinājumi", "notes": "Piezīmes", "settings": "Iestatījumi"},
+appNames:{"qr": "QR ģenerators", "currency": "Valūta", "favorites": "Izlase", "converter": "Pārveidotājs", "weather": "Laiks", "lucky": "Veiksme", "calculator": "Kalkulators", "stocks": "Akcijas", "translate": "Tulkot", "clock": "Pulkstenis", "calendar": "Kalendārs", "shopping": "Iepirkšanās", "reminders": "Atgādinājumi", "notes": "Piezīmes", "settings": "Iestatījumi",imageStudio:"Attēlu studija"},
 dockHint:"Turiet nospiestu lietotni, lai to vilktu uz doku",
 dockEditHint:"Pieskarieties ikonai, lai noņemtu · Pieskarieties citur, lai beigtu",
 dockLongPress:"Ilgi nospiediet lietotni, lai rediģētu doku",

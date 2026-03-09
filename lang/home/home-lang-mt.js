@@ -31,7 +31,7 @@ monthsShort:["Jan", "Fra", "Mar", "Apr", "Mej", "Ġun", "Lul", "Aww", "Set", "Ot
 days:["Ħad", "Tne", "Tli", "Erb", "Ħam", "Ġim", "Sib"],
 homeTagline:"Għodod mgħaġġla, xejn frizzjoni",
 homeSearch:"Fittex għodod…",
-appNames:{"qr": "Ġenerator QR", "currency": "Munita", "favorites": "Favoriti", "converter": "Konverter", "weather": "Temp", "lucky": "Xorti", "calculator": "Kalkulatur", "stocks": "Azzjonijiet", "translate": "Traduzzjoni", "clock": "Arloġġ", "calendar": "Kalendarju", "shopping": "Xiri", "reminders": "Tfakkira", "notes": "Noti", "settings": "Settings"},
+appNames:{"qr": "Ġenerator QR", "currency": "Munita", "favorites": "Favoriti", "converter": "Konverter", "weather": "Temp", "lucky": "Xorti", "calculator": "Kalkulatur", "stocks": "Azzjonijiet", "translate": "Traduzzjoni", "clock": "Arloġġ", "calendar": "Kalendarju", "shopping": "Xiri", "reminders": "Tfakkira", "notes": "Noti", "settings": "Settings",imageStudio:"Studjo tal-Immaġni"},
 dockHint:"Żomm app biex tiġbidha fid-dock",
 dockEditHint:"Idlak l-ikona biex tneħħi · Idlak band'oħra biex tispiċċa",
 dockLongPress:"Agħfas app twil biex teditja d-dock",

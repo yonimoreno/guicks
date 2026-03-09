@@ -31,7 +31,7 @@ monthsShort:["Січ", "Лют", "Бер", "Кві", "Тра", "Чер", "Лип
 days:["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
 homeTagline:"Швидкі інструменти, нуль тертя",
 homeSearch:"Пошук інструментів…",
-appNames:{"qr": "QR-генератор", "currency": "Валюта", "favorites": "Обране", "converter": "Конвертер", "weather": "Погода", "lucky": "Удача", "calculator": "Калькулятор", "stocks": "Акції", "translate": "Переклад", "clock": "Годинник", "calendar": "Календар", "shopping": "Покупки", "reminders": "Нагадування", "notes": "Нотатки", "settings": "Налаштування"},
+appNames:{"qr": "QR-генератор", "currency": "Валюта", "favorites": "Обране", "converter": "Конвертер", "weather": "Погода", "lucky": "Удача", "calculator": "Калькулятор", "stocks": "Акції", "translate": "Переклад", "clock": "Годинник", "calendar": "Календар", "shopping": "Покупки", "reminders": "Нагадування", "notes": "Нотатки", "settings": "Налаштування",imageStudio:"Студія зображень"},
 dockHint:"Утримуйте додаток, щоб перетягнути в dock",
 dockEditHint:"Торкніться іконки для видалення · Торкніться в іншому місці для завершення",
 dockLongPress:"Утримуйте додаток для редагування dock",

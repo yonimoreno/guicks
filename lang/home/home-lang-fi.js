@@ -31,7 +31,7 @@ monthsShort:["Tam", "Hel", "Maa", "Huh", "Tou", "Kes", "Hei", "Elo", "Syy", "Lok
 days:["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
 homeTagline:"Nopeat työkalut, nolla kitkaa",
 homeSearch:"Etsi työkaluja…",
-appNames:{"qr": "QR-generaattori", "currency": "Valuutta", "favorites": "Suosikit", "converter": "Muunnin", "weather": "Sää", "lucky": "Onni", "calculator": "Laskin", "stocks": "Osakkeet", "translate": "Käännä", "clock": "Kello", "calendar": "Kalenteri", "shopping": "Ostokset", "reminders": "Muistutukset", "notes": "Muistiinpanot", "settings": "Asetukset"},
+appNames:{"qr": "QR-generaattori", "currency": "Valuutta", "favorites": "Suosikit", "converter": "Muunnin", "weather": "Sää", "lucky": "Onni", "calculator": "Laskin", "stocks": "Osakkeet", "translate": "Käännä", "clock": "Kello", "calendar": "Kalenteri", "shopping": "Ostokset", "reminders": "Muistutukset", "notes": "Muistiinpanot", "settings": "Asetukset",imageStudio:"Kuvastudio"},
 dockHint:"Pidä sovellusta painettuna siirtääksesi sen dockiin",
 dockEditHint:"Napauta kuvaketta poistaaksesi · Napauta muualle lopettaaksesi",
 dockLongPress:"Pidä sovellusta painettuna muokataksesi dockia",
