@@ -76,4 +76,6 @@ weatherMoonFull:"Fullmåne",
 weatherMoonWanGibbous:"Avtagande gibbös",
 weatherMoonLastQ:"Sista kvarteret",
 weatherMoonWanCrescent:"Avtagande skära"
+,
+weatherMoonIllum:"Belysning"
 };

@@ -76,4 +76,6 @@ weatherMoonFull:"Lună plină",
 weatherMoonWanGibbous:"Gibbos descrescător",
 weatherMoonLastQ:"Ultimul pătrar",
 weatherMoonWanCrescent:"Semilună descrescătoare"
+,
+weatherMoonIllum:"Iluminare"
 };

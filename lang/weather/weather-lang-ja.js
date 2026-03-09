@@ -76,4 +76,6 @@ weatherMoonFull:"満月",
 weatherMoonWanGibbous:"十六夜月",
 weatherMoonLastQ:"下弦の月",
 weatherMoonWanCrescent:"有明月"
+,
+weatherMoonIllum:"輝面率"
 };

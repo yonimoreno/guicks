@@ -76,4 +76,6 @@ weatherMoonFull:"Qamar mimli",
 weatherMoonWanGibbous:"Gibbous jonqos",
 weatherMoonLastQ:"Aħħar kwart",
 weatherMoonWanCrescent:"Qamar jonqos"
+,
+weatherMoonIllum:"Dawl"
 };

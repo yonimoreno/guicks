@@ -489,7 +489,7 @@ function setUnit(u) {
 
 // ── Weather API ──
 async function fetchWeather(lat, lon) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,moonrise,moonset,moon_phase&timezone=auto&forecast_days=7&wind_speed_unit=kmh`;
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation_probability&hourly=temperature_2m,precipitation_probability,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=auto&forecast_days=7&wind_speed_unit=kmh`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Weather fetch failed');
   return res.json();
@@ -598,9 +598,6 @@ async function loadWeather(loc) {
     // Sun & Moon (today = index 0)
     const sr = data.daily.sunrise?.[0];
     const ss = data.daily.sunset?.[0];
-    const mr = data.daily.moonrise?.[0];
-    const ms = data.daily.moonset?.[0];
-    const mp = data.daily.moon_phase?.[0]; // 0..1
 
     function fmtTime(iso) {
       if (!iso) return '—';
@@ -608,8 +605,17 @@ async function loadWeather(loc) {
       return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
     }
 
+    // Client-side moon phase calculation (no API needed)
+    function getMoonPhase(date) {
+      // Known new moon reference: Jan 6, 2000
+      const ref = new Date(2000, 0, 6, 18, 14, 0);
+      const synodicMonth = 29.53058867;
+      const diff = (date - ref) / (1000 * 60 * 60 * 24);
+      const phase = ((diff % synodicMonth) + synodicMonth) % synodicMonth;
+      return phase / synodicMonth; // 0..1
+    }
+
     function moonPhaseName(p) {
-      // p = 0..1 where 0/1 = new moon, 0.5 = full moon
       if (p < 0.0625 || p >= 0.9375) return [GI.get('weatherMoonNew'), '🌑'];
       if (p < 0.1875) return [GI.get('weatherMoonWaxCrescent'), '🌒'];
       if (p < 0.3125) return [GI.get('weatherMoonFirstQ'), '🌓'];
@@ -628,32 +634,23 @@ async function loadWeather(loc) {
       const total = set - rise;
       const elapsed = Math.max(0, Math.min(total, now - rise));
       const progress = total > 0 ? elapsed / total : 0;
-
-      // Arc: semicircle from left to right
       const W = 160, H = 60, cx = W/2, cy = H, r = H - 4;
-      // Position on arc (0=sunrise left, 1=sunset right)
-      const angle = Math.PI * (1 - progress); // PI=left(rise), 0=right(set)
-      const sx = cx + r * Math.cos(Math.PI); // sunrise point
-      const sy = cy + r * Math.sin(Math.PI);
-      const ex = cx + r * Math.cos(0);       // sunset point
-      const ey = cy;
+      const angle = Math.PI * (1 - progress);
       const sunX = cx + r * Math.cos(angle);
       const sunY = cy - r * Math.sin(Math.PI - angle);
       const isDaylight = now >= rise && now <= set;
-
       return `<svg viewBox="0 0 ${W} ${H}" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}"
-          stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
-        ${isDaylight ? `<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${sunX} ${sunY}"
-          stroke="rgba(255,180,0,0.5)" stroke-width="2" fill="none"/>` : ''}
-        <circle cx="${cx - r}" cy="${cy}" r="3" fill="rgba(255,180,0,0.6)"/>
-        <circle cx="${cx + r}" cy="${cy}" r="3" fill="rgba(255,120,0,0.5)"/>
-        ${isDaylight ? `<circle cx="${sunX}" cy="${sunY}" r="7" fill="rgba(255,200,0,0.25)"/>
-        <circle cx="${sunX}" cy="${sunY}" r="4" fill="#ffc800"/>` : ''}
+        <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+        ${isDaylight ? `<path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${sunX} ${sunY}" stroke="rgba(255,180,0,0.5)" stroke-width="2" fill="none"/>` : ''}
+        <circle cx="${cx-r}" cy="${cy}" r="3" fill="rgba(255,180,0,0.6)"/>
+        <circle cx="${cx+r}" cy="${cy}" r="3" fill="rgba(255,120,0,0.5)"/>
+        ${isDaylight ? `<circle cx="${sunX}" cy="${sunY}" r="7" fill="rgba(255,200,0,0.25)"/><circle cx="${sunX}" cy="${sunY}" r="4" fill="#ffc800"/>` : ''}
       </svg>`;
     }
 
-    const [mpName, mpIcon] = moonPhaseName(mp ?? 0);
+    const moonPhaseVal = getMoonPhase(new Date());
+    const [mpName, mpIcon] = moonPhaseName(moonPhaseVal);
+    const illumination = Math.round(Math.sin(moonPhaseVal * Math.PI) * 100);
 
     document.getElementById('sunMoonGrid').innerHTML = `
       <div class="sun-moon-card">
@@ -673,12 +670,8 @@ async function loadWeather(loc) {
         <div class="moon-phase-icon">${mpIcon}</div>
         <div class="moon-phase-name">${mpName}</div>
         <div class="sun-moon-row" style="margin-top:10px">
-          <span class="sun-moon-label">🌕 ${GI.get('weatherMoonrise')}</span>
-          <span class="sun-moon-val">${fmtTime(mr)}</span>
-        </div>
-        <div class="sun-moon-row">
-          <span class="sun-moon-label">🌑 ${GI.get('weatherMoonset')}</span>
-          <span class="sun-moon-val">${fmtTime(ms)}</span>
+          <span class="sun-moon-label">✨ ${GI.get('weatherMoonIllum')}</span>
+          <span class="sun-moon-val">${illumination}%</span>
         </div>
       </div>`;
     document.getElementById('sunMoonSection').style.display = 'block';

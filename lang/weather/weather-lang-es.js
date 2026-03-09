@@ -76,4 +76,6 @@ weatherMoonFull:"Luna llena",
 weatherMoonWanGibbous:"Gibosa menguante",
 weatherMoonLastQ:"Cuarto menguante",
 weatherMoonWanCrescent:"Cuarto menguante"
+,
+weatherMoonIllum:"Iluminación"
 };

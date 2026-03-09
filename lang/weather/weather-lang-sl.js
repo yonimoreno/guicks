@@ -76,4 +76,6 @@ weatherMoonFull:"Polna luna",
 weatherMoonWanGibbous:"Pojemajoča luna",
 weatherMoonLastQ:"Zadnja četrt",
 weatherMoonWanCrescent:"Pojemajoči srpič"
+,
+weatherMoonIllum:"Osvetlitev"
 };

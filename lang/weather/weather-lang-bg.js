@@ -76,4 +76,6 @@ weatherMoonFull:"Пълнолуние",
 weatherMoonWanGibbous:"Намаляваща изпъкнала",
 weatherMoonLastQ:"Последна четвърт",
 weatherMoonWanCrescent:"Намаляваща луна"
+,
+weatherMoonIllum:"Осветеност"
 };

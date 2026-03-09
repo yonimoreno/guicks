@@ -76,4 +76,6 @@ weatherMoonFull:"Úplněk",
 weatherMoonWanGibbous:"Couvající měsíc",
 weatherMoonLastQ:"Poslední čtvrtina",
 weatherMoonWanCrescent:"Couvající srpek"
+,
+weatherMoonIllum:"Osvětlení"
 };

@@ -76,4 +76,6 @@ weatherMoonFull:"Lua cheia",
 weatherMoonWanGibbous:"Gibosa minguante",
 weatherMoonLastQ:"Quarto minguante",
 weatherMoonWanCrescent:"Minguante"
+,
+weatherMoonIllum:"Iluminação"
 };

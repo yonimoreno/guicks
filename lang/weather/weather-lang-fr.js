@@ -76,4 +76,6 @@ weatherMoonFull:"Pleine lune",
 weatherMoonWanGibbous:"Gibbeuse décroissante",
 weatherMoonLastQ:"Dernier quartier",
 weatherMoonWanCrescent:"Croissant décroissant"
+,
+weatherMoonIllum:"Illumination"
 };

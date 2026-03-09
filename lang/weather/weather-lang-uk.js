@@ -76,4 +76,6 @@ weatherMoonFull:"Повний місяць",
 weatherMoonWanGibbous:"Місяць, що спадає",
 weatherMoonLastQ:"Остання чверть",
 weatherMoonWanCrescent:"Серп, що спадає"
+,
+weatherMoonIllum:"Освітленість"
 };

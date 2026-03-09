@@ -76,4 +76,6 @@ weatherMoonFull:"Pun mjesec",
 weatherMoonWanGibbous:"Opadajući mjesec",
 weatherMoonLastQ:"Zadnja četvrtina",
 weatherMoonWanCrescent:"Opadajući srp"
+,
+weatherMoonIllum:"Osvjetljenje"
 };

@@ -76,4 +76,6 @@ weatherMoonFull:"Πανσέληνος",
 weatherMoonWanGibbous:"Φθίνουσα αμφίκυρτος",
 weatherMoonLastQ:"Τελευταίο τέταρτο",
 weatherMoonWanCrescent:"Φθίνουσα μηνίσκος"
+,
+weatherMoonIllum:"Φωτισμός"
 };

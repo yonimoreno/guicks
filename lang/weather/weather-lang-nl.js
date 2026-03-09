@@ -76,4 +76,6 @@ weatherMoonFull:"Volle maan",
 weatherMoonWanGibbous:"Afnemende gibbous",
 weatherMoonLastQ:"Laatste kwartier",
 weatherMoonWanCrescent:"Afnemende sikkel"
+,
+weatherMoonIllum:"Verlichting"
 };

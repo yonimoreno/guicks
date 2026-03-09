@@ -76,4 +76,6 @@ weatherMoonFull:"Pilnatis",
 weatherMoonWanGibbous:"Mažėjantis mėnulis",
 weatherMoonLastQ:"Paskutinis ketvirtis",
 weatherMoonWanCrescent:"Mažėjantis pjautuvas"
+,
+weatherMoonIllum:"Apšvietimas"
 };

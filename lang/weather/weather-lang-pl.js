@@ -76,4 +76,6 @@ weatherMoonFull:"Pełnia",
 weatherMoonWanGibbous:"Księżyc malejący",
 weatherMoonLastQ:"Ostatnia kwadra",
 weatherMoonWanCrescent:"Sierp malejący"
+,
+weatherMoonIllum:"Oświetlenie"
 };

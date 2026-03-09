@@ -76,4 +76,6 @@ weatherMoonFull:"Vollmond",
 weatherMoonWanGibbous:"Abnehmender Mond",
 weatherMoonLastQ:"Letztes Viertel",
 weatherMoonWanCrescent:"Abnehmende Sichel"
+,
+weatherMoonIllum:"Beleuchtung"
 };

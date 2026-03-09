@@ -76,4 +76,6 @@ weatherMoonFull:"Full Moon",
 weatherMoonWanGibbous:"Waning Gibbous",
 weatherMoonLastQ:"Last Quarter",
 weatherMoonWanCrescent:"Waning Crescent"
+,
+weatherMoonIllum:"Illumination"
 };

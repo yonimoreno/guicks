@@ -76,4 +76,6 @@ weatherMoonFull:"满月",
 weatherMoonWanGibbous:"亏凸月",
 weatherMoonLastQ:"下弦月",
 weatherMoonWanCrescent:"残月"
+,
+weatherMoonIllum:"月面亮度"
 };

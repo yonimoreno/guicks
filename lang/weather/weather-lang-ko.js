@@ -76,4 +76,6 @@ weatherMoonFull:"보름달",
 weatherMoonWanGibbous:"하현 이전",
 weatherMoonLastQ:"하현달",
 weatherMoonWanCrescent:"그믐달"
+,
+weatherMoonIllum:"조도"
 };

@@ -76,4 +76,6 @@ weatherMoonFull:"ירח מלא",
 weatherMoonWanGibbous:"ירח קטן",
 weatherMoonLastQ:"רבע אחרון",
 weatherMoonWanCrescent:"סהר קטן"
+,
+weatherMoonIllum:"תאורה"
 };

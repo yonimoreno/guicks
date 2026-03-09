@@ -76,4 +76,6 @@ weatherMoonFull:"القمر الكامل",
 weatherMoonWanGibbous:"الأحدب المتضائل",
 weatherMoonLastQ:"الربع الأخير",
 weatherMoonWanCrescent:"الهلال المتضائل"
+,
+weatherMoonIllum:"الإضاءة"
 };

@@ -76,4 +76,6 @@ weatherMoonFull:"Gealach lán",
 weatherMoonWanGibbous:"Gibbas laghdaitheach",
 weatherMoonLastQ:"Ceathrú deiridh",
 weatherMoonWanCrescent:"Corrán laghdaitheach"
+,
+weatherMoonIllum:"Soilsiú"
 };

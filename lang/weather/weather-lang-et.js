@@ -76,4 +76,6 @@ weatherMoonFull:"Täiskuu",
 weatherMoonWanGibbous:"Kahanev kuu",
 weatherMoonLastQ:"Viimane veerand",
 weatherMoonWanCrescent:"Kahanev sirp"
+,
+weatherMoonIllum:"Valgustus"
 };

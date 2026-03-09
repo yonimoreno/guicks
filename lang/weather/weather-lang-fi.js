@@ -76,4 +76,6 @@ weatherMoonFull:"Täysikuu",
 weatherMoonWanGibbous:"Vähenevä kuu",
 weatherMoonLastQ:"Viimeinen neljännes",
 weatherMoonWanCrescent:"Vähenevä sirppi"
+,
+weatherMoonIllum:"Valaistus"
 };

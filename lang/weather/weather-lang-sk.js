@@ -76,4 +76,6 @@ weatherMoonFull:"Spln",
 weatherMoonWanGibbous:"Ubúdajúci mesiac",
 weatherMoonLastQ:"Posledná štvrtina",
 weatherMoonWanCrescent:"Ubúdajúci srpok"
+,
+weatherMoonIllum:"Osvetlenie"
 };

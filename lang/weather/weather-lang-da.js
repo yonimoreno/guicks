@@ -76,4 +76,6 @@ weatherMoonFull:"Fuldmåne",
 weatherMoonWanGibbous:"Aftagende gibbøs",
 weatherMoonLastQ:"Sidste kvartal",
 weatherMoonWanCrescent:"Aftagende måne"
+,
+weatherMoonIllum:"Belysning"
 };

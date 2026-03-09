@@ -76,4 +76,6 @@ weatherMoonFull:"Telihold",
 weatherMoonWanGibbous:"Fogyó hold",
 weatherMoonLastQ:"Utolsó negyed",
 weatherMoonWanCrescent:"Fogyó sarlóhold"
+,
+weatherMoonIllum:"Megvilágítás"
 };

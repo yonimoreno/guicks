@@ -76,4 +76,6 @@ weatherMoonFull:"Pilnmēness",
 weatherMoonWanGibbous:"Dilstošs mēness",
 weatherMoonLastQ:"Pēdējais ceturksnis",
 weatherMoonWanCrescent:"Dilstošs sirpis"
+,
+weatherMoonIllum:"Apgaismojums"
 };
