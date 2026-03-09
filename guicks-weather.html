@@ -582,7 +582,7 @@ async function loadWeather(loc) {
       const dwx = getWx(data.daily.weather_code[i]);
       const rain = data.daily.precipitation_probability_max[i] || 0;
       return `<div class="day-card">
-        <div class="day-name">${i===0?GI.get('weatherToday'):GI.get('days')[dt.getDay()]}</div>
+        <div class="day-name">${i===0?GI.get('weatherToday'):(GI.getObj('days')||['Sun','Mon','Tue','Wed','Thu','Fri','Sat'])[dt.getDay()]}</div>
         <div class="day-icon">${dwx.icon}</div>
         <div class="day-rain-bar"><div class="day-rain-fill" style="width:${rain}%"></div></div>
         <div class="day-desc">${dwx.desc}</div>
