@@ -21,6 +21,17 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guicks">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}<\/script>
 <title>Free QR Code Generator — Create QR Codes Instantly | Guicks</title>
 <meta name="description" content="Generate QR codes instantly for URLs, text, email, phone numbers, WiFi and more. Download as PNG, customize colors and size. Free, no sign-up, no watermark.">
 <meta name="keywords" content="QR code generator, free QR code generator, create QR code, QR code maker, QR code online, generate QR code, URL QR code, WiFi QR code, QR code download">
@@ -607,6 +618,7 @@ html.guicks-light .seo-block a{text-decoration:none!important}
         <button class="dl-btn png" onclick="downloadPNG()"><span class="dl-icon">⬇</span>PNG</button>
         <button class="dl-btn svg" onclick="downloadSVG()"><span class="dl-icon">⬇</span>SVG</button>
         <button class="dl-btn copy" onclick="copyToClipboard()" id="copy-btn"><span class="dl-icon">⎘</span><span data-i18n="copy">Copy</span></button>
+        <button class="dl-btn copy" onclick="shareQR()" id="share-btn"><span class="dl-icon">↗</span>Share</button>
       </div>
       <div class="size-note" id="size-info"></div>
     </div>
@@ -778,6 +790,32 @@ html.guicks-light .seo-block a{text-decoration:none!important}
       } catch(e) {
         alert(GI.get('qrClipboardError'));
       }
+    });
+  }
+
+  async function shareQR() {
+    const c = getCanvas(); if (!c) return;
+    const input = document.getElementById('qr-input')?.value || 'QR Code';
+    const btn = document.getElementById('share-btn');
+    c.toBlob(async blob => {
+      const file = new File([blob], 'qrcode.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ title: 'QR Code', text: input, files: [file] });
+          return;
+        } catch(e) { if (e.name === 'AbortError') return; }
+      }
+      // Fallback: share just the text
+      if (navigator.share) {
+        try { await navigator.share({ title: 'QR Code', text: input }); return; }
+        catch(e) { if (e.name === 'AbortError') return; }
+      }
+      // Last fallback: copy image to clipboard
+      try {
+        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+        btn.innerHTML = '<span class="dl-icon">✓</span>Copied';
+        setTimeout(() => { btn.innerHTML = '<span class="dl-icon">↗</span>Share'; }, 2000);
+      } catch(e) {}
     });
   }
 

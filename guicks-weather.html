@@ -12,6 +12,17 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guicks">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}<\/script>
 <title>Free Weather Forecast — Current Weather & 7-Day Forecast | Guicks</title>
 <meta name="description" content="Check the current weather and 7-day forecast for any city in the world. Temperature, humidity, wind speed, UV index and hourly forecast. Free, no ads, no sign-up.">
 <meta name="keywords" content="weather forecast, current weather, weather today, 7 day forecast, hourly forecast, weather app, weather online, temperature today, wind speed, humidity, UV index, weather by city">
@@ -395,7 +406,10 @@ html.guicks-light .seo-block a{text-decoration:none!important}
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       guicks
     </a>
-    <div style="width:80px"></div>
+    <button onclick="shareWeather()" id="weatherShareBtn" style="background:none;border:none;cursor:pointer;color:#a0a0c8;padding:6px 10px;border-radius:10px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:5px;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background='none'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share
+    </button>
   </div>
 
   <!-- Hero card -->
@@ -615,6 +629,28 @@ function setSky(wx, storm) {
 }
 
 // ── Load weather for a location ──
+async function shareWeather() {
+  if (!currentLocation) { return; }
+  const city = currentLocation.name || 'Unknown';
+  const country = currentLocation.country || '';
+  // Read from rendered DOM
+  const heroTemp = document.querySelector('.hero-temp')?.textContent?.trim() || '';
+  const heroDesc = document.querySelector('.hero-desc')?.textContent?.trim() || '';
+  const stats = document.querySelectorAll('.hero-stat-val');
+  const feels = stats[0]?.textContent || '';
+  const humidity = stats[1]?.textContent || '';
+  const wind = stats[2]?.textContent || '';
+  const text = `🌤 Weather in ${city}, ${country}\n\n${heroTemp}${unitSuffix()} · ${heroDesc}\n\n🌡️ Feels like ${feels}\n💧 Humidity ${humidity}\n💨 Wind ${wind}\n\nvia guicks.com`;
+  const btn = document.getElementById('weatherShareBtn');
+  if (navigator.share) {
+    try { await navigator.share({ title: `Weather in ${city}`, text }); return; }
+    catch(e) { if (e.name === 'AbortError') return; }
+  }
+  await navigator.clipboard.writeText(text).catch(()=>{});
+  btn.textContent = '✓ Copied';
+  setTimeout(() => { btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share'; }, 2000);
+}
+
 async function loadWeather(loc) {
   currentLocation = loc;
   document.getElementById('heroContent').innerHTML = `<div class="hero-skeleton"><div class="skel skel-sm"></div><div class="skel skel-lg"></div><div class="skel skel-md"></div></div>`;

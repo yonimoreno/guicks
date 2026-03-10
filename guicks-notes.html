@@ -44,6 +44,17 @@ html.guicks-light .toolbar-btn:hover{color:#1a1a14!important;background:rgba(0,0
 html.guicks-light .char-count{color:rgba(26,26,20,.3)!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guicks">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}<\/script>
 <title>Free Online Notepad — Write & Save Notes in Your Browser | Guicks</title>
 <meta name="description" content="A free online notepad that saves your notes automatically in your browser. Write, organise with tags, and access your notes any time — no account, no sync, completely private.">
 <meta name="keywords" content="online notepad, free notepad, notes online, notepad browser, write notes online, quick notes, sticky notes online, note taking app, browser notepad, offline notes">
@@ -571,6 +582,9 @@ html.guicks-light .seo-block a{text-decoration:none!important}
       <span data-i18n="notesTitle">Notes</span>
     </button>
     <div class="editor-topbar-right">
+      <button class="toolbar-btn" onclick="shareNote()" title="Share">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
       <button class="toolbar-btn" onclick="copyNote()" data-i18n-title="notesCopy" title="Copy">
         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       </button>
@@ -825,6 +839,20 @@ function deleteCurrentNote(){
   saveNotes();
   closeEditor();
   showToast('🗑 ' + GI.get('notesDeleted'));
+}
+
+async function shareNote(){
+  const title=document.getElementById('editor-title').value;
+  const body=document.getElementById('editor-body').value;
+  if(!title && !body){ showToast('📝 Note is empty'); return; }
+  const text=(title?title+'\n\n':'')+body+'\n\nvia guicks.com';
+  if(navigator.share){
+    try{ await navigator.share({title: title||'Note', text}); return; }
+    catch(e){ if(e.name==='AbortError') return; }
+  }
+  navigator.clipboard?.writeText(text)
+    .then(()=>showToast('📋 Note copied to clipboard'))
+    .catch(()=>showToast('Could not share'));
 }
 
 function copyNote(){

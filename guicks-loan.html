@@ -406,6 +406,12 @@ html:not(.guicks-light) .seo-block p{color:rgba(240,240,248,.55)!important}
       </div>
     </div>
 
+    <!-- Share button -->
+    <button onclick="shareLoan()" id="loanShareBtn" style="width:calc(100%);margin:8px 0 4px;padding:13px;border-radius:14px;border:1px solid var(--border2);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--accent2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share Summary
+    </button>
+
     <!-- Tabs: summary / amortization -->
     <div class="tab-bar" style="margin-top:12px">
       <button class="tab-btn active" onclick="switchTab('summary',this)">Summary</button>
@@ -670,6 +676,30 @@ function renderAmort(all){
 function showMore(){
   showingAll=true;
   renderAmort(true);
+}
+
+async function shareLoan() {
+  const monthly = document.getElementById('rMonthly')?.textContent;
+  const interest = document.getElementById('rInterest')?.textContent;
+  const total = document.getElementById('rTotal')?.textContent;
+  const payoff = document.getElementById('rPayoff')?.textContent;
+  if (!monthly || monthly === '—') return;
+  const amount = document.getElementById('amount')?.value;
+  const rate = document.getElementById('rate')?.value;
+  const term = document.getElementById('term')?.value;
+  const unit = document.getElementById('termUnit')?.textContent;
+  const extra = parseFloat(document.getElementById('extra')?.value)||0;
+  let text = `🏦 Loan Summary\n\nAmount: ${CURRENCIES[curIdx]}${parseFloat(amount).toLocaleString()}\nRate: ${rate}% · Term: ${term} ${unit}\n\nMonthly payment: ${monthly}\nTotal interest: ${interest}\nTotal cost: ${total}\nPayoff: ${payoff}`;
+  if (extra > 0) text += `\n+${CURRENCIES[curIdx]}${extra}/mo extra payment`;
+  text += '\n\nvia guicks.com';
+  const btn = document.getElementById('loanShareBtn');
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Loan Summary', text }); return; }
+    catch(e) { if (e.name === 'AbortError') return; }
+  }
+  await navigator.clipboard.writeText(text).catch(()=>{});
+  btn.textContent = '✓ Copied to clipboard';
+  setTimeout(() => { btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share Summary'; }, 2000);
 }
 
 function switchTab(id, btn){

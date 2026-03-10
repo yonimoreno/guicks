@@ -36,6 +36,17 @@ html.guicks-light .tab-btn{color:rgba(0,0,0,.45)!important}
 html.guicks-light .tab-btn.active{color:#fff!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guicks">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}<\/script>
 <title>Free Tip Calculator — Split Bills & Calculate Tips Instantly | Guicks</title>
 <meta name="description" content="Free tip calculator for restaurants, bars and cafes. Choose 10–25% tip or enter a custom percentage, split the bill between up to 50 people, and see the per-person total instantly. No ads, no sign-up.">
 <meta name="keywords" content="tip calculator, tip calculator free, how much to tip, bill splitter, split bill calculator, restaurant tip, gratuity calculator, tip percentage, calculate tip online">
@@ -385,9 +396,10 @@ html.guicks-light .seo-block a{text-decoration:none!important}
       </div>
     </div>
 
-    <!-- Save button -->
-    <div style="padding:0 16px">
-      <button class="save-btn" onclick="saveToHistory()" data-i18n="tipSave">💾 Save to History</button>
+    <!-- Save + Share buttons -->
+    <div style="padding:0 16px;display:flex;gap:8px">
+      <button class="save-btn" onclick="saveToHistory()" data-i18n="tipSave" style="flex:1">💾 Save to History</button>
+      <button class="save-btn" onclick="shareTip()" id="tipShareBtn" style="flex:1;background:var(--surface2);border:1px solid var(--border)">↗ Share</button>
     </div>
 
   </div>
@@ -512,6 +524,25 @@ function calculate() {
     document.getElementById('ppSub').textContent = GI.get('tipEnterBill') || 'Enter a bill amount';
     document.getElementById('distWrap').style.display = 'none';
   }
+}
+
+// ── Share ──
+async function shareTip() {
+  const bill = document.getElementById('rBill')?.textContent;
+  const tip = document.getElementById('rTip')?.textContent;
+  const total = document.getElementById('rTotal')?.textContent;
+  const pp = document.getElementById('ppAmount')?.textContent;
+  const sub = document.getElementById('ppSub')?.textContent;
+  if (!bill || bill === '—') { showToast('⚠️ Calculate a tip first'); return; }
+  const text = `🧾 Tip Calculator\n\nBill: ${bill}\nTip: ${tip}\nTotal: ${total}\n\n👤 Per person: ${pp}\n${sub}\n\nvia guicks.com`;
+  const btn = document.getElementById('tipShareBtn');
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Tip Split', text }); return; }
+    catch(e) { if (e.name === 'AbortError') return; }
+  }
+  await navigator.clipboard.writeText(text).catch(()=>{});
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => { btn.textContent = '↗ Share'; }, 2000);
 }
 
 // ── History ──

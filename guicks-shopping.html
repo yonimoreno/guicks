@@ -36,6 +36,17 @@ html.guicks-light .qty-btn:hover{color:#0d0d1a!important}
 html.guicks-light .section-group-label{color:rgba(0,0,0,.35)!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guicks">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}<\/script>
 <title>Free Shopping List App — Grocery List Online | Guicks</title>
 <meta name="description" content="Create and manage your shopping list in your browser. Add items, auto-categorise by aisle, check off as you shop. Free, no sign-up, works offline.">
 <meta name="keywords" content="shopping list, grocery list, shopping list app, free shopping list, online shopping list, grocery list app, shopping list browser, digital shopping list, supermarket list">
@@ -432,6 +443,9 @@ html.guicks-light .seo-block a{text-decoration:none!important}
       guicks
     </a>
     <div class="topnav-right">
+      <button class="icon-btn" onclick="shareList()" title="Share list" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
       <button class="icon-btn" onclick="clearAll()" title="Clear all">
         <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>
@@ -686,7 +700,36 @@ function clearDone(){
   showToast(`🗑 ${GI.get('shopCleared').replace('{n}', count)}`);
 }
 
+async function shareList(){
+  if(!items.length){ showToast('🛒 List is empty'); return; }
+  const pending = items.filter(i=>!i.done);
+  const done = items.filter(i=>i.done);
+  let text = '🛒 Shopping List\n\n';
+  const SECT_MAP = getSectMap();
+  // Group by section
+  const groups = {};
+  items.forEach(i=>{ if(!groups[i.section]) groups[i.section]=[]; groups[i.section].push(i); });
+  Object.keys(groups).forEach(sid=>{
+    const label = SECT_MAP[sid]?.icon + ' ' + SECT_MAP[sid]?.label || sid;
+    text += label + '\n';
+    groups[sid].forEach(i=>{ text += (i.done ? '✅ ' : '☐ ') + i.name + (i.qty>1?' x'+i.qty:'') + '\n'; });
+    text += '\n';
+  });
+  text += `${pending.length} to get · ${done.length} done\nvia guicks.com`;
+  const btn = document.getElementById('shareBtn');
+  if(navigator.share){
+    try{ await navigator.share({ title:'Shopping List', text }); return; }
+    catch(e){ if(e.name==='AbortError') return; }
+  }
+  await navigator.clipboard.writeText(text).catch(()=>{});
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  setTimeout(()=>{ btn.innerHTML = orig; }, 1500);
+  showToast('📋 List copied to clipboard');
+}
+
 function clearAll(){
+
   if(!items.length){ showToast(GI.get('shopAlreadyEmpty')); return; }
   if(!confirm(GI.get('shopConfirmClear').replace('{n}', items.length))) return;
   items=[];save();render();
