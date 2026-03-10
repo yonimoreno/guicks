@@ -625,17 +625,20 @@
     /* ── Cookie Banner ── */
     .cookie-banner {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(20, 20, 35, 0.92);
+      bottom: 120px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 32px); max-width: 568px;
+      background: rgba(14, 14, 24, 0.97);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 14px 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      z-index: 200;
+      z-index: 300;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       animation: fadeUp 0.5s ease both;
     }
 
@@ -2299,22 +2302,38 @@
 
 <!-- Cookie Banner -->
 <div class="cookie-banner" id="cookieBanner">
-  <p>🍪 This website uses cookies to analyze traffic with Google Analytics. By continuing, you accept our use of cookies.</p>
-  <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+  <p>🍪 We use <strong>Google Analytics</strong> to understand how visitors use Guicks. No personal data is sold. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Privacy policy</a>.</p>
+  <div style="display:flex;gap:8px;flex-shrink:0">
+    <button class="cookie-btn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.6)" onclick="declineCookies()">Decline</button>
+    <button class="cookie-btn" onclick="acceptCookies()">Accept</button>
+  </div>
 </div>
 
 <script>
-  // Hide banner if already accepted
-  if (localStorage.getItem('cookiesAccepted')) {
+  // GDPR cookie consent
+  const _consent = localStorage.getItem('cookiesAccepted');
+  if (_consent) {
     document.getElementById('cookieBanner').style.display = 'none';
+    // If previously declined, disable GA
+    if (_consent === 'declined') {
+      window['ga-disable-G-TPNLYBBFTF'] = true;
+    }
+  }
+  function _hideBanner() {
+    const b = document.getElementById('cookieBanner');
+    b.style.opacity = '0';
+    b.style.transform = 'translateX(-50%) translateY(20px)';
+    b.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    setTimeout(() => b.style.display = 'none', 300);
   }
   function acceptCookies() {
     localStorage.setItem('cookiesAccepted', 'true');
-    const b = document.getElementById('cookieBanner');
-    b.style.opacity = '0';
-    b.style.transform = 'translateY(20px)';
-    b.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    setTimeout(() => b.style.display = 'none', 300);
+    _hideBanner();
+  }
+  function declineCookies() {
+    localStorage.setItem('cookiesAccepted', 'declined');
+    window['ga-disable-G-TPNLYBBFTF'] = true;
+    _hideBanner();
   }
 </script>
 
