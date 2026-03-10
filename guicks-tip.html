@@ -36,7 +36,51 @@ html.guicks-light .tab-btn{color:rgba(0,0,0,.45)!important}
 html.guicks-light .tab-btn.active{color:#fff!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Tip Calculator — Guicks</title>
+<title>Free Tip Calculator — Split Bills & Calculate Tips Instantly | Guicks</title>
+<meta name="description" content="Free tip calculator for restaurants, bars and cafes. Choose 10–25% tip or enter a custom percentage, split the bill between up to 50 people, and see the per-person total instantly. No ads, no sign-up.">
+<meta name="keywords" content="tip calculator, tip calculator free, how much to tip, bill splitter, split bill calculator, restaurant tip, gratuity calculator, tip percentage, calculate tip online">
+<link rel="canonical" href="https://guicks.com/guicks-tip.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Tip Calculator — Split Bills Instantly | Guicks">
+<meta property="og:description" content="Calculate the perfect tip and split any restaurant bill between friends. Free, instant, no ads.">
+<meta property="og:url" content="https://guicks.com/guicks-tip.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Tip Calculator | Guicks">
+<meta name="twitter:description" content="Calculate tips and split bills instantly. Free, no ads, works on any device.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Tip Calculator",
+  "url": "https://guicks.com/guicks-tip.html",
+  "description": "Free online tip calculator. Calculate restaurant tips from 5% to 25%, split bills between multiple people, and get an instant per-person total. Supports USD, EUR, GBP, JPY, INR and BRL.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Calculate tip percentage (5% to 25%)",
+    "Custom tip percentage input",
+    "Split bill between up to 50 people",
+    "Round up per person option",
+    "Supports USD, EUR, GBP, JPY, INR, BRL",
+    "Save calculation history",
+    "Works offline"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="./guicks-i18n.js"></script>
@@ -180,6 +224,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .save-btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(18,183,106,.45)}
 .save-btn:active{transform:translateY(0)}
 
+/* ── SEO content block ── */
+.seo-block{margin:8px 16px 32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#12b76a}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html.guicks-light .seo-block{background:#fff!important;border-color:rgba(0,0,0,.07)!important;color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#12b76a!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
+html.guicks-light .seo-block a{color:#12b76a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+
 /* ── Toast ── */
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,30,50,.95);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:14px;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -187,6 +245,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ── Animations ── */
 @keyframes popIn{0%{transform:scale(.96);opacity:.6}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
 .pop{animation:popIn .2s ease-out}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 </head>
 <body>
@@ -342,6 +406,19 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- SEO content block — visible to users and crawlers -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Tip Calculator — How Much to Tip?</h2>
+    <p style="color:#4a4a6a">Not sure how much to leave? This free tip calculator takes your bill, applies your chosen tip percentage, and tells you exactly how much each person owes. Whether you're at a restaurant, bar, hotel, or taxi, just enter the total bill, pick a tip — 10%, 15%, 18%, 20% or a custom amount — and tap split to divide it between your group.</p>
+    <h3 style="color:#12b76a">How to calculate a tip</h3>
+    <p style="color:#4a4a6a">Multiply the bill by the tip percentage and divide by 100. For a $50 bill with a 20% tip: $50 × 20 ÷ 100 = $10 tip, $60 total. Split between 3 people: $20 each. This calculator does all of that instantly.</p>
+    <h3 style="color:#12b76a">How much should you tip?</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">10%</strong> — Minimum for basic service. <strong style="color:#0d0d1a">15%</strong> — Standard for good service. <strong style="color:#0d0d1a">18–20%</strong> — Recommended for great service at restaurants. <strong style="color:#0d0d1a">25%+</strong> — Exceptional service or fine dining. Tipping customs vary by country — in Japan tipping is not customary, while in the US 18–20% is standard.</p>
+    <h3 style="color:#12b76a">Bill splitter</h3>
+    <p style="color:#4a4a6a">Dining with friends? Use the people counter to split the total (including tip) evenly. Enable "round up" to avoid awkward cent amounts — each person pays a clean rounded figure.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:var(--accent);font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
   </div>
 
 </div>

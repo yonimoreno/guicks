@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
 <style>
 html.guicks-light body{background:#f0f2f7!important}
 html.guicks-light body::before,html.guicks-light body::after{display:none!important}
@@ -12,7 +12,53 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Calculator — Guicks</title>
+<title>Free Online Calculator — Scientific & Standard | Guicks</title>
+<meta name="description" content="Free online calculator with standard and scientific modes. Supports brackets, percentages, square roots, powers, trigonometry and calculation history. Fast, accurate, works on mobile.">
+<meta name="keywords" content="online calculator, free calculator, scientific calculator, calculator online, math calculator, percentage calculator, square root calculator, calculator with history, browser calculator">
+<link rel="canonical" href="https://guicks.com/guicks-calculator.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Online Calculator — Scientific & Standard | Guicks">
+<meta property="og:description" content="Standard and scientific calculator in your browser. Brackets, percentages, trigonometry and history. Free, no ads.">
+<meta property="og:url" content="https://guicks.com/guicks-calculator.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Online Calculator | Guicks">
+<meta name="twitter:description" content="Standard and scientific calculator. Brackets, trig, history. Free and instant.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Calculator",
+  "url": "https://guicks.com/guicks-calculator.html",
+  "description": "Free online calculator with standard and scientific modes. Supports basic arithmetic, percentages, brackets, square roots, powers, logarithms, trigonometric functions (sin, cos, tan) and a full calculation history log.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Standard arithmetic (add, subtract, multiply, divide)",
+    "Percentage calculations",
+    "Brackets and order of operations",
+    "Square root and powers",
+    "Scientific mode: sin, cos, tan, log, ln",
+    "Calculation history",
+    "Keyboard support",
+    "Works on mobile and desktop",
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
 <style>
@@ -220,10 +266,31 @@ canvas#graphCanvas { display: block; width: 100%; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── Footer / Cookie ── */
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--accent)}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#9b6ff5!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#6c3fe0!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
 .footer { text-align: center; padding: 8px 0 24px; font-size: 11px; color: var(--text-3); margin-top: auto; }
 .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 200; }
 .cookie-banner p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
 .cookie-btn { flex-shrink: 0; background: var(--accent); color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Outfit', sans-serif; }
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -262,15 +329,15 @@ canvas#graphCanvas { display: block; width: 100%; }
     </div>
     <div class="app-header-text">
       <h1 data-i18n="calcTitle">Calculator</h1>
-      <p>Simple · Scientific · Advanced</p>
+      <p data-i18n="calcSub">Simple · Scientific · Advanced</p>
     </div>
   </div>
 
   <!-- Mode switcher -->
   <div class="mode-bar">
     <button class="mode-btn active" id="modeSimple"    onclick="setMode('simple')" data-i18n="calcSimple">Simple</button>
-    <button class="mode-btn"        id="modeSci"       onclick="setMode('sci')" data-i18n="calcScientific">Scientific</button>
-    <button class="mode-btn"        id="modeAdv"       onclick="setMode('adv')" data-i18n="calcAdvanced">Advanced</button>
+    <button class="mode-btn"        id="modeSci"       onclick="setMode('sci')" data-i18n="calcSci">Scientific</button>
+    <button class="mode-btn"        id="modeAdv"       onclick="setMode('adv')" data-i18n="calcAdv">Advanced</button>
   </div>
 
   <!-- Display -->
@@ -364,44 +431,44 @@ canvas#graphCanvas { display: block; width: 100%; }
   <div id="advSection" style="display:none">
     <div class="adv-section">
       <div class="adv-tabs">
-        <button class="adv-tab active" id="advTabEq"    onclick="switchAdv('eq')">📐 Equations</button>
-        <button class="adv-tab"        id="advTabGraph" onclick="switchAdv('graph')">📈 Graph</button>
-        <button class="adv-tab"        id="advTabCalc"  onclick="switchAdv('calc')">🔢 Compute</button>
+        <button class="adv-tab active" id="advTabEq"    onclick="switchAdv('eq')" data-i18n="calcTabEq">📐 Equations</button>
+        <button class="adv-tab"        id="advTabGraph" onclick="switchAdv('graph')" data-i18n="calcTabGraph">📈 Graph</button>
+        <button class="adv-tab"        id="advTabCalc"  onclick="switchAdv('calc')" data-i18n="calcTabCompute">🔢 Compute</button>
       </div>
 
       <!-- Equation solver -->
       <div id="advEq" class="eq-solver">
-        <div class="eq-label">Solve equation for x</div>
+        <div class="eq-label" data-i18n="calcEq">Solve equation for x</div>
         <div class="eq-input-row">
-          <input class="eq-input" id="eqInput" placeholder="e.g.  x^2 - 5*x + 6 = 0" data-i18n-ph="calcEqPlaceholder" onkeydown="if(event.key==='Enter')solveEq()"/>
-          <button class="eq-solve-btn" onclick="solveEq()">Solve</button>
+          <input class="eq-input" id="eqInput" placeholder="e.g.  x^2 - 5*x + 6 = 0" data-i18n-ph="calcEqPh" onkeydown="if(event.key==='Enter')solveEq()"/>
+          <button class="eq-solve-btn" onclick="solveEq()" data-i18n="calcSolve">Solve</button>
         </div>
-        <div class="eq-result" id="eqResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px">Enter an equation above and tap Solve</span></div>
-        <div class="eq-hint">Supports: linear, quadratic, cubic, trig, log equations. Use <code>*</code> for multiply, <code>^</code> for powers.</div>
+        <div class="eq-result" id="eqResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px" data-i18n="calcEqHint">Enter an equation above and tap Solve</span></div>
+        <div class="eq-hint" data-i18n="calcEqSupport">Supports: linear, quadratic, cubic, trig, log equations. Use <code>*</code> for multiply, <code>^</code> for powers.</div>
       </div>
 
       <!-- Graph plotter -->
       <div id="advGraph" class="graph-card" style="display:none">
         <div class="graph-inputs">
-          <div class="eq-label">Plot functions of x</div>
+          <div class="eq-label" data-i18n="calcGraphLabel">Plot functions of x</div>
           <div class="graph-fn-row">
             <div class="graph-fn-dot" style="background:#6c3fe0"></div>
             <input class="graph-input" id="fn1" placeholder="sin(x)" value="sin(x)"/>
           </div>
           <div class="graph-fn-row">
             <div class="graph-fn-dot" style="background:#f79009"></div>
-            <input class="graph-input" id="fn2" placeholder="Optional: cos(x)"/>
+            <input class="graph-input" id="fn2" data-i18n-ph="calcGraphOptional" placeholder="Optional: cos(x)"/>
           </div>
           <div class="graph-fn-row">
             <div class="graph-fn-dot" style="background:#12b76a"></div>
-            <input class="graph-input" id="fn3" placeholder="Optional: x^2/10"/>
+            <input class="graph-input" id="fn3" data-i18n-ph="calcGraphOptional2" placeholder="Optional: x^2/10"/>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <span style="font-size:12px;color:var(--text-3);font-weight:600">x from</span>
+            <span style="font-size:12px;color:var(--text-3);font-weight:600" data-i18n="calcXFrom">x from</span>
             <input class="graph-input" id="xMin" value="-10" style="width:60px;text-align:center"/>
-            <span style="font-size:12px;color:var(--text-3);font-weight:600">to</span>
+            <span style="font-size:12px;color:var(--text-3);font-weight:600" data-i18n="calcXTo">to</span>
             <input class="graph-input" id="xMax" value="10" style="width:60px;text-align:center"/>
-            <button class="graph-plot-btn" onclick="plotGraph()">Plot</button>
+            <button class="graph-plot-btn" onclick="plotGraph()" data-i18n="calcPlot">Plot</button>
           </div>
         </div>
         <div class="graph-canvas-wrap">
@@ -418,12 +485,12 @@ canvas#graphCanvas { display: block; width: 100%; }
       <!-- Compute (advanced expression) -->
       <div id="advCalc" style="display:none">
         <div class="eq-solver">
-          <div class="eq-label">Advanced computation</div>
+          <div class="eq-label" data-i18n="calcCompute">Advanced computation</div>
           <div class="eq-input-row">
             <input class="eq-input" id="advExprInput" placeholder="e.g.  derivative('sin(x)', 'x')" onkeydown="if(event.key==='Enter')computeAdv()"/>
-            <button class="eq-solve-btn" onclick="computeAdv()">Compute</button>
+            <button class="eq-solve-btn" onclick="computeAdv()" data-i18n="calcComputeBtn">Compute</button>
           </div>
-          <div class="eq-result" id="advExprResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px">Enter expression above</span></div>
+          <div class="eq-result" id="advExprResult"><span style="color:var(--text-3);font-family:'Outfit',sans-serif;font-size:13px" data-i18n="calcComputeHint">Enter expression above</span></div>
           <div class="eq-hint">
             Examples:<br>
             <code>derivative('x^3 + 2x', 'x')</code> → derivative<br>
@@ -461,13 +528,28 @@ canvas#graphCanvas { display: block; width: 100%; }
   <!-- Calculation history -->
   <div style="padding: 0 16px 8px; display:flex; align-items:center; justify-content:space-between;" id="histHeader">
     <div class="hist-tabs">
-      <button class="hist-tab active" id="histTabHistory"   onclick="switchHistTab('history')">🕐 History</button>
-      <button class="hist-tab"        id="histTabFavorites" onclick="switchHistTab('favorites')">⭐ Favorites</button>
+      <button class="hist-tab active" id="histTabHistory"   onclick="switchHistTab('history')" data-i18n="calcHistory">🕐 History</button>
+      <button class="hist-tab"        id="histTabFavorites" onclick="switchHistTab('favorites')" data-i18n="calcFavorites">⭐ Favorites</button>
     </div>
-    <button onclick="clearCurrentTab()" style="font-size:12px;font-weight:600;color:var(--red);background:none;border:none;cursor:pointer;font-family:inherit;opacity:0.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">Clear</button>
+    <button onclick="clearCurrentTab()" data-i18n="clear" style="font-size:12px;font-weight:600;color:var(--red);background:none;border:none;cursor:pointer;font-family:inherit;opacity:0.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">Clear</button>
   </div>
   <div class="calc-history" id="calcHistory">
-    <div class="hist-empty">No calculations yet</div>
+    <div class="hist-empty" data-i18n="calcNoHistory">No calculations yet</div>
+  </div>
+
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Online Calculator — Standard & Scientific</h2>
+    <p style="color:#4a4a6a">A fast, accurate calculator that works entirely in your browser — no app to download, no sign-up, no ads. Use it for everyday arithmetic, homework, shopping, cooking, or any calculation you'd normally reach your phone for.</p>
+    <h3 style="color:#6c3fe0">Standard calculator</h3>
+    <p style="color:#4a4a6a">Add, subtract, multiply and divide with full support for <strong style="color:#0d0d1a">brackets</strong> and <strong style="color:#0d0d1a">order of operations</strong>. Calculate <strong style="color:#0d0d1a">percentages</strong> instantly — useful for discounts, tax, tips and splits. Square roots and powers included.</p>
+    <h3 style="color:#6c3fe0">Scientific calculator</h3>
+    <p style="color:#4a4a6a">Switch to scientific mode for advanced maths. Includes <strong style="color:#0d0d1a">sin, cos, tan</strong> and their inverses, <strong style="color:#0d0d1a">log</strong> (base 10) and <strong style="color:#0d0d1a">ln</strong> (natural log), <strong style="color:#0d0d1a">π</strong>, <strong style="color:#0d0d1a">e</strong>, factorials and more. Powered by <strong style="color:#0d0d1a">math.js</strong> for precise floating-point results.</p>
+    <h3 style="color:#6c3fe0">Calculation history</h3>
+    <p style="color:#4a4a6a">Every calculation is saved in the history panel so you can scroll back, review your working and reuse previous results. Tap any history entry to reload it. Perfect for multi-step problems where you need to keep track of intermediate values.</p>
+    <h3 style="color:#6c3fe0">Keyboard shortcuts</h3>
+    <p style="color:#4a4a6a">On desktop, type numbers and operators directly from your keyboard. Press <strong style="color:#0d0d1a">Enter</strong> to calculate, <strong style="color:#0d0d1a">Escape</strong> to clear, and <strong style="color:#0d0d1a">Backspace</strong> to delete the last character. Faster than clicking every time.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:var(--accent);font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
   </div>
 
   <div class="footer">© 2026 Yoni Moreno · Powered by math.js</div>
@@ -565,7 +647,7 @@ function backspace(){ expr=expr.slice(0,-1); updateDisplay(); }
 function toggleDeg(){
   degMode = !degMode;
   const btn = document.getElementById('degBtn');
-  btn.textContent = degMode ? 'DEG' : 'RAD';
+  btn.textContent = degMode ? GI.get('calcDeg') : GI.get('calcRad');
   btn.style.color = degMode ? '' : 'var(--accent)';
 }
 
@@ -583,7 +665,7 @@ function calculate(){
     updateDisplay();
     document.getElementById('dispExpr').textContent = '';
   } catch(e){
-    document.getElementById('dispResult').textContent = 'Error';
+    document.getElementById('dispResult').textContent = GI.get('error');
     document.getElementById('dispResult').className = 'display-result error';
     setTimeout(()=>{ document.getElementById('dispResult').textContent = expr||'0'; document.getElementById('dispResult').className='display-result'; },1200);
   }
@@ -628,15 +710,15 @@ function toggleFavById(id){
   const entry = calcHistory.find(h=>h.id===id) || calcFavorites.find(f=>f.id===id);
   if (!entry) return;
   const idx = calcFavorites.findIndex(f=>f.id===id);
-  if (idx>=0){ calcFavorites.splice(idx,1); showToast('Removed from favorites'); }
-  else { calcFavorites.unshift({...entry}); showToast('⭐ Saved to favorites!'); }
+  if (idx>=0){ calcFavorites.splice(idx,1); showToast(GI.get('calcRemovedFav')); }
+  else { calcFavorites.unshift({...entry}); showToast('⭐ ' + GI.get('calcSavedFav')); }
   localStorage.setItem(FAV_KEY, JSON.stringify(calcFavorites));
   if (lastCalculation?.id===id) updateDisplayFavBtn();
   renderHistory();
 }
 
 function toggleFavoriteCurrent(){
-  if (!lastCalculation){ showToast('Calculate something first!'); return; }
+  if (!lastCalculation){ showToast(GI.get('calcFirst')); return; }
   toggleFavById(lastCalculation.id);
 }
 
@@ -645,7 +727,7 @@ function updateDisplayFavBtn(){
   if (!btn) return;
   const on = lastCalculation && isFav(lastCalculation.id);
   btn.classList.toggle('on', !!on);
-  btn.title = on ? 'Remove from favorites' : 'Save as favorite';
+  btn.title = on ? GI.get('calcRemovedFav') : GI.get('calcSavedFav');
 }
 
 function switchHistTab(tab){
@@ -658,7 +740,7 @@ function switchHistTab(tab){
 function renderHistory(){
   const el = document.getElementById('calcHistory');
   const items = currentHistTab==='history' ? calcHistory : calcFavorites;
-  const emptyMsg = currentHistTab==='history' ? 'No calculations yet' : 'No saved favorites';
+  const emptyMsg = currentHistTab==='history' ? GI.get('calcNoHistory') : GI.get('calcNoFavorites');
 
   if (!items.length){
     el.innerHTML=`<div class="hist-empty">${emptyMsg}</div>`;
@@ -672,10 +754,10 @@ function renderHistory(){
       <span class="hist-expr">${esc(h.ex)}</span>
       <span class="hist-res">${esc(h.res)}</span>
       <div class="hist-actions">
-        <button class="hist-act-btn ${faved?'fav-on':''}" onclick="event.stopPropagation();toggleFavById('${h.id}')" title="${faved?'Remove favorite':'Save favorite'}">
+        <button class="hist-act-btn ${faved?'fav-on':''}" onclick="event.stopPropagation();toggleFavById('${h.id}')" title="${faved?GI.get('calcRemovedFav'):GI.get('calcSavedFav')}">
           <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         </button>
-        <button class="hist-act-btn del-btn" onclick="event.stopPropagation();deleteEntry('${h.id}')" title="Delete">
+        <button class="hist-act-btn del-btn" onclick="event.stopPropagation();deleteEntry('${h.id}')" title="${GI.get('delete')}">
           <svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
         </button>
       </div>
@@ -726,7 +808,7 @@ function switchAdv(tab){
 function solveEq(){
   const raw = document.getElementById('eqInput').value.trim();
   const out = document.getElementById('eqResult');
-  if (!raw){ out.innerHTML='<span style="color:var(--text-3);font-family:Outfit,sans-serif;font-size:13px">Enter an equation first</span>'; return; }
+  if (!raw){ out.innerHTML=`<span style="color:var(--text-3);font-family:Outfit,sans-serif;font-size:13px">${GI.get('calcEqFirst')}</span>`; return; }
 
   try {
     let solutions = [];

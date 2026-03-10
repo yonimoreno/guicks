@@ -42,7 +42,50 @@ html.guicks-light .manage-tags-btn{color:rgba(0,0,0,.35)!important;border-color:
 html.guicks-light .manage-tags-btn:hover{background:rgba(0,0,0,.04)!important;color:#0d0d1a!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Reminders — Guicks</title>
+<title>Free Reminders App — Set Reminders Online, No Sign-Up | Guicks</title>
+<meta name="description" content="Set reminders directly in your browser. Add tasks with due dates and times, get notified, organise with tags. Free, no account, no app to install.">
+<meta name="keywords" content="reminders app, set reminder online, free reminders, task reminders, reminder app browser, to do reminders, browser notifications reminders, reminder without app">
+<link rel="canonical" href="https://guicks.com/guicks-reminders.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Reminders App — Browser Notifications | Guicks">
+<meta property="og:description" content="Set reminders and get browser notifications. No sign-up, no app to install. Free.">
+<meta property="og:url" content="https://guicks.com/guicks-reminders.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Reminders App | Guicks">
+<meta name="twitter:description" content="Set reminders in your browser. Notifications, tags, no sign-up.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Reminders",
+  "url": "https://guicks.com/guicks-reminders.html",
+  "description": "Free browser-based reminders app. Set tasks with due dates and times, receive browser notifications, organise with tags and filter by status. No account required — all data stored locally.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Set reminders with date and time"
+    "Browser push notifications"
+    "Organise with tags"
+    "Filter by upcoming, today, overdue"
+    "No account — stores locally"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
@@ -352,6 +395,21 @@ body::before{
 }
 .manage-tags-btn:hover{border-color:rgba(167,139,250,.4);color:rgba(167,139,250,.8);background:rgba(108,63,224,.08);}
 
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#1a6dd4}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#4f8ef7!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#1a6dd4!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(8px);
@@ -363,6 +421,12 @@ body::before{
   white-space:nowrap;z-index:9999;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <script src="./guicks-i18n.js"></script>
 </head>
@@ -757,5 +821,18 @@ document.getElementById('item-input').focus();
 // ── i18n ──
 document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); render(); });});
 </script>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Reminders App — Browser Notifications, No Sign-Up</h2>
+    <p style="color:#4a4a6a">Set reminders and get notified right in your browser — no app to download, no account to create. Add tasks with due dates and times, organise them with tags, and let the app ping you when it's time. Works on desktop and mobile.</p>
+    <h3 style="color:#1a6dd4">How browser reminders work</h3>
+    <p style="color:#4a4a6a">When you add a reminder, the app schedules a <strong style="color:#0d0d1a">browser notification</strong> for the time you set. Make sure to allow notifications when prompted — this is what triggers the alert. Notifications fire even if you've navigated away from the page, as long as the browser tab is still open.</p>
+    <h3 style="color:#1a6dd4">Organise with tags and filters</h3>
+    <p style="color:#4a4a6a">Add tags like "work", "personal", or "health" to group related reminders. Use the filter bar to show only <strong style="color:#0d0d1a">today's reminders</strong>, <strong style="color:#0d0d1a">upcoming</strong> tasks, or <strong style="color:#0d0d1a">overdue</strong> items you haven't completed yet.</p>
+    <h3 style="color:#1a6dd4">Privacy and data storage</h3>
+    <p style="color:#4a4a6a">All reminders are saved in your browser's <strong style="color:#0d0d1a">localStorage</strong> — nothing is uploaded anywhere. Your reminders are private, available offline, and persist between sessions. Clearing browser data will remove them.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#4f8ef7;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
 </body>
 </html>

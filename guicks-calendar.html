@@ -11,7 +11,51 @@ html.guicks-light .statusbar svg{fill:#0d0d1a!important}
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Calendar — Guicks</title>
+<title>Free Online Calendar — Year, Month & Week View | Guicks</title>
+<meta name="description" content="A free online calendar with year, month, week and day views. Add events with color-coded categories, set reminders and manage your schedule. No sign-up required.">
+<meta name="keywords" content="online calendar, free calendar, calendar app, monthly calendar, weekly calendar, event calendar, schedule planner, browser calendar, calendar without google, calendar no sign up">
+<link rel="canonical" href="https://guicks.com/guicks-calendar.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Online Calendar — Month, Week & Day Views | Guicks">
+<meta property="og:description" content="Full calendar app with multiple views, events and categories. Free, no sign-up.">
+<meta property="og:url" content="https://guicks.com/guicks-calendar.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Online Calendar | Guicks">
+<meta name="twitter:description" content="Calendar with year/month/week/day views. Events, categories. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Calendar",
+  "url": "https://guicks.com/guicks-calendar.html",
+  "description": "Free online calendar application with year, month, week and day views. Add and manage events with color-coded categories, recurring events and reminders. All data stored locally — no account required.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Year, month, week and day views"
+    "Create and manage events"
+    "Color-coded event categories"
+    "Event reminders"
+    "Recurring events"
+    "Saves locally — no account needed"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
@@ -544,6 +588,21 @@ html.guicks-light body::before{display:none}
 .clr-sw:hover{transform:scale(1.12);}
 .clr-sw.picked{border-color:#fff;transform:scale(1.15);}
 
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#1a6dd4}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#4f8ef7!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#1a6dd4!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(8px);
@@ -555,6 +614,12 @@ html.guicks-light body::before{display:none}
   white-space:nowrap;z-index:9999;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <script src="./guicks-i18n.js"></script>
 </head>
@@ -644,7 +709,7 @@ html.guicks-light body::before{display:none}
     <div class="modal-title" id="modal-title">New Event</div>
     <div class="form-group">
       <div class="form-label">Title</div>
-      <input class="form-input" id="evt-title" placeholder="Event name…" data-i18n-ph="calEventTitlePlaceholder" maxlength="60" autocomplete="off">
+      <input class="form-input" id="evt-title" placeholder="Event name…" data-i18n-ph="calEvTitlePh" maxlength="60" autocomplete="off">
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -673,7 +738,7 @@ html.guicks-light body::before{display:none}
     </div>
     <div class="form-group">
       <div class="form-label">Notes</div>
-      <input class="form-input" id="evt-notes" placeholder="Optional notes…" data-i18n-ph="calEventNotesPlaceholder" maxlength="200" autocomplete="off">
+      <input class="form-input" id="evt-notes" placeholder="Optional notes…" data-i18n-ph="calEvNotesPh" maxlength="200" autocomplete="off">
     </div>
     <div class="form-group">
       <div class="form-label">Category</div>
@@ -693,7 +758,7 @@ html.guicks-light body::before{display:none}
       <div class="form-label" style="margin-bottom:8px">New Category</div>
       <div class="color-swatches" id="new-cat-swatches"></div>
       <div class="new-cat-row">
-        <input class="form-input" id="new-cat-name" placeholder="Category name…" data-i18n-ph="calCategoryName" maxlength="24" style="flex:1" autocomplete="off">
+        <input class="form-input" id="new-cat-name" placeholder="Category name…" data-i18n-ph="calCatNamePh" maxlength="24" style="flex:1" autocomplete="off">
         <button class="btn-save" style="flex:none;padding:12px 20px;font-size:14px" onclick="addCategory()">Add</button>
       </div>
     </div>
@@ -1252,5 +1317,18 @@ document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });
   render();
 });
 </script>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Online Calendar — Multiple Views, Events & Categories</h2>
+    <p style="color:#4a4a6a">A full-featured calendar that works entirely in your browser. View your schedule by year, month, week or day, add events with custom categories, and keep track of everything without creating an account or handing over your data to a cloud service.</p>
+    <h3 style="color:#1a6dd4">Multiple calendar views</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">Year view</strong> — See the whole year at a glance and spot busy periods. <strong style="color:#0d0d1a">Month view</strong> — The classic calendar layout, great for planning ahead. <strong style="color:#0d0d1a">Week view</strong> — Detailed hourly view of your week for scheduling meetings and appointments. <strong style="color:#0d0d1a">Day view</strong> — Full breakdown of a single day.</p>
+    <h3 style="color:#1a6dd4">Events and categories</h3>
+    <p style="color:#4a4a6a">Add events with a title, date, time and color-coded category — work, personal, health, travel and more. Categories let you filter your calendar to see only what's relevant at a glance. Events are saved in your browser and persist between sessions.</p>
+    <h3 style="color:#1a6dd4">Private by design</h3>
+    <p style="color:#4a4a6a">Unlike Google Calendar or Outlook, this calendar stores everything locally in your browser. No data is sent to any server. Your schedule stays completely private. This makes it ideal for anyone who wants a quick, no-fuss calendar without the overhead of a full account.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#4f8ef7;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
 </body>
 </html>

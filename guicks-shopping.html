@@ -36,7 +36,51 @@ html.guicks-light .qty-btn:hover{color:#0d0d1a!important}
 html.guicks-light .section-group-label{color:rgba(0,0,0,.35)!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Shopping List — Guicks</title>
+<title>Free Shopping List App — Grocery List Online | Guicks</title>
+<meta name="description" content="Create and manage your shopping list in your browser. Add items, auto-categorise by aisle, check off as you shop. Free, no sign-up, works offline.">
+<meta name="keywords" content="shopping list, grocery list, shopping list app, free shopping list, online shopping list, grocery list app, shopping list browser, digital shopping list, supermarket list">
+<link rel="canonical" href="https://guicks.com/guicks-shopping.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Shopping List App — Grocery List Online | Guicks">
+<meta property="og:description" content="Digital shopping list with auto-categories and check-off. Free, no sign-up, works offline.">
+<meta property="og:url" content="https://guicks.com/guicks-shopping.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Shopping List App | Guicks">
+<meta name="twitter:description" content="Digital grocery list. Auto-categories, check-off, offline. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopping List",
+  "url": "https://guicks.com/guicks-shopping.html",
+  "description": "Free browser-based shopping list app. Add grocery items, auto-categorise by department (produce, dairy, bakery, etc.), check off items as you shop, and filter by category. Works offline and requires no account.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Add grocery and shopping items"
+    "Auto-categorisation by department"
+    "Check off items as you shop"
+    "Filter by category"
+    "Works offline"
+    "No account — saves in browser"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
@@ -333,6 +377,21 @@ html.guicks-light .autocat-hint{color:rgba(0,0,0,.35);}
 }
 .filter-tag.active .ft-count{background:rgba(255,255,255,.25);}
 
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#0a7a45}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#12b76a!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#0a7a45!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);
@@ -344,6 +403,12 @@ html.guicks-light .autocat-hint{color:rgba(0,0,0,.35);}
   white-space:nowrap;z-index:9999;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <script src="./guicks-i18n.js"></script>
 </head>
@@ -1122,5 +1187,18 @@ document.getElementById('item-input').focus();
 // ── i18n ──
 document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ renderFilterBar();renderItems(); });});
 </script>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Shopping List App — Your Digital Grocery List</h2>
+    <p style="color:#4a4a6a">Build your shopping list on your phone or computer before heading to the store. Add items, check them off as you pick them up, and never forget anything again. Works offline, saves automatically, no account needed.</p>
+    <h3 style="color:#0a7a45">Auto-categorisation by aisle</h3>
+    <p style="color:#4a4a6a">Type any item and the app intelligently categorises it — <strong style="color:#0d0d1a">produce</strong>, <strong style="color:#0d0d1a">dairy</strong>, <strong style="color:#0d0d1a">bakery</strong>, <strong style="color:#0d0d1a">meat</strong>, <strong style="color:#0d0d1a">frozen</strong>, <strong style="color:#0d0d1a">beverages</strong> and more. This groups your list by supermarket section so you can shop efficiently without doubling back through the store.</p>
+    <h3 style="color:#0a7a45">Tips for a better shopping list</h3>
+    <p style="color:#4a4a6a">Write your list <strong style="color:#0d0d1a">before</strong> you're hungry — studies show we buy more impulse items when shopping hungry. Group items by category or aisle to save time. Check your fridge and pantry first to avoid buying duplicates. Keep a running list through the week as you notice things running low.</p>
+    <h3 style="color:#0a7a45">Works offline</h3>
+    <p style="color:#4a4a6a">Your shopping list is saved in your browser's localStorage, so it's available even when you have no signal inside the supermarket. Just open the app before you lose connection and it'll be right there.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#12b76a;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
 </body>
 </html>

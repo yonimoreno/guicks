@@ -35,7 +35,53 @@ html.guicks-light .before-after-label{color:rgba(0,0,0,.4)!important}
 html.guicks-light .toggle-bg{background:rgba(0,0,0,.07)!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Studio – Guicks</title>
+<title>Free Image Compressor & Converter — Resize, Convert JPEG, PNG, WebP | Guicks</title>
+<meta name="description" content="Compress and convert images for free directly in your browser. Reduce file size, resize by pixels or percentage, convert between JPEG, PNG and WebP. No upload, no server — 100% private.">
+<meta name="keywords" content="image compressor, compress image, image converter, resize image, convert to webp, convert jpeg to png, reduce image size, image optimizer, compress png, compress jpeg, free image compressor, batch image compressor">
+<link rel="canonical" href="https://guicks.com/guicks-image.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Image Compressor & Converter | Guicks">
+<meta property="og:description" content="Compress, resize and convert images in your browser. JPEG, PNG, WebP. No upload, 100% private. Free.">
+<meta property="og:url" content="https://guicks.com/guicks-image.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Image Compressor & Converter | Guicks">
+<meta name="twitter:description" content="Compress, resize and convert images. JPEG, PNG, WebP. No upload, 100% private. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Image Studio",
+  "url": "https://guicks.com/guicks-image.html",
+  "description": "Free browser-based image compressor and converter. Compress JPEG, PNG and WebP images, resize by pixel dimensions or percentage, convert between formats, and process multiple images at once in batch mode. Nothing is uploaded — all processing happens locally in your browser.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Compress JPEG, PNG and WebP images",
+    "Convert between JPEG, PNG and WebP formats",
+    "Resize images by pixel dimensions or percentage",
+    "Quality slider for fine-grained compression control",
+    "Before/after preview with file size comparison",
+    "Batch mode — process multiple images at once",
+    "100% client-side — no files uploaded to any server",
+    "Drag and drop interface",
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="./guicks-i18n.js"></script>
@@ -190,6 +236,19 @@ body::before{
 .empty-state .es-icon{font-size:36px;margin-bottom:10px}
 .empty-state p{font-size:13px;font-weight:600}
 
+/* ── SEO content block ── */
+.seo-block{margin:8px 16px 32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#4f8ef7}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html.guicks-light .seo-block{background:#fff!important;border-color:rgba(0,0,0,.07)!important;color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#1a6dd4!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
+html.guicks-light .seo-block a{color:#1a6dd4!important}
+
 /* ── Toast ── */
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,30,50,.95);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:10px 20px;border-radius:14px;opacity:0;transition:all .25s;pointer-events:none;z-index:9999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -200,6 +259,12 @@ body::before{
 
 /* ── Dim text ── */
 .dim-text{color:var(--text3);font-size:12px}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 </head>
 <body>
@@ -388,6 +453,21 @@ body::before{
     <div style="padding:0 16px">
       <button class="dl-btn dl-btn-all" id="batchDlBtn" onclick="downloadAll()" disabled data-i18n="imgProcessAll">⬇ Process &amp; Download All</button>
     </div>
+  </div>
+
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Image Compressor & Converter — No Upload, 100% Private</h2>
+    <p style="color:#4a4a6a">Compress, resize and convert images directly in your browser. Your photos and files never leave your device — all processing happens locally using the Canvas API. No server, no account, no data sent anywhere. Free and unlimited.</p>
+    <h3 style="color:#4f8ef7">Compress images without losing quality</h3>
+    <p style="color:#4a4a6a">Use the quality slider to find the perfect balance between file size and visual quality. A JPEG at 80% quality is typically <strong style="color:#0d0d1a">60–80% smaller</strong> than the original with almost no visible difference. Great for speeding up websites, reducing email attachments or saving storage space.</p>
+    <h3 style="color:#4f8ef7">Convert between image formats</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">JPEG</strong> — Best for photos and complex images. Smaller file sizes, does not support transparency. <strong style="color:#0d0d1a">PNG</strong> — Lossless quality, supports transparency. Best for logos, screenshots and graphics. <strong style="color:#0d0d1a">WebP</strong> — Modern format supported by all major browsers. Typically 25–35% smaller than JPEG at the same quality. Ideal for web use.</p>
+    <h3 style="color:#4f8ef7">Resize images</h3>
+    <p style="color:#4a4a6a">Resize by entering exact pixel dimensions or a percentage of the original. Enable <strong style="color:#0d0d1a">Keep aspect ratio</strong> to prevent stretching. Useful for resizing profile pictures, thumbnails, product images or any image that needs to fit a specific size constraint.</p>
+    <h3 style="color:#4f8ef7">Batch image compression</h3>
+    <p style="color:#4a4a6a">Switch to batch mode to process multiple images at once. Drag and drop your files, set your format, quality and resize options, and download all compressed images in one go. Saves time when preparing images for a website or photo gallery.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#4f8ef7;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
   </div>
 
 </div>

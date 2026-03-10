@@ -28,7 +28,50 @@ html.guicks-light .note-bar{background:rgba(245,166,35,.1)!important;border-colo
 html.guicks-light .section-empty{color:#9090b0!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clock — Guicks</title>
+<title>Free World Clock — Time Zones, Alarms & Stopwatch | Guicks</title>
+<meta name="description" content="Check the current time in any city worldwide. Analog and digital clock, world time zones, stopwatch, countdown timer and alarms. Free, no sign-up.">
+<meta name="keywords" content="world clock, time zones, current time, clock online, what time is it, stopwatch online, countdown timer, alarm clock online, time zone converter, free clock">
+<link rel="canonical" href="https://guicks.com/guicks-clock.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free World Clock — Timezones, Alarms & Stopwatch | Guicks">
+<meta property="og:description" content="World clock with 38 cities, stopwatch, countdown and alarms. Free, no sign-up.">
+<meta property="og:url" content="https://guicks.com/guicks-clock.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free World Clock | Guicks">
+<meta name="twitter:description" content="Current time worldwide, stopwatch, countdown, alarms. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "World Clock",
+  "url": "https://guicks.com/guicks-clock.html",
+  "description": "Free online clock with world time zones for 38 cities, analog and digital display, stopwatch, countdown timer and multiple alarms. Works entirely in the browser with no account required.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Current local time — analog and digital"
+    "World clock for 38 major cities"
+    "Stopwatch with lap times"
+    "Countdown timer"
+    "Multiple alarms with Web Audio"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Google tag -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -480,13 +523,13 @@ try { cities = JSON.parse(localStorage.getItem(CITIES_KEY)) || []; } catch(e) {}
 function addCity() {
   const sel = document.getElementById('city-select');
   const tz = sel.value;
-  if (!tz) { showToast('Pick a city first'); return; }
+  if (!tz) { showToast(GI.get('clockPickCity')); return; }
   const city = TZ_LIST.find(([c, t]) => t === tz)?.[0] || tz;
-  if (cities.find(c => c.tz === tz)) { showToast('Already added!'); return; }
+  if (cities.find(c => c.tz === tz)) { showToast(GI.get('clockAlreadyAdded')); return; }
   cities.push({ city, tz });
   localStorage.setItem(CITIES_KEY, JSON.stringify(cities));
   renderWorldList(); sel.value = '';
-  showToast('✅ ' + city + ' added');
+  showToast(GI.get('clockAdded').replace('{city}', city));
 }
 
 function renderWorldList() {
@@ -524,14 +567,14 @@ try { alarms = JSON.parse(localStorage.getItem(ALARMS_KEY)) || []; } catch(e) {}
 
 function addAlarm() {
   const time = document.getElementById('alarm-time-input').value;
-  if (!time) { showToast('Pick a time first'); return; }
+  if (!time) { showToast(GI.get('clockPickTime')); return; }
   const label = document.getElementById('alarm-label-input').value.trim() || 'Alarm';
   alarms.push({ id: Date.now(), time, label, on: true });
   localStorage.setItem(ALARMS_KEY, JSON.stringify(alarms));
   renderAlarmList();
   document.getElementById('alarm-time-input').value = '';
   document.getElementById('alarm-label-input').value = '';
-  showToast('⏰ Alarm set for ' + time);
+  showToast(GI.get('clockAlarmSetFor').replace('{time}', time));
 }
 
 function renderAlarmList() {
@@ -610,6 +653,27 @@ function dismissAlarm() {
   if (_audioCtx) { try { _audioCtx.close(); } catch(e) {} _audioCtx = null; }
 }
 
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#1a6dd4}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#4f8ef7!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#1a6dd4!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 /* ── Toast ── */
 let _toastTimer;
 function showToast(msg) {
@@ -643,5 +707,20 @@ setInterval(tick, 1000);
 // ── i18n ──
 document.addEventListener("DOMContentLoaded",function(){GI.init(function(){  });});
 </script>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free World Clock — Time Zones, Stopwatch, Countdown & Alarms</h2>
+    <p style="color:#4a4a6a">Check the current time anywhere in the world, run a stopwatch, set a countdown timer, or create an alarm — all in one free browser app. No download, no sign-up, works on any device.</p>
+    <h3 style="color:#1a6dd4">World time zones</h3>
+    <p style="color:#4a4a6a">See the current local time in <strong style="color:#0d0d1a">38 major cities</strong> across every time zone — including New York, London, Paris, Dubai, Mumbai, Tokyo, Sydney and more. Essential for remote teams, international calls and travel planning. Each city shows the local time and UTC offset.</p>
+    <h3 style="color:#1a6dd4">Stopwatch and lap timer</h3>
+    <p style="color:#4a4a6a">A precise stopwatch with <strong style="color:#0d0d1a">lap recording</strong> — tap lap to record split times while the clock keeps running. Useful for workouts, cooking, presentations or any timed activity where you need to track intervals.</p>
+    <h3 style="color:#1a6dd4">Countdown timer</h3>
+    <p style="color:#4a4a6a">Set a countdown for any duration and get a <strong style="color:#0d0d1a">sound alert</strong> when time is up. Great for study sessions (Pomodoro technique), cooking, meetings, or any time-boxed activity.</p>
+    <h3 style="color:#1a6dd4">Alarms</h3>
+    <p style="color:#4a4a6a">Set multiple alarms with custom labels. Alarms use the Web Audio API to play a sound directly in the browser — no notification permissions needed. Keep the tab open for alarms to fire.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#4f8ef7;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
 </body>
 </html>

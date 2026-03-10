@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
 <style>
 html.guicks-light body{background:#f0f2f7!important}
 html.guicks-light body::before,html.guicks-light body::after{display:none!important}
@@ -12,7 +12,55 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weather — Guicks</title>
+<title>Free Weather Forecast — Current Weather & 7-Day Forecast | Guicks</title>
+<meta name="description" content="Check the current weather and 7-day forecast for any city in the world. Temperature, humidity, wind speed, UV index and hourly forecast. Free, no ads, no sign-up.">
+<meta name="keywords" content="weather forecast, current weather, weather today, 7 day forecast, hourly forecast, weather app, weather online, temperature today, wind speed, humidity, UV index, weather by city">
+<link rel="canonical" href="https://guicks.com/guicks-weather.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Weather Forecast — Any City, 7-Day Forecast | Guicks">
+<meta property="og:description" content="Current weather and 7-day forecast for any city. Temperature, wind, humidity, UV index and more. Free, no ads.">
+<meta property="og:url" content="https://guicks.com/guicks-weather.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Weather Forecast | Guicks">
+<meta name="twitter:description" content="Current weather and 7-day forecast for any city worldwide. Free, no ads, no sign-up.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Weather Forecast",
+  "url": "https://guicks.com/guicks-weather.html",
+  "description": "Free weather app showing current conditions and a 7-day forecast for any city in the world. Displays temperature, feels-like, humidity, wind speed, UV index, sunrise and sunset times, and an hourly breakdown. Powered by Open-Meteo.",
+  "applicationCategory": "WeatherApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Current weather conditions",
+    "7-day weather forecast",
+    "Hourly temperature forecast",
+    "Feels-like temperature",
+    "Humidity and wind speed",
+    "UV index",
+    "Sunrise and sunset times",
+    "Search any city worldwide",
+    "Auto-detects your location",
+    "Celsius and Fahrenheit toggle",
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -286,6 +334,22 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── Footer ── */
+/* ── SEO content block ── */
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-sm)}
+.seo-block{color:var(--text)} .seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#1a6dd4}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#60a5fa!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+  html.guicks-light .seo-block{color:#0d0d1a!important}
+  html.guicks-light .seo-block h2{color:#0d0d1a!important}
+  html.guicks-light .seo-block h3{color:#1a6dd4!important}
+  html.guicks-light .seo-block p{color:#4a4a6a!important}
+  html.guicks-light .seo-block strong{color:#0d0d1a!important}
+
 .footer { text-align: center; padding: 12px 0 28px; font-size: 11px; color: var(--text-3); margin-top: auto; }
 .footer a { color: #1a6dd4; text-decoration: none; }
 
@@ -295,6 +359,12 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
 .cookie-btn { flex-shrink: 0; background: #1a6dd4; color: white; border: none; border-radius: 20px; padding: 8px 18px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Outfit', sans-serif; }
 
 @media (max-width: 380px) { .locations-grid { grid-template-columns: 1fr; } .hero-temp { font-size: 64px; } }
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -396,6 +466,19 @@ html, body { width: 100%; min-height: 100%; font-family: 'Outfit', sans-serif; b
   <div class="section-pad" id="locationsSection">
     <div class="section-title" data-i18n="weatherSavedLocations">Saved locations</div>
     <div class="locations-grid" id="locationsGrid"></div>
+  </div>
+
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Weather Forecast — Current Conditions & 7-Day Outlook</h2>
+    <p style="color:#4a4a6a">Get the current weather and a full 7-day forecast for any city in the world, right in your browser. No app download, no account, no ads. Just search for your city and get instant results — temperature, wind, humidity, UV index and hourly breakdown included.</p>
+    <h3 style="color:#1a6dd4">What weather data is shown?</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">Current conditions</strong> — Temperature, feels-like temperature, weather description, humidity, wind speed and UV index. <strong style="color:#0d0d1a">Hourly forecast</strong> — Temperature trend through the day so you know when to bring a jacket. <strong style="color:#0d0d1a">7-day forecast</strong> — Daily high and low temperatures with weather icons for the week ahead. <strong style="color:#0d0d1a">Sunrise & sunset</strong> — Exact times for your location each day.</p>
+    <h3 style="color:#1a6dd4">How to check weather for any city</h3>
+    <p style="color:#4a4a6a">Type the city name in the search bar at the top. The app uses your location automatically on first visit if you allow it. You can switch between Celsius and Fahrenheit at any time. Weather data is powered by <strong style="color:#0d0d1a">Open-Meteo</strong>, a free open-source weather API with global coverage.</p>
+    <h3 style="color:#1a6dd4">What affects the weather forecast accuracy?</h3>
+    <p style="color:#4a4a6a">Short-range forecasts (1–3 days) are generally very accurate. Beyond 5 days, forecasts become less reliable as atmospheric conditions are harder to predict. The 7-day forecast is best used for planning, not precision. UV index is particularly useful for sun protection — a UV index above 3 means sunscreen is recommended.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#1a6dd4;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
   </div>
 
   <div class="footer">Weather by <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> · © 2026 Yoni Moreno</div>

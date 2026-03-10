@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
 <style>
 html.guicks-light body{background:#f0f2f7!important}
 html.guicks-light body::before,html.guicks-light body::after{display:none!important}
@@ -12,7 +12,51 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Favorites — Guicks</title>
+<title>Free Bookmark Manager — Save & Organise Your Favourite Links | Guicks</title>
+<meta name="description" content="Save and organise your favourite websites and links in your browser. Add bookmarks with icons, search, categorise and access them instantly. Free, private, no sign-up.">
+<meta name="keywords" content="bookmark manager, save links, favorites manager, bookmark organiser, link saver, free bookmarks, browser bookmarks, online bookmark manager, save websites, bookmark app">
+<link rel="canonical" href="https://guicks.com/guicks-favorites.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Bookmark Manager — Save Your Favourite Links | Guicks">
+<meta property="og:description" content="Save, organise and access your favourite links instantly. Free, private, no sign-up.">
+<meta property="og:url" content="https://guicks.com/guicks-favorites.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Bookmark Manager | Guicks">
+<meta name="twitter:description" content="Save and organise favourite links. Private, free, no sign-up.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Favorites",
+  "url": "https://guicks.com/guicks-favorites.html",
+  "description": "Free browser-based bookmark manager. Save favourite websites and links with custom icons and categories, search through them instantly, and access them with one tap. All data stored locally — completely private.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Save favourite websites and links"
+    "Custom icons and categories"
+    "Instant search"
+    "One-tap to open saved links"
+    "Private — stores in browser"
+    "No sign-up required"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -318,6 +362,21 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* ── Footer ── */
+  .seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+  .seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+  .seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#0a84ff}
+  .seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+  .seo-block strong{color:var(--text);font-weight:700}
+  html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+  html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+  html:not(.guicks-light) .seo-block h3{color:#60a5fa!important}
+  html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+  html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+  html.guicks-light .seo-block{color:#0d0d1a!important}
+  html.guicks-light .seo-block h2{color:#0d0d1a!important}
+  html.guicks-light .seo-block h3{color:#0a84ff!important}
+  html.guicks-light .seo-block p{color:#4a4a6a!important}
+  html.guicks-light .seo-block strong{color:#0d0d1a!important}
   .footer { text-align: center; padding: 16px 0 24px; font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; }
 
   /* ── Custom category modal ── */
@@ -457,6 +516,12 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     padding: 8px 18px; font-size: 12px; font-weight: 700;
     cursor: pointer; font-family: 'Outfit', sans-serif;
   }
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -526,6 +591,20 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
 
   <!-- Bookmarks -->
   <div class="bookmarks-wrap" id="bookmarksWrap"></div>
+
+
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Bookmark Manager — Save & Organise Your Favourite Links</h2>
+    <p style="color:#4a4a6a">A simple, private bookmark manager that lives in your browser. Save any URL, give it a name and icon, organise bookmarks into categories, and open them with a single tap. No browser extension needed, no account, no sync — just your links, saved locally.</p>
+    <h3 style="color:#0a84ff">Why use a dedicated bookmark manager?</h3>
+    <p style="color:#4a4a6a">Browser bookmarks get messy fast. A dedicated manager lets you <strong style="color:#0d0d1a">organise by category</strong>, add <strong style="color:#0d0d1a">custom icons</strong> for visual recognition, and <strong style="color:#0d0d1a">search by name</strong> to find what you need instantly. Much cleaner than a cluttered bookmarks bar.</p>
+    <h3 style="color:#0a84ff">Perfect for</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">Work resources</strong> — Save tools, dashboards and documentation you access daily. <strong style="color:#0d0d1a">Research</strong> — Collect links for a project in one place. <strong style="color:#0d0d1a">Entertainment</strong> — Favourite news sites, streaming services, blogs. <strong style="color:#0d0d1a">Shopping</strong> — Save product pages to revisit later.</p>
+    <h3 style="color:#0a84ff">Private and offline</h3>
+    <p style="color:#4a4a6a">All bookmarks are stored in your browser's localStorage — nothing is uploaded anywhere. Your links are completely private and available even without an internet connection (the manager itself, not the linked sites).</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#0a84ff;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
 
   <div class="footer">© Copyright 2026 Yoni Moreno</div>
 </div>

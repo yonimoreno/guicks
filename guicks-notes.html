@@ -44,7 +44,50 @@ html.guicks-light .toolbar-btn:hover{color:#1a1a14!important;background:rgba(0,0
 html.guicks-light .char-count{color:rgba(26,26,20,.3)!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Notes — Guicks</title>
+<title>Free Online Notepad — Write & Save Notes in Your Browser | Guicks</title>
+<meta name="description" content="A free online notepad that saves your notes automatically in your browser. Write, organise with tags, and access your notes any time — no account, no sync, completely private.">
+<meta name="keywords" content="online notepad, free notepad, notes online, notepad browser, write notes online, quick notes, sticky notes online, note taking app, browser notepad, offline notes">
+<link rel="canonical" href="https://guicks.com/guicks-notes.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Online Notepad — Auto-Saves in Browser | Guicks">
+<meta property="og:description" content="Write and save notes directly in your browser. Tags, search, auto-save. Free, no account.">
+<meta property="og:url" content="https://guicks.com/guicks-notes.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Online Notepad | Guicks">
+<meta name="twitter:description" content="Write notes in your browser. Auto-saves, tags, search. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Notes",
+  "url": "https://guicks.com/guicks-notes.html",
+  "description": "Free online notepad that saves notes automatically in the browser using localStorage. Supports tagging, search, multiple notes and rich text editing. No account required — all data stays on your device.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Create and edit multiple notes"
+    "Auto-saves to browser storage"
+    "Organise notes with tags"
+    "Full-text search"
+    "No account or sync — private by design"
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TPNLYBBFTF');</script>
@@ -415,6 +458,21 @@ body::before{
 .clr-sw:hover{transform:scale(1.12);}
 .clr-sw.picked{border-color:#fff;transform:scale(1.15);}
 
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:#b8860b}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#f5c542!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#b8860b!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
 /* ── Toast ── */
 .toast{
   position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(8px);
@@ -426,6 +484,12 @@ body::before{
   white-space:nowrap;z-index:9999;
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <script src="./guicks-i18n.js"></script>
 </head>
@@ -921,5 +985,18 @@ render();
 // ── i18n ──
 document.addEventListener("DOMContentLoaded",function(){GI.init(function(){ GI.apply(); render(); });});
 </script>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Online Notepad — Auto-Saves in Your Browser</h2>
+    <p style="color:#4a4a6a">A clean, distraction-free notepad that lives entirely in your browser. Write notes, organise them with tags, and search through them instantly. Everything saves automatically — no account, no cloud, no data leaving your device.</p>
+    <h3 style="color:#b8860b">Private by design</h3>
+    <p style="color:#4a4a6a">Notes are stored in your browser's <strong style="color:#0d0d1a">localStorage</strong> — they never touch a server. This means your notes are completely private, work offline, and are always available even without an internet connection. Clearing your browser data will erase them, so export anything important.</p>
+    <h3 style="color:#b8860b">Organise with tags</h3>
+    <p style="color:#4a4a6a">Add tags to any note to group related content together. Filter your notes by tag to find what you need quickly. Tags are great for separating work notes, personal ideas, shopping lists and anything else you want to keep organised.</p>
+    <h3 style="color:#b8860b">When to use a browser notepad</h3>
+    <p style="color:#4a4a6a">Perfect for <strong style="color:#0d0d1a">quick thoughts</strong> you need to jot down fast, <strong style="color:#0d0d1a">temporary scratch pads</strong> while working at a computer, <strong style="color:#0d0d1a">copying text</strong> from one place to another, or <strong style="color:#0d0d1a">drafting messages</strong> before sending them. For anything long-term, consider exporting to a document.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#f5c542;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
 </body>
 </html>

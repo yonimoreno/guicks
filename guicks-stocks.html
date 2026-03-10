@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
 <style>
 html.guicks-light body{background:#f0f2f7!important}
 html.guicks-light body::before,html.guicks-light body::after{display:none!important}
@@ -12,7 +12,52 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stocks — Guicks</title>
+<title>Free Stock Price Tracker — Live Stock Quotes & Market Data | Guicks</title>
+<meta name="description" content="Track stock prices in real time. Search any ticker symbol, view live quotes, price changes, market cap and key metrics for stocks, ETFs and indices. Free, no sign-up.">
+<meta name="keywords" content="stock price, stock tracker, live stock quotes, stock market, share price, stock price today, check stock price, stock quote, NYSE, NASDAQ, stock portfolio tracker, free stock tracker">
+<link rel="canonical" href="https://guicks.com/guicks-stocks.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Stock Price Tracker — Live Quotes | Guicks">
+<meta property="og:description" content="Live stock prices for any ticker. Real-time quotes, price changes, market cap and key metrics. Free, no sign-up.">
+<meta property="og:url" content="https://guicks.com/guicks-stocks.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Stock Price Tracker | Guicks">
+<meta name="twitter:description" content="Live stock quotes for any ticker. Real-time prices, changes and market data. Free.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Stock Tracker",
+  "url": "https://guicks.com/guicks-stocks.html",
+  "description": "Free real-time stock price tracker. Search any NYSE or NASDAQ ticker symbol to get the current price, daily change, percentage change, market cap, 52-week high and low, and other key metrics. Powered by Finnhub.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Live stock prices for any ticker symbol",
+    "Daily price change and percentage",
+    "Market cap and trading volume",
+    "52-week high and low",
+    "Search NYSE, NASDAQ and major exchanges",
+    "Watchlist to save favourite stocks",
+    "Powered by Finnhub real-time data",
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -349,7 +394,29 @@ body::before {
   border-radius: 20px; padding: 8px 18px; font-size: 12px; font-weight: 700;
   cursor: pointer; font-family: 'Outfit', sans-serif;
 }
+.seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+.seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+.seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--green)}
+.seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+.seo-block strong{color:var(--text);font-weight:700}
+html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+html:not(.guicks-light) .seo-block h3{color:#00c853!important}
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+html:not(.guicks-light) .seo-block strong{color:#f0f0f5!important}
+html.guicks-light .seo-block{color:#0d0d1a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#00874a!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
+html.guicks-light .seo-block a{color:#0a84ff!important}
 .footer { text-align: center; padding: 8px 0 24px; font-size: 11px; color: var(--text-3); }
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TPNLYBBFTF"></script>
@@ -443,7 +510,20 @@ body::before {
       <span id="lastRefresh" data-i18n="stocksLiveData">Live data · Auto-refreshes every 60s</span>
     </div>
 
-    <div class="footer">© Copyright 2026 Yoni Moreno · Powered by Finnhub</div>
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Stock Price Tracker — Live Quotes for Any Ticker</h2>
+    <p style="color:#4a4a6a">Look up the current price of any stock, ETF or index in seconds. Search by ticker symbol — AAPL, TSLA, MSFT, AMZN, GOOGL, SPY — and get a live quote with daily change, percentage move and key metrics. Powered by Finnhub real-time market data.</p>
+    <h3 style="color:#00874a">What data is shown for each stock?</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">Current price</strong> — The latest traded price updated in real time during market hours. <strong style="color:#0d0d1a">Daily change</strong> — How much the price has moved today in dollars and percentage. <strong style="color:#0d0d1a">52-week high & low</strong> — The price range over the past year, useful for context. <strong style="color:#0d0d1a">Market cap</strong> — Total market value of the company. <strong style="color:#0d0d1a">Volume</strong> — Number of shares traded today.</p>
+    <h3 style="color:#00874a">Popular stocks to track</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">AAPL</strong> — Apple Inc. <strong style="color:#0d0d1a">MSFT</strong> — Microsoft. <strong style="color:#0d0d1a">GOOGL</strong> — Alphabet (Google). <strong style="color:#0d0d1a">AMZN</strong> — Amazon. <strong style="color:#0d0d1a">TSLA</strong> — Tesla. <strong style="color:#0d0d1a">NVDA</strong> — NVIDIA. <strong style="color:#0d0d1a">META</strong> — Meta Platforms. <strong style="color:#0d0d1a">SPY</strong> — S&P 500 ETF. <strong style="color:#0d0d1a">BRK.B</strong> — Berkshire Hathaway.</p>
+    <h3 style="color:#00874a">How to read a stock quote</h3>
+    <p style="color:#4a4a6a">The price shown is the last traded price. During market hours (9:30am–4:00pm ET, Monday–Friday) this updates in real time. Outside market hours the price shown is the previous closing price. A <strong style="color:#0d0d1a">green</strong> change means the stock is up from yesterday's close; <strong style="color:#0d0d1a">red</strong> means it's down. Past performance is not a guarantee of future results — always do your own research before investing.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:#0a84ff;font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
+  </div>
+
+  <div class="footer">© Copyright 2026 Yoni Moreno · Powered by Finnhub</div>
   </div>
 
   <!-- Setup screen -->

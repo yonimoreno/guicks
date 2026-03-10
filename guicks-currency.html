@@ -11,7 +11,7 @@
   gtag('config', 'G-TPNLYBBFTF');
 </script>
 <meta charset="UTF-8">
-<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"dark";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
 <style>
 html.guicks-light body{background:#f0f2f7!important}
 html.guicks-light body::before,html.guicks-light body::after{display:none!important}
@@ -21,7 +21,51 @@ html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!im
 html.guicks-light .back-btn svg{stroke:currentColor!important}
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Currency Converter — Guicks</title>
+<title>Free Currency Converter — Live Exchange Rates | Guicks</title>
+<meta name="description" content="Convert currencies instantly with live exchange rates. Supports 150+ currencies including USD, EUR, GBP, JPY, CAD, AUD and more. Free, no sign-up, updated daily.">
+<meta name="keywords" content="currency converter, currency exchange, exchange rate, convert currency, USD to EUR, EUR to GBP, live exchange rates, foreign exchange calculator, money converter, forex calculator">
+<link rel="canonical" href="https://guicks.com/guicks-currency.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Currency Converter — Live Exchange Rates | Guicks">
+<meta property="og:description" content="Convert between 150+ currencies with live exchange rates. Fast, free, no sign-up required.">
+<meta property="og:url" content="https://guicks.com/guicks-currency.html">
+<meta property="og:site_name" content="Guicks">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Currency Converter | Guicks">
+<meta name="twitter:description" content="Live exchange rates for 150+ currencies. Free and instant.">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Currency Converter",
+  "url": "https://guicks.com/guicks-currency.html",
+  "description": "Free online currency converter with live exchange rates. Convert between over 150 world currencies including US Dollar, Euro, British Pound, Japanese Yen, Canadian Dollar, Swiss Franc, Chinese Yuan and more.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "150+ world currencies supported",
+    "Live exchange rates updated daily",
+    "Instant conversion as you type",
+    "Swap currencies with one tap",
+    "Popular currency pairs (USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY)",
+    "Works on mobile and desktop",
+    "Available in 31 languages"
+  ],
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com"
+  }
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -285,6 +329,22 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
   /* Footer */
+  /* ── SEO content block ── */
+  .seo-block{margin:8px 16px 8px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-sm)}
+  .seo-block{color:var(--text)} .seo-block h2{font-size:16px;font-weight:800;margin-bottom:10px;letter-spacing:-.3px;color:var(--text)}
+  .seo-block h3{font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--green)}
+  .seo-block p{font-size:13px;line-height:1.65;color:var(--text-2)}
+  .seo-block strong{color:var(--text);font-weight:700}
+  html:not(.guicks-light) .seo-block{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.09)!important}
+  html:not(.guicks-light) .seo-block h2{color:#f0f0f5!important}
+  html:not(.guicks-light) .seo-block h3{color:#34d399!important}
+  html:not(.guicks-light) .seo-block p{color:rgba(240,240,245,.65)!important}
+  html.guicks-light .seo-block{color:#0d0d1a!important}
+  html.guicks-light .seo-block h2{color:#0d0d1a!important}
+  html.guicks-light .seo-block h3{color:#1a7a4a!important}
+  html.guicks-light .seo-block p{color:#4a4a6a!important}
+  html.guicks-light .seo-block strong{color:#0d0d1a!important}
+
   .footer { text-align: center; padding: 8px 0 24px; font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; }
 
   /* Cookie banner */
@@ -306,6 +366,12 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
     font-family: 'Outfit', sans-serif; transition: opacity 0.2s;
   }
   .cookie-btn:hover { opacity: 0.85; }
+html.guicks-light .seo-block,
+html.guicks-light .seo-block *:not(a){color:#0d0d1a!important}
+html.guicks-light .seo-block p,
+html.guicks-light .seo-block p *:not(a){color:#4a4a6a!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important;font-weight:800!important}
+html.guicks-light .seo-block a{text-decoration:none!important}
 </style>
 <script src="./guicks-i18n.js"></script>
 </head>
@@ -446,6 +512,19 @@ html.guicks-light .back-btn svg{stroke:currentColor!important}
       <div class="update-dot"></div>
       <span data-i18n="currRatesNotice">Rates via Open Exchange Rates · Updated live</span>
     </div>
+  </div>
+
+  <!-- SEO content block -->
+  <div class="seo-block" style="color:#0d0d1a">
+    <h2 style="color:#0d0d1a!important">Free Currency Converter — Live Exchange Rates for 150+ Currencies</h2>
+    <p style="color:#4a4a6a">Need to know how much $100 is in euros, or what 50 British pounds converts to in Japanese yen? This free currency converter fetches live exchange rates and calculates the result instantly as you type. No sign-up, no ads, no delays.</p>
+    <h3 style="color:#1a7a4a">How currency exchange rates work</h3>
+    <p style="color:#4a4a6a">Exchange rates change constantly based on global markets, central bank decisions, inflation and trade flows. The rate you see here is the mid-market rate — the midpoint between the buying and selling prices used by banks and financial institutions. Banks and exchange bureaus typically add a margin of 2–5% on top of this rate, so the mid-market rate is always the best benchmark to compare against.</p>
+    <h3 style="color:#1a7a4a">Most converted currency pairs</h3>
+    <p style="color:#4a4a6a"><strong style="color:#0d0d1a">USD to EUR</strong> — The world's most traded currency pair. <strong style="color:#0d0d1a">USD to GBP</strong> — US Dollar to British Pound. <strong style="color:#0d0d1a">EUR to GBP</strong> — Euro to Pound. <strong style="color:#0d0d1a">USD to JPY</strong> — Dollar to Japanese Yen. <strong style="color:#0d0d1a">USD to CAD</strong> — Dollar to Canadian Dollar. <strong style="color:#0d0d1a">GBP to EUR</strong> — Pound to Euro. This converter supports all of these and 150+ more.</p>
+    <h3 style="color:#1a7a4a">Travel money tips</h3>
+    <p style="color:#4a4a6a">Before a trip, use this converter to budget your spending and understand how far your money will go. Check the live rate, then compare it to what your bank or currency exchange is offering — the difference is their fee. For the best rates abroad, use a card with no foreign transaction fees or withdraw from ATMs rather than airport exchange desks.</p>
+    <p style="margin-top:12px;color:#4a4a6a">← <a href="https://guicks.com" style="color:var(--green);font-weight:700;text-decoration:none">Back to all Guicks tools</a></p>
   </div>
 
   <div class="footer">© Copyright 2026 Yoni Moreno</div>
