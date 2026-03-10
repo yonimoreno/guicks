@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>/* Guicks theme */(function(){var t=localStorage.getItem("guicks_theme_v1")||"auto";var light=(t==="light")||(t==="auto"&&window.matchMedia("(prefers-color-scheme:light)").matches);if(light)document.documentElement.classList.add("guicks-light");})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0a0a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guicks">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}</script>
+<title>Free Loan Calculator — Monthly Payment & Amortization Table | Guicks</title>
+<meta name="description" content="Calculate monthly loan payments, total interest and see a full amortization schedule. Works for personal loans, mortgages and car loans. Free, instant, no sign-up.">
+<meta name="keywords" content="loan calculator, mortgage calculator, monthly payment calculator, amortization calculator, personal loan calculator, car loan calculator, interest calculator, loan repayment calculator">
+<link rel="canonical" href="https://guicks.com/guicks-loan.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Loan Calculator — Monthly Payment & Amortization | Guicks">
+<meta property="og:description" content="Calculate monthly payments, total interest and amortization schedule for any loan. Free, no sign-up.">
+<meta property="og:url" content="https://guicks.com/guicks-loan.html">
+<meta property="og:site_name" content="Guicks">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Free Loan Calculator | Guicks">
+<meta name="twitter:description" content="Monthly payments, total interest and amortization table for any loan. Free and instant.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Guicks Loan Calculator",
+  "url": "https://guicks.com/guicks-loan.html",
+  "description": "Free loan calculator that computes monthly payments, total interest paid and a full amortization schedule. Supports personal loans, mortgages and car loans with optional extra payment simulation.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": ["Monthly payment calculation","Amortization schedule","Extra payment simulator","Multiple loan types","Total interest breakdown"],
+  "isPartOf": { "@type": "WebSite", "name": "Guicks", "url": "https://guicks.com" }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ── Light mode first ── */
+html.guicks-light body{background:#f0f2f7!important;color:#0d0d1a!important}
+html.guicks-light body::before{display:none!important}
+html.guicks-light .statusbar{color:#0d0d1a!important}
+html.guicks-light .statusbar svg{fill:#0d0d1a!important}
+html.guicks-light .statusbar .icons svg{stroke:#0d0d1a!important;fill:#0d0d1a!important}
+html.guicks-light .back-btn{color:#1c1c2e!important}
+html.guicks-light .back-btn svg{stroke:#1c1c2e!important}
+html.guicks-light .card{background:#fff!important;border-color:rgba(0,0,0,.07)!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important}
+html.guicks-light .field-label{color:#6a6a8a!important}
+html.guicks-light .field-input{background:#f5f6fa!important;border-color:rgba(0,0,0,.12)!important;color:#0d0d1a!important}
+html.guicks-light .field-input:focus{border-color:#1a6dd4!important}
+html.guicks-light .field-unit{color:#0d0d1a!important;background:#eef0f5!important;border-color:rgba(0,0,0,.1)!important}
+html.guicks-light .type-btn{background:#eef0f5!important;color:#6a6a8a!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .type-btn.active{background:linear-gradient(135deg,#1a4a8a,#1a6dd4)!important;color:#fff!important}
+html.guicks-light .result-card{background:#fff!important;border-color:rgba(0,0,0,.07)!important}
+html.guicks-light .result-label{color:#6a6a8a!important}
+html.guicks-light .result-value{color:#0d0d1a!important}
+html.guicks-light .result-value.accent{color:#1a6dd4!important}
+html.guicks-light .result-value.highlight{color:#0a7a45!important}
+html.guicks-light .tab-bar{background:rgba(0,0,0,.05)!important;border-color:rgba(0,0,0,.08)!important}
+html.guicks-light .tab-btn{color:rgba(0,0,0,.4)!important}
+html.guicks-light .tab-btn.active{background:linear-gradient(135deg,#1a4a8a,#1a6dd4)!important;color:#fff!important}
+html.guicks-light .amort-head{background:#eef0f5!important;color:#6a6a8a!important}
+html.guicks-light .amort-row{border-color:rgba(0,0,0,.05)!important;color:#0d0d1a!important}
+html.guicks-light .amort-row:hover{background:#f5f6fa!important}
+html.guicks-light .amort-row .principal{color:#0a7a45!important}
+html.guicks-light .amort-row .interest{color:#c0392b!important}
+html.guicks-light .extra-note{color:#6a6a8a!important}
+html.guicks-light .donut-label{color:#0d0d1a!important}
+html.guicks-light .donut-sub{color:#6a6a8a!important}
+html.guicks-light .legend-dot-principal{background:#1a6dd4!important}
+html.guicks-light .legend-dot-interest{background:#e05252!important}
+html.guicks-light .legend-label{color:#6a6a8a!important}
+html.guicks-light .seo-block{background:#fff!important;border-color:rgba(0,0,0,.07)!important}
+html.guicks-light .seo-block h2{color:#0d0d1a!important}
+html.guicks-light .seo-block h3{color:#1a6dd4!important}
+html.guicks-light .seo-block p{color:#4a4a6a!important}
+html.guicks-light .seo-block strong{color:#0d0d1a!important}
+html.guicks-light .range-wrap input[type=range]{accent-color:#1a6dd4!important}
+html.guicks-light .slider-labels{color:#6a6a8a!important}
+html.guicks-light .savings-box{background:rgba(10,122,69,.08)!important;border-color:rgba(10,122,69,.2)!important}
+html.guicks-light .savings-box .sv-val{color:#0a7a45!important}
+html.guicks-light .savings-box .sv-label{color:#4a6a5a!important}
+html.guicks-light .footer-link{color:#1a6dd4!important}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0e0e16;
+  --surface:#16161f;
+  --surface2:#1e1e2a;
+  --surface3:#252535;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --text:#f0f0f8;
+  --text2:#9090b0;
+  --text3:#5a5a78;
+  --accent:#1a6dd4;
+  --accent2:#4f8ef7;
+  --green:#12b76a;
+  --red:#e05252;
+  --shadow:0 4px 24px rgba(0,0,0,.35);
+  --radius:20px;
+}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:radial-gradient(ellipse 80% 50% at 20% 0%,rgba(26,109,212,0.18) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 40% at 80% 100%,rgba(18,183,106,0.1) 0%,transparent 55%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:40px}
+
+/* ── Status bar ── */
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 0;font-size:13px;font-weight:700;color:var(--text)}
+.statusbar .time{font-size:16px;font-weight:800}
+.statusbar .icons{display:flex;gap:5px;align-items:center}
+.statusbar .icons svg{width:16px;height:16px;fill:var(--text2)}
+
+/* ── Back ── */
+.topnav{display:flex;align-items:center;padding:10px 20px 0}
+.back-btn{display:inline-flex;align-items:center;gap:4px;color:#a0a0c8;font-size:15px;font-weight:700;text-decoration:none;padding:6px 10px 6px 4px;border-radius:10px;transition:background .15s}
+.back-btn:hover{background:rgba(255,255,255,.06)}
+.back-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Header ── */
+.app-header{display:flex;align-items:center;gap:14px;padding:8px 24px 16px}
+.app-icon-wrap{width:52px;height:52px;border-radius:14px;background:linear-gradient(145deg,#0d3a7a,#1a6dd4);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12);flex-shrink:0}
+.app-icon-wrap svg{width:28px;height:28px}
+.app-header-text h1{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.app-header-text p{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* ── Loan type pills ── */
+.type-row{display:flex;gap:8px;margin:0 16px 16px;flex-wrap:wrap}
+.type-btn{flex:1;min-width:80px;padding:9px 10px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .18s;text-align:center}
+.type-btn.active{background:linear-gradient(135deg,#0d3a7a,#1a6dd4);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(26,109,212,.35)}
+
+/* ── Card ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:0 16px 12px;box-shadow:var(--shadow)}
+
+/* ── Field ── */
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:6px}
+.field-row{display:flex;align-items:center;gap:8px}
+.field-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text);outline:none;transition:border-color .18s;width:100%}
+.field-input:focus{border-color:var(--accent2)}
+.field-unit{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:var(--text2);white-space:nowrap;cursor:pointer;transition:all .15s}
+
+/* ── Range slider ── */
+.range-wrap{margin-top:8px}
+.range-wrap input[type=range]{width:100%;accent-color:var(--accent2);cursor:pointer}
+.slider-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:3px}
+
+/* ── Calculate button ── */
+.calc-btn{width:calc(100% - 32px);margin:4px 16px 12px;padding:16px;border-radius:16px;border:none;font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#0d3a7a,#1a6dd4);color:#fff;box-shadow:0 4px 20px rgba(26,109,212,.35);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,109,212,.45)}
+.calc-btn:active{transform:scale(.98)}
+.calc-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Results ── */
+.results{display:none;margin:0 16px 12px}
+.results.visible{display:block}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.result-card.wide{grid-column:1/-1}
+.result-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:4px}
+.result-value{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--text)}
+.result-value.accent{color:var(--accent2)}
+.result-value.highlight{color:var(--green)}
+.result-value small{font-size:13px;opacity:.6}
+
+/* ── Donut chart ── */
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 0 4px}
+.donut-svg{width:110px;height:110px;flex-shrink:0}
+.donut-center{position:relative}
+.donut-info{display:flex;flex-direction:column;gap:10px}
+.donut-label{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--text)}
+.donut-sub{font-size:11px;color:var(--text3)}
+.legend-item{display:flex;align-items:center;gap:8px}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-dot-principal{background:var(--accent2)}
+.legend-dot-interest{background:var(--red)}
+.legend-label{font-size:12px;color:var(--text2)}
+.legend-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-left:auto}
+
+/* ── Savings box (extra payment) ── */
+.savings-box{background:rgba(18,183,106,.08);border:1px solid rgba(18,183,106,.2);border-radius:14px;padding:12px 16px;margin-top:8px;display:none}
+.savings-box.visible{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.sv-item{text-align:center}
+.sv-val{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--green)}
+.sv-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* ── Tabs ── */
+.tab-bar{display:flex;gap:5px;margin:0 16px 14px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:14px;padding:4px}
+.tab-btn{flex:1;padding:9px 6px;border-radius:10px;border:none;background:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);cursor:pointer;transition:all .18s}
+.tab-btn.active{background:linear-gradient(135deg,#0d3a7a,#1a6dd4);color:#fff;box-shadow:0 3px 12px rgba(26,109,212,.35)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ── Amortization table ── */
+.amort-wrap{overflow-x:auto;border-radius:16px;background:var(--surface);border:1px solid var(--border);margin:0 16px 12px}
+.amort-head{display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr;gap:4px;padding:10px 12px;background:var(--surface2);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)}
+.amort-row{display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr;gap:4px;padding:9px 12px;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);transition:background .12s}
+.amort-row:hover{background:var(--surface2)}
+.amort-row .principal{color:var(--accent2)}
+.amort-row .interest{color:var(--red)}
+.amort-row .month{color:var(--text3)}
+.amort-row .balance{color:var(--text)}
+.amort-show-more{width:calc(100% - 32px);margin:0 16px 12px;padding:11px;border-radius:12px;border:1px solid var(--border);background:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .15s}
+.amort-show-more:hover{background:var(--surface2);color:var(--text)}
+
+/* ── Extra payment note ── */
+.extra-note{font-size:11px;color:var(--text3);text-align:center;margin:-4px 0 12px;padding:0 16px}
+
+/* ── SEO block ── */
+.seo-block{margin:16px 16px 8px;padding:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:20px}
+.seo-block h2{font-size:15px;font-weight:800;color:rgba(240,240,248,.9);margin-bottom:8px}
+.seo-block h3{font-size:12px;font-weight:700;color:var(--accent2);margin:12px 0 5px}
+.seo-block p{font-size:12px;line-height:1.65;color:rgba(240,240,248,.5)}
+.seo-block strong{color:rgba(240,240,248,.8)}
+
+.footer-link{display:block;text-align:center;font-size:12px;color:var(--accent2);text-decoration:none;margin:8px 0 4px;opacity:.7}
+.footer-link:hover{opacity:1}
+
+html:not(.guicks-light) .seo-block p{color:rgba(240,240,248,.55)!important}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span class="time" id="sbTime">10:00</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24"><rect x="1" y="6" width="3" height="12" rx="1"/><rect x="6" y="4" width="3" height="14" rx="1"/><rect x="11" y="2" width="3" height="16" rx="1"/><rect x="16" y="1" width="3" height="17" rx="1"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M1.5 8.5C5.5 4.5 10 2.8 12 2.8s6.5 1.7 10.5 5.7M5 12c1.9-1.9 4.3-3 7-3s5.1 1.1 7 3M8.5 15.5c.9-.9 2.2-1.5 3.5-1.5s2.6.6 3.5 1.5M12 19h.01"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3"/><rect x="4" y="9" width="10" height="7" rx="1" fill="currentColor" opacity=".5"/></svg>
+    </div>
+  </div>
+
+  <!-- Back -->
+  <div class="topnav">
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      guicks
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-icon-wrap">
+      <svg viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="6" width="18" height="13" rx="2" stroke="white" stroke-width="1.6"/>
+        <path d="M3 10h18" stroke="white" stroke-width="1.6"/>
+        <path d="M7 14h4M15 14h2" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 4v4M17 4v4" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="app-header-text">
+      <h1>Loan Calculator</h1>
+      <p>Monthly payment · Amortization · Extra payments</p>
+    </div>
+  </div>
+
+  <!-- Loan type -->
+  <div class="type-row">
+    <button class="type-btn active" onclick="setType('personal',this)">💳 Personal</button>
+    <button class="type-btn" onclick="setType('mortgage',this)">🏠 Mortgage</button>
+    <button class="type-btn" onclick="setType('car',this)">🚗 Car</button>
+    <button class="type-btn" onclick="setType('custom',this)">⚙️ Custom</button>
+  </div>
+
+  <!-- Inputs card -->
+  <div class="card">
+    <div class="field">
+      <div class="field-label">Loan Amount</div>
+      <div class="field-row">
+        <input class="field-input" id="amount" type="number" value="10000" min="1" step="100" oninput="onInput()">
+        <span class="field-unit" id="currencyUnit" onclick="cycleCurrency()">€</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Annual Interest Rate</div>
+      <div class="field-row">
+        <input class="field-input" id="rate" type="number" value="5" min="0.01" max="99" step="0.1" oninput="onInput()">
+        <span class="field-unit">%</span>
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="rateSlider" min="0.5" max="30" step="0.1" value="5" oninput="syncSlider('rate','rateSlider')">
+        <div class="slider-labels"><span>0.5%</span><span>30%</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Loan Term</div>
+      <div class="field-row">
+        <input class="field-input" id="term" type="number" value="36" min="1" step="1" oninput="onInput()">
+        <span class="field-unit" id="termUnit" onclick="toggleTermUnit()">months</span>
+      </div>
+      <div class="range-wrap">
+        <input type="range" id="termSlider" min="1" max="360" step="1" value="36" oninput="syncSlider('term','termSlider')">
+        <div class="slider-labels"><span id="slMin">1 mo</span><span id="slMax">360 mo</span></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Extra Monthly Payment <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;opacity:.6">(optional)</span></div>
+      <div class="field-row">
+        <input class="field-input" id="extra" type="number" value="0" min="0" step="10" oninput="onInput()">
+        <span class="field-unit" id="extraUnit">€</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">
+    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    Calculate
+  </button>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-label">Monthly Payment</div>
+        <div class="result-value accent" id="rMonthly">—</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Total Interest</div>
+        <div class="result-value" id="rInterest" style="color:var(--red)">—</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Total Payment</div>
+        <div class="result-value" id="rTotal">—</div>
+      </div>
+      <div class="result-card">
+        <div class="result-label">Payoff Date</div>
+        <div class="result-value highlight" id="rPayoff" style="font-size:16px">—</div>
+      </div>
+      <!-- Donut chart -->
+      <div class="result-card wide">
+        <div class="result-label">Principal vs Interest</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" viewBox="0 0 110 110" id="donutSvg">
+            <circle cx="55" cy="55" r="42" fill="none" stroke="var(--surface3)" stroke-width="14"/>
+            <circle cx="55" cy="55" r="42" fill="none" stroke="var(--red)" stroke-width="14"
+              id="donutInterest" stroke-dasharray="0 264" stroke-linecap="round"
+              transform="rotate(-90 55 55)" style="transition:stroke-dasharray .6s ease"/>
+            <circle cx="55" cy="55" r="42" fill="none" stroke="var(--accent2)" stroke-width="14"
+              id="donutPrincipal" stroke-dasharray="0 264" stroke-linecap="round"
+              transform="rotate(-90 55 55)" style="transition:stroke-dasharray .6s ease"/>
+          </svg>
+          <div class="donut-info">
+            <div>
+              <div class="donut-label" id="donutPct">—%</div>
+              <div class="donut-sub">interest ratio</div>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot legend-dot-principal"></div>
+              <span class="legend-label">Principal</span>
+              <span class="legend-val" id="lgPrincipal">—</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot legend-dot-interest"></div>
+              <span class="legend-label">Interest</span>
+              <span class="legend-val" id="lgInterest">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extra payment savings -->
+    <div class="savings-box" id="savingsBox">
+      <div class="sv-item">
+        <div class="sv-val" id="svSaved">—</div>
+        <div class="sv-label">Interest saved</div>
+      </div>
+      <div class="sv-item">
+        <div class="sv-val" id="svMonths">—</div>
+        <div class="sv-label">Months saved</div>
+      </div>
+      <div class="sv-item">
+        <div class="sv-val" id="svEarlier">—</div>
+        <div class="sv-label">Paid off earlier</div>
+      </div>
+    </div>
+
+    <!-- Tabs: summary / amortization -->
+    <div class="tab-bar" style="margin-top:12px">
+      <button class="tab-btn active" onclick="switchTab('summary',this)">Summary</button>
+      <button class="tab-btn" onclick="switchTab('amort',this)">Amortization</button>
+    </div>
+
+    <div class="tab-content active" id="tab-summary">
+      <div class="results-grid" id="summaryGrid" style="margin-bottom:0"></div>
+    </div>
+
+    <div class="tab-content" id="tab-amort">
+      <p class="extra-note" id="extraNote"></p>
+      <div class="amort-wrap">
+        <div class="amort-head">
+          <span>#</span><span>Payment</span><span>Principal</span><span>Interest</span><span>Balance</span>
+        </div>
+        <div id="amortBody"></div>
+      </div>
+      <button class="amort-show-more" id="showMoreBtn" onclick="showMore()" style="display:none">Show all months ▾</button>
+    </div>
+
+  </div>
+
+  <!-- SEO content block -->
+  <div class="seo-block">
+    <h2 style="color:rgba(240,240,248,.9)">Free Loan Calculator — Monthly Payments & Full Amortization</h2>
+    <p style="color:#4a4a6a">Calculate the monthly repayment on any loan in seconds. Enter the <strong style="color:#0d0d1a">loan amount</strong>, <strong style="color:#0d0d1a">interest rate</strong> and <strong style="color:#0d0d1a">term</strong> to see your monthly payment, total interest paid and a complete month-by-month amortization table.</p>
+    <h3 style="color:#1a6dd4">Personal loan calculator</h3>
+    <p style="color:#4a4a6a">Personal loans typically run 12–84 months at 5–25% APR. A <strong style="color:#0d0d1a">€10,000 personal loan at 8% over 48 months</strong> costs €244/month with €1,706 in total interest. Use the extra payment field to see how much faster you can pay it off.</p>
+    <h3 style="color:#1a6dd4">Mortgage calculator</h3>
+    <p style="color:#4a4a6a">Mortgages typically span 15–30 years at 3–7% interest. A <strong style="color:#0d0d1a">€250,000 mortgage at 4.5% over 25 years</strong> costs €1,389/month — but paying just €100 extra per month saves over €18,000 in interest and shaves 2 years off the term.</p>
+    <h3 style="color:#1a6dd4">Car loan calculator</h3>
+    <p style="color:#4a4a6a">Car loans usually run 24–72 months at 4–12% APR. A <strong style="color:#0d0d1a">€20,000 car loan at 6% over 60 months</strong> costs €386/month. The amortization table shows exactly how much of each payment goes toward the principal vs. interest.</p>
+    <h3 style="color:#1a6dd4">How loan interest is calculated</h3>
+    <p style="color:#4a4a6a">This calculator uses the <strong style="color:#0d0d1a">standard amortization formula</strong>: M = P × [r(1+r)ⁿ] / [(1+r)ⁿ−1], where P is the principal, r is the monthly interest rate and n is the number of payments. Each month a larger share goes to principal and a smaller share to interest.</p>
+  </div>
+
+  <a href="index.html" class="footer-link">← All Guicks tools</a>
+
+</div>
+
+<script>
+// ── Clock ──
+function tick(){
+  const n=new Date();
+  document.getElementById('sbTime').textContent=
+    n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
+}
+tick(); setInterval(tick,10000);
+
+// ── State ──
+const CURRENCIES=['€','$','£','¥','Fr'];
+let curIdx=0, termInYears=false;
+let amortData=[], showingAll=false;
+
+function cycleCurrency(){
+  curIdx=(curIdx+1)%CURRENCIES.length;
+  const sym=CURRENCIES[curIdx];
+  document.getElementById('currencyUnit').textContent=sym;
+  document.getElementById('extraUnit').textContent=sym;
+  if(amortData.length) calculate();
+}
+
+function toggleTermUnit(){
+  termInYears=!termInYears;
+  const u=document.getElementById('termUnit');
+  const sl=document.getElementById('termSlider');
+  u.textContent=termInYears?'years':'months';
+  if(termInYears){
+    sl.max=30; sl.step=1;
+    document.getElementById('slMin').textContent='1 yr';
+    document.getElementById('slMax').textContent='30 yr';
+    const v=parseInt(document.getElementById('term').value)||36;
+    document.getElementById('term').value=Math.max(1,Math.round(v/12));
+    sl.value=document.getElementById('term').value;
+  } else {
+    sl.max=360; sl.step=1;
+    document.getElementById('slMin').textContent='1 mo';
+    document.getElementById('slMax').textContent='360 mo';
+    const v=parseInt(document.getElementById('term').value)||3;
+    document.getElementById('term').value=v*12;
+    sl.value=document.getElementById('term').value;
+  }
+  if(amortData.length) calculate();
+}
+
+function syncSlider(inputId, sliderId){
+  const sl=document.getElementById(sliderId);
+  document.getElementById(inputId).value=sl.value;
+  onInput();
+}
+
+function onInput(){
+  // sync sliders to inputs
+  const r=parseFloat(document.getElementById('rate').value)||0;
+  const t=parseFloat(document.getElementById('term').value)||0;
+  const rsl=document.getElementById('rateSlider');
+  const tsl=document.getElementById('termSlider');
+  if(r>=0.5&&r<=30) rsl.value=r;
+  if(t>=1&&t<=(termInYears?30:360)) tsl.value=t;
+}
+
+const PRESETS={
+  personal:{amount:10000,rate:8,term:48},
+  mortgage:{amount:250000,rate:4.5,term:300},
+  car:{amount:20000,rate:6,term:60},
+  custom:{amount:null,rate:null,term:null}
+};
+
+function setType(type, btn){
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const p=PRESETS[type];
+  if(p.amount!==null){
+    document.getElementById('amount').value=p.amount;
+    document.getElementById('rate').value=p.rate;
+    document.getElementById('rateSlider').value=p.rate;
+    // ensure months
+    if(termInYears) toggleTermUnit();
+    document.getElementById('term').value=p.term;
+    document.getElementById('termSlider').value=p.term;
+    document.getElementById('extra').value=0;
+    calculate();
+  }
+}
+
+// ── Core calculation ──
+function getMonths(){
+  const t=parseInt(document.getElementById('term').value)||0;
+  return termInYears ? t*12 : t;
+}
+
+function buildAmort(P, monthlyRate, n, extra=0){
+  const rows=[];
+  let bal=P;
+  const basePayment = P*monthlyRate*Math.pow(1+monthlyRate,n)/(Math.pow(1+monthlyRate,n)-1);
+  const payment=basePayment+extra;
+  for(let i=1;i<=n&&bal>0.005;i++){
+    const int=bal*monthlyRate;
+    let prin=Math.min(payment-int, bal);
+    if(prin<0) prin=0;
+    bal=Math.max(0,bal-prin);
+    rows.push({month:i,payment:Math.min(payment,prin+int+bal),principal:prin,interest:int,balance:bal});
+    if(bal<0.005) break;
+  }
+  return {rows, basePayment};
+}
+
+function fmt(n){
+  const sym=CURRENCIES[curIdx];
+  return sym+(n>=1000?n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,','):n.toFixed(2));
+}
+function fmtSmall(n){
+  const sym=CURRENCIES[curIdx];
+  return sym+n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
+function calculate(){
+  const P=parseFloat(document.getElementById('amount').value)||0;
+  const annualRate=parseFloat(document.getElementById('rate').value)||0;
+  const n=getMonths();
+  const extra=parseFloat(document.getElementById('extra').value)||0;
+  if(!P||!annualRate||!n) return;
+
+  const r=annualRate/100/12;
+  const {rows, basePayment}=buildAmort(P,r,n,extra);
+  amortData=rows;
+
+  const totalPaid=rows.reduce((s,r)=>s+r.principal+r.interest,0);
+  const totalInterest=rows.reduce((s,r)=>s+r.interest,0);
+  const months=rows.length;
+
+  // Payoff date
+  const payoff=new Date();
+  payoff.setMonth(payoff.getMonth()+months);
+  const payoffStr=payoff.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+
+  document.getElementById('rMonthly').textContent=fmt(basePayment+(extra>0?extra:0));
+  document.getElementById('rInterest').textContent=fmtSmall(totalInterest);
+  document.getElementById('rTotal').textContent=fmtSmall(totalPaid);
+  document.getElementById('rPayoff').textContent=payoffStr;
+
+  // Legend
+  document.getElementById('lgPrincipal').textContent=fmtSmall(P);
+  document.getElementById('lgInterest').textContent=fmtSmall(totalInterest);
+
+  // Donut
+  const pct=totalInterest/totalPaid;
+  const circ=2*Math.PI*42;
+  const intArc=pct*circ;
+  const prinArc=(1-pct)*circ;
+  document.getElementById('donutInterest').setAttribute('stroke-dasharray',`${intArc} ${circ-intArc}`);
+  document.getElementById('donutPrincipal').setAttribute('stroke-dasharray',`${prinArc} ${circ-prinArc}`);
+  // offset principal to start after interest
+  document.getElementById('donutPrincipal').setAttribute('transform',`rotate(${-90+pct*360} 55 55)`);
+  document.getElementById('donutPct').textContent=Math.round(pct*100)+'%';
+
+  // Extra payment savings
+  const sb=document.getElementById('savingsBox');
+  if(extra>0){
+    const {rows:baseRows}=buildAmort(P,r,n,0);
+    const baseTotalInterest=baseRows.reduce((s,r)=>s+r.interest,0);
+    const saved=baseTotalInterest-totalInterest;
+    const monthsSaved=baseRows.length-months;
+    document.getElementById('svSaved').textContent=fmtSmall(saved);
+    document.getElementById('svMonths').textContent=monthsSaved+' mo';
+    const earlier=new Date();
+    earlier.setMonth(earlier.getMonth()+months);
+    document.getElementById('svEarlier').textContent=earlier.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+    sb.classList.add('visible');
+  } else {
+    sb.classList.remove('visible');
+  }
+
+  // Summary grid
+  const sg=document.getElementById('summaryGrid');
+  const items=[
+    ['Loan Amount', fmtSmall(P), ''],
+    ['Monthly Payment', fmt(basePayment+extra), 'accent'],
+    ['Total Interest', fmtSmall(totalInterest), 'red'],
+    ['Total Cost', fmtSmall(totalPaid), ''],
+    ['Loan Term', months+' months', ''],
+    ['Payoff', payoffStr, 'highlight'],
+  ];
+  sg.innerHTML=items.map(([l,v,cls])=>`
+    <div class="result-card">
+      <div class="result-label">${l}</div>
+      <div class="result-value ${cls}" style="${cls==='red'?'color:var(--red)':'font-size:17px'}">${v}</div>
+    </div>`).join('');
+
+  // Amortization table
+  renderAmort(false);
+
+  document.getElementById('results').classList.add('visible');
+}
+
+let visibleRows=12;
+function renderAmort(all){
+  const body=document.getElementById('amortBody');
+  const rows=all?amortData:amortData.slice(0,12);
+  body.innerHTML=rows.map(r=>`
+    <div class="amort-row">
+      <span class="month">${r.month}</span>
+      <span>${fmt(r.principal+r.interest)}</span>
+      <span class="principal">${fmt(r.principal)}</span>
+      <span class="interest">${fmt(r.interest)}</span>
+      <span class="balance">${fmtSmall(r.balance)}</span>
+    </div>`).join('');
+  const btn=document.getElementById('showMoreBtn');
+  if(amortData.length>12&&!all){
+    btn.style.display='block';
+    btn.textContent=`Show all ${amortData.length} months ▾`;
+  } else {
+    btn.style.display='none';
+  }
+  // extra note
+  const en=document.getElementById('extraNote');
+  const extra=parseFloat(document.getElementById('extra').value)||0;
+  en.textContent=extra>0?`Including ${fmt(extra)} extra/month — ${amortData.length} payments total`:'';
+}
+
+function showMore(){
+  showingAll=true;
+  renderAmort(true);
+}
+
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// Auto-calculate on load
+window.addEventListener('load', calculate);
+</script>
+</body>
+</html>
