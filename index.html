@@ -3,7 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Guicks — Quick Tools</title>
+  <title>Guicks — Free Online Tools: QR Code, Calculator, Currency Converter & More</title>
+  <meta name="description" content="18 free online tools in one place. QR code generator, currency converter, unit converter, calculator, password generator, weather, tip calculator, image compressor and more. No sign-up, no ads, works on any device.">
+  <meta name="keywords" content="free online tools, QR code generator, currency converter, unit converter, online calculator, password generator, weather forecast, tip calculator, image compressor, free tools online, web tools, browser tools">
+  <link rel="canonical" href="https://guicks.com/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Guicks — 18 Free Online Tools in One Place">
+  <meta property="og:description" content="QR codes, currency converter, calculator, password generator, weather, image compressor and more. Free, no sign-up, works on any device.">
+  <meta property="og:url" content="https://guicks.com/">
+  <meta property="og:site_name" content="Guicks">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Guicks — 18 Free Online Tools">
+  <meta name="twitter:description" content="QR codes, calculator, currency converter, password generator, weather and more. Free, no sign-up.">
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Guicks",
+    "url": "https://guicks.com",
+    "description": "A collection of 18 free online tools including a QR code generator, currency converter, unit converter, scientific calculator, password generator, weather forecast, tip calculator, image compressor, world clock, translator, notes, reminders, shopping list and more. All tools work in the browser — no account required.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://guicks.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Guicks Free Online Tools",
+    "description": "18 free browser-based utility tools",
+    "numberOfItems": 18,
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"QR Code Generator","url":"https://guicks.com/guicks-qr.html"},
+      {"@type":"ListItem","position":2,"name":"Currency Converter","url":"https://guicks.com/guicks-currency.html"},
+      {"@type":"ListItem","position":3,"name":"Unit Converter","url":"https://guicks.com/guicks-converter.html"},
+      {"@type":"ListItem","position":4,"name":"Calculator","url":"https://guicks.com/guicks-calculator.html"},
+      {"@type":"ListItem","position":5,"name":"Password Generator","url":"https://guicks.com/guicks-password.html"},
+      {"@type":"ListItem","position":6,"name":"Weather Forecast","url":"https://guicks.com/guicks-weather.html"},
+      {"@type":"ListItem","position":7,"name":"Tip Calculator","url":"https://guicks.com/guicks-tip.html"},
+      {"@type":"ListItem","position":8,"name":"Image Compressor","url":"https://guicks.com/guicks-image.html"},
+      {"@type":"ListItem","position":9,"name":"Stock Tracker","url":"https://guicks.com/guicks-stocks.html"},
+      {"@type":"ListItem","position":10,"name":"Text Translator","url":"https://guicks.com/guicks-translate.html"},
+      {"@type":"ListItem","position":11,"name":"World Clock","url":"https://guicks.com/guicks-clock.html"},
+      {"@type":"ListItem","position":12,"name":"Calendar","url":"https://guicks.com/guicks-calendar.html"},
+      {"@type":"ListItem","position":13,"name":"Notes","url":"https://guicks.com/guicks-notes.html"},
+      {"@type":"ListItem","position":14,"name":"Reminders","url":"https://guicks.com/guicks-reminders.html"},
+      {"@type":"ListItem","position":15,"name":"Shopping List","url":"https://guicks.com/guicks-shopping.html"},
+      {"@type":"ListItem","position":16,"name":"Favorites","url":"https://guicks.com/guicks-favorites.html"},
+      {"@type":"ListItem","position":17,"name":"Lucky — Random Generator","url":"https://guicks.com/guicks-lucky.html"},
+      {"@type":"ListItem","position":18,"name":"Image Studio","url":"https://guicks.com/guicks-image.html"}
+    ]
+  }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -603,6 +660,16 @@
       padding-bottom: 12px;
       letter-spacing: 0.04em;
     }
+    .home-seo{margin:0 16px 8px;padding:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px}
+    .home-seo h2{font-size:15px;font-weight:800;color:rgba(240,240,245,.9);margin-bottom:8px;letter-spacing:-.3px}
+    .home-seo h3{font-size:12px;font-weight:700;color:#4f8ef7;margin:12px 0 5px}
+    .home-seo p{font-size:12px;line-height:1.65;color:rgba(240,240,245,.5)}
+    .home-seo strong{color:rgba(240,240,245,.8);font-weight:700}
+    html.guicks-light .home-seo{background:#fff!important;border-color:rgba(0,0,0,.08)!important}
+    html.guicks-light .home-seo h2{color:#0d0d1a!important}
+    html.guicks-light .home-seo h3{color:#1a6dd4!important}
+    html.guicks-light .home-seo p{color:#4a4a6a!important}
+    html.guicks-light .home-seo strong{color:#0d0d1a!important}
 
     /* scrollbar */
     .grid-wrap::-webkit-scrollbar { width: 0; }
@@ -1046,6 +1113,18 @@
       <div class="dock-slot empty" id="dock-2" ondragover="dockDragOver(event,2)" ondragleave="dockDragLeave(2)" ondrop="dockDrop(event,2)"></div>
       <div class="dock-slot empty" id="dock-3" ondragover="dockDragOver(event,3)" ondragleave="dockDragLeave(3)" ondrop="dockDrop(event,3)"></div>
     </div>
+  </div>
+
+  <!-- SEO content block -->
+  <div class="home-seo">
+    <h2>18 Free Online Tools — No Sign-Up, No Download</h2>
+    <p>Guicks is a collection of fast, free browser tools designed to do one thing each and do it well. Everything runs locally in your browser — no account, no installation, no data sent to a server.</p>
+    <h3>Most popular tools</h3>
+    <p><strong>QR Code Generator</strong> — Create QR codes for URLs, WiFi, email and plain text. Download as PNG, no watermark. <strong>Currency Converter</strong> — Live exchange rates for 150+ currencies. <strong>Unit Converter</strong> — Length, weight, temperature, area, volume, speed and more. <strong>Calculator</strong> — Standard and scientific calculator with history. <strong>Password Generator</strong> — Cryptographically secure passwords with custom rules.</p>
+    <h3>Productivity tools</h3>
+    <p><strong>Tip Calculator</strong> — Split any bill between any number of people. <strong>Image Compressor</strong> — Compress and convert JPEG, PNG and WebP without uploading. <strong>Weather</strong> — 7-day forecast for any city. <strong>Translator</strong> — Translate between 50+ languages. <strong>World Clock</strong> — Current time in 38 cities.</p>
+    <h3>Organisation tools</h3>
+    <p><strong>Calendar</strong> — Year, month, week and day views with events. <strong>Notes</strong> — Auto-saving notepad in your browser. <strong>Reminders</strong> — Browser notifications for tasks. <strong>Shopping List</strong> — Grocery list with auto-categories.</p>
   </div>
 
   <!-- Copyright -->
