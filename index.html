@@ -2214,6 +2214,14 @@
           </div>
           <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
         </div>
+        <div class="settings-row" onclick="resetCookieConsent()" style="cursor:pointer">
+          <div class="settings-row-icon" style="background:rgba(255,200,50,0.15)">🍪</div>
+          <div class="settings-row-text">
+            <div class="settings-row-label">Cookie Preferences</div>
+            <div class="settings-row-sub" id="cookieStatus">Loading…</div>
+          </div>
+          <div class="settings-row-action"><span class="settings-row-chevron">›</span></div>
+        </div>
         <div class="settings-row">
           <div class="settings-row-icon" style="background:rgba(255,255,255,0.07)">📱</div>
           <div class="settings-row-text">
@@ -2314,10 +2322,17 @@
   const _consent = localStorage.getItem('cookiesAccepted');
   if (_consent) {
     document.getElementById('cookieBanner').style.display = 'none';
-    // If previously declined, disable GA
     if (_consent === 'declined') {
       window['ga-disable-G-TPNLYBBFTF'] = true;
     }
+  }
+  function _updateCookieStatus() {
+    const el = document.getElementById('cookieStatus');
+    if (!el) return;
+    const c = localStorage.getItem('cookiesAccepted');
+    el.textContent = c === 'true' ? 'Analytics accepted — tap to change' :
+                     c === 'declined' ? 'Analytics declined — tap to change' :
+                     'No choice made yet — tap to decide';
   }
   function _hideBanner() {
     const b = document.getElementById('cookieBanner');
@@ -2329,12 +2344,24 @@
   function acceptCookies() {
     localStorage.setItem('cookiesAccepted', 'true');
     _hideBanner();
+    _updateCookieStatus();
   }
   function declineCookies() {
     localStorage.setItem('cookiesAccepted', 'declined');
     window['ga-disable-G-TPNLYBBFTF'] = true;
     _hideBanner();
+    _updateCookieStatus();
   }
+  function resetCookieConsent() {
+    localStorage.removeItem('cookiesAccepted');
+    const b = document.getElementById('cookieBanner');
+    b.style.display = 'flex';
+    b.style.opacity = '1';
+    b.style.transform = 'translateX(-50%)';
+    _updateCookieStatus();
+  }
+  // Update status label on load
+  document.addEventListener('DOMContentLoaded', _updateCookieStatus);
 </script>
 
 <script>
